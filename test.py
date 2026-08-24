@@ -14,7 +14,7 @@ print(f"GPU Available: {torch.cuda.is_available()}")
 # ==========================================
 # STEP 1: Problem Definition & Dataset Assembly
 # ==========================================
-def load_and_assemble_data(filepath="25HomeAustin/15minute_data_austin.csv"):
+def load_and_assemble_data(filepath="15minute_data_austin.csv"):
     print("Step 1: Assembling Dataset...")
     
     # Load raw telemetry
