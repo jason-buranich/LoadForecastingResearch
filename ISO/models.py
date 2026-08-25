@@ -48,14 +48,14 @@ def get_tabular_models(horizon=24, n_estimators=100, random_state=42):
     Wraps single-output estimators in MultiOutputRegressor if horizon > 1.
     """
     if horizon == 1:
-        # Traditional ISO Baseline
-        mlr = Ridge(alpha=1.0)
+        # Fast iterative solver for high-dimensional data
+        mlr = Ridge(alpha=500.0, solver='lsqr')
         
         rf = RandomForestRegressor(n_estimators=n_estimators, random_state=random_state, n_jobs=-1)
         lgbm = lgb.LGBMRegressor(n_estimators=n_estimators, random_state=random_state, n_jobs=-1, verbosity=-1)
     else:
-        # Traditional ISO Baseline for Day-Ahead (Multi-Step)
-        mlr = MultiOutputRegressor(Ridge(alpha=1.0))
+        # Ridge natively supports multi-output. DO NOT wrap it in MultiOutputRegressor!
+        mlr = Ridge(alpha=500.0, solver='lsqr')
         
         rf = MultiOutputRegressor(RandomForestRegressor(n_estimators=n_estimators, random_state=random_state, n_jobs=-1))
         lgbm = MultiOutputRegressor(lgb.LGBMRegressor(n_estimators=n_estimators, random_state=random_state, n_jobs=-1, verbosity=-1))
@@ -163,3 +163,37 @@ class TimeSeriesTransformer(nn.Module):
         pooled = enc_out.mean(dim=1)
         out = self.head(pooled)
         return out  # Shape: (batch_size, horizon)
+
+class Seq2SeqCovariateLSTM(nn.Module):
+    def __init__(self, hist_input_dim, future_input_dim, hidden_dim, horizon=24, num_layers=1):
+        super(Seq2SeqCovariateLSTM, self).__init__()
+        self.horizon = horizon
+        self.hidden_dim = hidden_dim
+        
+        # Encoder: Processes the 168-hour history (load + weather + time)
+        self.encoder = nn.LSTM(hist_input_dim, hidden_dim, num_layers, batch_first=True)
+        
+        # Decoder: Processes the 24-hour future weather forecast & time features
+        self.decoder_lstm = nn.LSTM(future_input_dim, hidden_dim, num_layers, batch_first=True)
+        
+        # Final output layer to map the hidden state to a single Megawatt prediction per hour
+        self.fc = nn.Linear(hidden_dim, 1)
+        
+    def forward(self, x_hist, x_future):
+        """
+        x_hist shape: (Batch, 168, hist_input_dim)
+        x_future shape: (Batch, 24, future_input_dim)
+        """
+        # 1. Encode the history
+        _, (hn, cn) = self.encoder(x_hist)
+        
+        # 2. Decode the future forecast
+        # We initialize the decoder's memory with the encoder's final state (hn, cn)
+        decoder_out, _ = self.decoder_lstm(x_future, (hn, cn))
+        
+        # 3. Predict the load for each of the 24 future hours
+        # decoder_out is (Batch, 24, hidden_dim)
+        predictions = self.fc(decoder_out) # Outputs (Batch, 24, 1)
+        
+        # Drop the last dimension to match the target shape (Batch, 24)
+        return predictions.squeeze(-1)

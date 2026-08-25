@@ -6,6 +6,7 @@ from optimize import get_dataloaders
 from models import DirectLSTM, get_tabular_models
 from trainingLoop import train_model
 from evaluate import evaluate_predictions
+from visualize import plot_day_ahead_forecast
 import numpy as np
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
@@ -50,7 +51,7 @@ def run_tabular_baseline(X_train, Y_train, X_test, Y_test, scaler, target_col_id
     print(f"MAE (MW):  {mae:.2f}")
     print(f"WAPE (%):  {wape:.2f}")
     
-    return mlr
+    return mlr, preds_mw
 
 def run_experiment_with_evaluation():
     HORIZON = 24
@@ -64,46 +65,51 @@ def run_experiment_with_evaluation():
     X_train, Y_train = create_safe_sequences(train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     X_val, Y_val     = create_safe_sequences(val_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     X_test, Y_test   = create_safe_sequences(test_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
-
-    run_tabular_baseline(X_train, Y_train, X_test, Y_test, scaler, TARGET_IDX, HORIZON)
     
-    # 2. Create DataLoaders
-    train_loader, val_loader = get_dataloaders(X_train, Y_train, X_val, Y_val, batch_size=64)
+    # 2. Run the ISO Baseline (MLR) First
+    mlr_model, mlr_preds = run_tabular_baseline(X_train, Y_train, X_test, Y_test, scaler, TARGET_IDX, HORIZON)
+    
+    # 3. Create PyTorch DataLoaders (using Optuna's best batch_size of 32)
+    train_loader, val_loader = get_dataloaders(X_train, Y_train, X_val, Y_val, batch_size=32)
     
     test_dataset = TensorDataset(X_test, Y_test)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=64, shuffle=False, num_workers=4)
     
-    # 3. Initialize Model
+    # 4. Initialize Model (using Optuna's best architecture)
     input_dim = X_train.shape[-1]
     model = DirectLSTM(input_dim=input_dim, hidden_dim=256, horizon=HORIZON, num_layers=1)
     
-    model_path = f'direct_lstm_{HORIZON}h.pth'
+    model_path = f'tuned_direct_lstm_{HORIZON}h.pth'
     
-    # 4. Execute Training Loop
-    print("Launching training loop...")
+    # 5. Execute Training Loop (with Early Stopping and Optuna's learning rate)
+    print("Launching training loop with tuned parameters...")
     trained_model, _ = train_model(
         model=model, 
         train_loader=train_loader, 
         val_loader=val_loader, 
-        epochs=50, 
-        lr=4e-4, 
+        epochs=100, 
+        lr=0.000394, 
+        patience=10,
         model_save_path=model_path
     )
     
-    # 5. Load Best Weights and Evaluate on Unseen Test Data
+    # 6. Load Best Weights and Evaluate on Unseen Test Data
     print("Evaluating best model on test dataset...")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     trained_model.load_state_dict(torch.load(model_path, weights_only=True))
     trained_model.to(device)
     
-    # Pass the scaler and target index into the evaluation script
-    metrics, predictions, ground_truth = evaluate_predictions(
+    lstm_metrics, lstm_preds, lstm_targets = evaluate_predictions(
         trained_model, 
         test_loader, 
         scaler=scaler, 
         target_col_idx=TARGET_IDX, 
         device=device
     )
+    
+    # 7. Generate forecast comparison graph
+    print("Generating forecast comparison graph...")
+    plot_day_ahead_forecast(lstm_targets, mlr_preds, lstm_preds, start_idx=0)
 
 if __name__ == "__main__":
     run_experiment_with_evaluation()
