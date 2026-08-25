@@ -20,7 +20,7 @@ def create_safe_sequences(df, seq_len=168, horizon=24, target_idx=4, covariate_s
             x_seq = month_data[i : i + seq_len]
             
             # 24-hour future forecast (only weather and time features)
-            x_fut = month_data[i + seq_len : i + seq_len + horizon, covariate_start_idx-1:] # -1 because we dropped 'Month'
+            x_fut = month_data[i + seq_len : i + seq_len + horizon, covariate_start_idx:] # -1 because we dropped 'Month'
             
             # 24-hour future target (only CAISO load)
             y_seq = month_data[i + seq_len : i + seq_len + horizon, target_idx]

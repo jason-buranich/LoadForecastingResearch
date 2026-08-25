@@ -35,7 +35,7 @@ class EarlyStopping:
 def train_model(model, train_loader, val_loader, epochs=100, lr=1e-3, patience=10, model_save_path='best_model.pth'):
     """
     Standardized GPU training loop with AdamW optimizer, gradient clipping, 
-    and Early Stopping.
+    and Early Stopping. Unpacks two items (history, target) for Direct LSTM.
     """
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Training on device: {device}")
@@ -54,18 +54,15 @@ def train_model(model, train_loader, val_loader, epochs=100, lr=1e-3, patience=1
         model.train()
         train_loss = 0.0
         
-        # Now unpacking 3 items
-        for batch_x_hist, batch_x_fut, batch_y in train_loader:
-            batch_x_hist = batch_x_hist.to(device)
-            batch_x_fut = batch_x_fut.to(device)
-            batch_y = batch_y.to(device)
+        # Unpacking TWO items: batch_x (history) and batch_y (target)
+        for batch_x, batch_y in train_loader:
+            batch_x, batch_y = batch_x.to(device), batch_y.to(device)
             
             optimizer.zero_grad()
+            outputs = model(batch_x)
             
-            # Pass both history and future covariates to the model
-            outputs = model(batch_x_hist, batch_x_fut)
-            
-            batch_size = batch_x_hist.size(0)
+            # Align shapes safely with .view()
+            batch_size = batch_x.size(0)
             loss = criterion(outputs.view(batch_size, -1), batch_y.view(batch_size, -1))
             loss.backward()
             
@@ -80,16 +77,17 @@ def train_model(model, train_loader, val_loader, epochs=100, lr=1e-3, patience=1
         model.eval()
         val_loss = 0.0
         with torch.no_grad():
-            for batch_x_hist, batch_x_fut, batch_y in val_loader:
-                batch_x_hist = batch_x_hist.to(device)
-                batch_x_fut = batch_x_fut.to(device)
-                batch_y = batch_y.to(device)
+            for batch_x, batch_y in val_loader:
+                batch_x, batch_y = batch_x.to(device), batch_y.to(device)
                 
-                outputs = model(batch_x_hist, batch_x_fut)
+                outputs = model(batch_x)
                 
-                batch_size = batch_x_hist.size(0)
+                batch_size = batch_x.size(0)
                 loss = criterion(outputs.view(batch_size, -1), batch_y.view(batch_size, -1))
                 val_loss += loss.item()
+                
+        train_loss /= len(train_loader)
+        val_loss /= len(val_loader)
         
         print(f"Epoch {epoch+1}/{epochs} | Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f}")
         
@@ -101,4 +99,6 @@ def train_model(model, train_loader, val_loader, epochs=100, lr=1e-3, patience=1
             break
             
     print(f"Training complete. Best Validation Loss: {early_stopping.best_loss:.4f}. Model saved to {model_save_path}.")
+    
+    # Return a tuple so main.py can unpack it as: trained_model, _ = train_model(...)
     return model, early_stopping.best_loss
