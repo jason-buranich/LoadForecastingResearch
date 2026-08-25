@@ -39,7 +39,7 @@ def train_seq2seq_model(model, train_loader, val_loader, epochs=100, lr=1e-3, pa
             optimizer.zero_grad()
             
             # Pass history and future weather forecast to the model
-            outputs = model(batch_x_hist, batch_x_fut)
+            outputs = model(batch_x_hist, batch_x_fut, y_target=batch_y, teacher_forcing_ratio=0.5)
             
             batch_size = batch_x_hist.size(0)
             loss = criterion(outputs.view(batch_size, -1), batch_y.view(batch_size, -1))
@@ -61,7 +61,7 @@ def train_seq2seq_model(model, train_loader, val_loader, epochs=100, lr=1e-3, pa
                 batch_x_fut = batch_x_fut.to(device)
                 batch_y = batch_y.to(device)
                 
-                outputs = model(batch_x_hist, batch_x_fut)
+                outputs = model(batch_x_hist, batch_x_fut, y_target=batch_y, teacher_forcing_ratio=0.0)
                 
                 batch_size = batch_x_hist.size(0)
                 loss = criterion(outputs.view(batch_size, -1), batch_y.view(batch_size, -1))
@@ -100,9 +100,9 @@ def main():
     val_dataset = TensorDataset(X_val_hist, X_val_fut, Y_val)
     test_dataset = TensorDataset(X_test_hist, X_test_fut, Y_test)
     
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=4)
-    val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False, num_workers=4)
-    test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False, num_workers=4)
+    train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=4)
+    val_loader = DataLoader(val_dataset, batch_size=16, shuffle=False, num_workers=4)
+    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=4)
     
     # 3. Initialize Seq2Seq Covariate LSTM Model
     hist_input_dim = X_train_hist.shape[-1]
@@ -124,7 +124,7 @@ def main():
         train_loader=train_loader, 
         val_loader=val_loader, 
         epochs=100, 
-        lr=0.000394, # You may want to run Optuna again for this new architecture later
+        lr=3e-4, # You may want to run Optuna again for this new architecture later
         patience=10,
         model_save_path=model_path
     )

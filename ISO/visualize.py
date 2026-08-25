@@ -37,3 +37,27 @@ def plot_day_ahead_forecast(targets_mw, mlr_preds_mw, lstm_preds_mw, start_idx=0
     plt.savefig(save_path, dpi=300)
     print(f"Graph saved successfully to {save_path}")
     plt.show()
+
+def plot_single_model_forecast(targets, preds, start_idx=0, horizon=24, model_name="Model", save_path="forecast.png"):
+    """
+    Plots a 24-hour slice of actual grid load versus a single model's predictions.
+    """
+    plt.figure(figsize=(12, 6))
+    
+    # Slice the specific 24-hour window from the flattened arrays
+    target_slice = targets[start_idx : start_idx + horizon]
+    pred_slice = preds[start_idx : start_idx + horizon]
+    
+    plt.plot(target_slice, label='Actual Load (MW)', color='black', linewidth=2)
+    plt.plot(pred_slice, label=f'{model_name} Forecast', color='blue', linestyle='--', linewidth=2)
+    
+    plt.title(f'24-Hour Day-Ahead Forecast: Actual vs {model_name}')
+    plt.xlabel('Hour of Day')
+    plt.ylabel('Load (MW)')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.savefig(save_path)
+    plt.close()
+    
+    print(f"Graph saved successfully to {save_path}")

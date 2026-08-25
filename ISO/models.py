@@ -5,6 +5,8 @@ from sklearn.linear_model import Ridge
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.multioutput import MultiOutputRegressor
 import lightgbm as lgb
+import random
+import math
 
 
 # ==============================================================================
@@ -93,107 +95,74 @@ class DirectLSTM(nn.Module):
 # ==============================================================================
 # 4. PYTORCH: ENCODER-DECODER LSTM (Seq2Seq)
 # ==============================================================================
-class Seq2SeqLSTM(nn.Module):
-    """
-    Encoder-decoder LSTM architecture that compresses input dynamics 
-    into latent context vectors before autoregressively generating predictions.
-    """
-    def __init__(self, input_dim=9, hidden_dim=64, horizon=24, num_layers=2, target_idx=4):
-        super().__init__()
-        self.horizon = horizon
-        self.target_idx = target_idx
-        
-        self.encoder = nn.LSTM(
-            input_size=input_dim,
-            hidden_size=hidden_dim,
-            num_layers=num_layers,
-            batch_first=True
-        )
-        self.decoder = nn.LSTM(
-            input_size=1,
-            hidden_size=hidden_dim,
-            num_layers=num_layers,
-            batch_first=True
-        )
-        self.fc = nn.Linear(hidden_dim, 1)
-
-    def forward(self, x):
-        batch_size = x.size(0)
-        _, (hn, cn) = self.encoder(x)
-        
-        # Initialize first decoder step using the last observed target load
-        dec_input = x[:, -1, self.target_idx].unsqueeze(1).unsqueeze(2)  # Shape: (batch, 1, 1)
-        outputs = []
-        
-        for _ in range(self.horizon):
-            dec_out, (hn, cn) = self.decoder(dec_input, (hn, cn))
-            pred = self.fc(dec_out[:, -1, :])  # Shape: (batch, 1)
-            outputs.append(pred)
-            dec_input = pred.unsqueeze(1)      # Feed forward step as next input
-            
-        return torch.cat(outputs, dim=1)  # Shape: (batch_size, horizon)
-
-
-# ==============================================================================
-# 5. PYTORCH: TIME-SERIES TRANSFORMER
-# ==============================================================================
-class TimeSeriesTransformer(nn.Module):
-    """
-    Multi-head self-attention transformer head mapping sequential
-    temporal dependencies directly to multi-step forecasts.
-    """
-    def __init__(self, input_dim=9, d_model=64, nhead=4, num_layers=2, horizon=24, dim_feedforward=128, dropout=0.1):
-        super().__init__()
-        self.input_projection = nn.Linear(input_dim, d_model)
-        encoder_layer = nn.TransformerEncoderLayer(
-            d_model=d_model,
-            nhead=nhead,
-            dim_feedforward=dim_feedforward,
-            dropout=dropout,
-            batch_first=True
-        )
-        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
-        self.head = nn.Linear(d_model, horizon)
-
-    def forward(self, x):
-        # x shape: (batch_size, seq_len, input_dim)
-        proj = self.input_projection(x)
-        enc_out = self.transformer_encoder(proj)
-        # Pool across sequence dimension (mean pooling)
-        pooled = enc_out.mean(dim=1)
-        out = self.head(pooled)
-        return out  # Shape: (batch_size, horizon)
-
 class Seq2SeqCovariateLSTM(nn.Module):
-    def __init__(self, hist_input_dim, future_input_dim, hidden_dim, horizon=24, num_layers=1):
+    def __init__(self, hist_input_dim, future_input_dim, hidden_dim, horizon=24, num_layers=1, target_idx=4):
         super(Seq2SeqCovariateLSTM, self).__init__()
         self.horizon = horizon
         self.hidden_dim = hidden_dim
+        self.target_idx = target_idx
         
-        # Encoder: Processes the 168-hour history (load + weather + time)
         self.encoder = nn.LSTM(hist_input_dim, hidden_dim, num_layers, batch_first=True)
-        
-        # Decoder: Processes the 24-hour future weather forecast & time features
-        self.decoder_lstm = nn.LSTM(future_input_dim, hidden_dim, num_layers, batch_first=True)
-        
-        # Final output layer to map the hidden state to a single Megawatt prediction per hour
+        self.decoder_lstm = nn.LSTM(1 + future_input_dim, hidden_dim, num_layers, batch_first=True)
         self.fc = nn.Linear(hidden_dim, 1)
         
-    def forward(self, x_hist, x_future):
-        """
-        x_hist shape: (Batch, 168, hist_input_dim)
-        x_future shape: (Batch, 24, future_input_dim)
-        """
-        # 1. Encode the history
+    def forward(self, x_hist, x_future, y_target=None, teacher_forcing_ratio=0.0):
         _, (hn, cn) = self.encoder(x_hist)
         
-        # 2. Decode the future forecast
-        # We initialize the decoder's memory with the encoder's final state (hn, cn)
-        decoder_out, _ = self.decoder_lstm(x_future, (hn, cn))
+        current_load = x_hist[:, -1, self.target_idx].unsqueeze(1)
+        predictions = []
         
-        # 3. Predict the load for each of the 24 future hours
-        # decoder_out is (Batch, 24, hidden_dim)
-        predictions = self.fc(decoder_out) # Outputs (Batch, 24, 1)
+        for t in range(self.horizon):
+            current_covariates = x_future[:, t, :]
+            
+            decoder_input = torch.cat((current_load, current_covariates), dim=1).unsqueeze(1)
+            decoder_out, (hn, cn) = self.decoder_lstm(decoder_input, (hn, cn))
+            
+            pred_load = self.fc(decoder_out.squeeze(1))
+            predictions.append(pred_load)
+            
+            # TEACHER FORCING LOGIC
+            # If training, sometimes use the actual ground truth for the next step's input
+            if y_target is not None and random.random() < teacher_forcing_ratio:
+                current_load = y_target[:, t].unsqueeze(1)
+            else:
+                current_load = pred_load # Otherwise, use its own prediction
+                
+        return torch.stack(predictions, dim=1).squeeze(-1)
+
+class GridTransformer(nn.Module):
+    """
+    A Transformer-based architecture capturing the core cross-attention 
+    mechanics of a TFT for multi-horizon time-series forecasting.
+    """
+    def __init__(self, hist_input_dim, future_input_dim, hidden_dim=64, horizon=24, nheads=4, num_layers=2):
+        super(GridTransformer, self).__init__()
         
-        # Drop the last dimension to match the target shape (Batch, 24)
-        return predictions.squeeze(-1)
+        # 1. Linear projections to align history and future dimensions
+        self.hist_proj = nn.Linear(hist_input_dim, hidden_dim)
+        self.fut_proj = nn.Linear(future_input_dim, hidden_dim)
+        
+        # 2. Learnable Positional Encodings to inject the concept of "time" 
+        self.pos_encoder_hist = nn.Parameter(torch.randn(1, 168, hidden_dim))
+        self.pos_encoder_fut = nn.Parameter(torch.randn(1, horizon, hidden_dim))
+        
+        # 3. The Core Attention Mechanism
+        # The decoder allows the future covariates to dynamically "query" the history
+        decoder_layer = nn.TransformerDecoderLayer(d_model=hidden_dim, nhead=nheads, batch_first=True)
+        self.transformer_decoder = nn.TransformerDecoder(decoder_layer, num_layers=num_layers)
+        
+        # 4. Final Output Projection to Megawatts
+        self.fc_out = nn.Linear(hidden_dim, 1)
+
+    def forward(self, x_hist, x_future, **kwargs):
+        # Project and add positional context
+        memory = self.hist_proj(x_hist) + self.pos_encoder_hist
+        tgt = self.fut_proj(x_future) + self.pos_encoder_fut
+        
+        # Transformer Cross-Attention: 
+        # Future weather (tgt) searches the 168-hour history (memory) for patterns
+        out = self.transformer_decoder(tgt, memory)
+        
+        # Map back to a single MW prediction per hour
+        pred = self.fc_out(out).squeeze(-1) # Shape: (Batch, 24)
+        return pred
