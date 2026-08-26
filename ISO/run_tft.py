@@ -153,12 +153,12 @@ def main():
     model = GridTransformer(
         hist_input_dim=X_train_hist.shape[-1], 
         future_input_dim=X_train_fut.shape[-1], 
-        hidden_dim=64,   
+        hidden_dim=128,   
         nheads=4,        
         num_layers=2
     )
     
-    trained_model = train_tft(model, train_loader, val_loader, epochs=30, lr=1e-3)
+    trained_model = train_tft(model, train_loader, val_loader, epochs=50, lr=5e-4)
     
     # 6. Evaluate
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

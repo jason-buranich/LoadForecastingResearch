@@ -131,38 +131,29 @@ class Seq2SeqCovariateLSTM(nn.Module):
         return torch.stack(predictions, dim=1).squeeze(-1)
 
 class GridTransformer(nn.Module):
-    """
-    A Transformer-based architecture capturing the core cross-attention 
-    mechanics of a TFT for multi-horizon time-series forecasting.
-    """
-    def __init__(self, hist_input_dim, future_input_dim, hidden_dim=64, horizon=24, nheads=4, num_layers=2):
+    def __init__(self, hist_input_dim, future_input_dim, hidden_dim=128, horizon=24, nheads=4, num_layers=2):
         super(GridTransformer, self).__init__()
         
-        # 1. Linear projections to align history and future dimensions
         self.hist_proj = nn.Linear(hist_input_dim, hidden_dim)
         self.fut_proj = nn.Linear(future_input_dim, hidden_dim)
         
-        # 2. Learnable Positional Encodings to inject the concept of "time" 
         self.pos_encoder_hist = nn.Parameter(torch.randn(1, 168, hidden_dim))
         self.pos_encoder_fut = nn.Parameter(torch.randn(1, horizon, hidden_dim))
         
-        # 3. The Core Attention Mechanism
-        # The decoder allows the future covariates to dynamically "query" the history
-        decoder_layer = nn.TransformerDecoderLayer(d_model=hidden_dim, nhead=nheads, batch_first=True)
+        # Added dropout=0.1 to regularize the attention mechanism
+        decoder_layer = nn.TransformerDecoderLayer(
+            d_model=hidden_dim, 
+            nhead=nheads, 
+            dropout=0.1, 
+            batch_first=True
+        )
         self.transformer_decoder = nn.TransformerDecoder(decoder_layer, num_layers=num_layers)
         
-        # 4. Final Output Projection to Megawatts
         self.fc_out = nn.Linear(hidden_dim, 1)
 
     def forward(self, x_hist, x_future, **kwargs):
-        # Project and add positional context
         memory = self.hist_proj(x_hist) + self.pos_encoder_hist
         tgt = self.fut_proj(x_future) + self.pos_encoder_fut
         
-        # Transformer Cross-Attention: 
-        # Future weather (tgt) searches the 168-hour history (memory) for patterns
         out = self.transformer_decoder(tgt, memory)
-        
-        # Map back to a single MW prediction per hour
-        pred = self.fc_out(out).squeeze(-1) # Shape: (Batch, 24)
-        return pred
+        return self.fc_out(out).squeeze(-1)
