@@ -161,7 +161,7 @@ class Seq2SeqCovariateLSTM(nn.Module):
         return torch.stack(predictions, dim=1).squeeze(-1)
 
 class GridTransformer(nn.Module):
-    def __init__(self, hist_input_dim, future_input_dim, hidden_dim=128, horizon=24, nheads=4, num_layers=2):
+    def __init__(self, hist_input_dim, future_input_dim, hidden_dim=128, horizon=24, nheads=4, num_layers=2, dropout=0.1):
         super(GridTransformer, self).__init__()
         
         self.hist_proj = nn.Linear(hist_input_dim, hidden_dim)
@@ -170,11 +170,11 @@ class GridTransformer(nn.Module):
         self.pos_encoder_hist = nn.Parameter(torch.randn(1, 168, hidden_dim))
         self.pos_encoder_fut = nn.Parameter(torch.randn(1, horizon, hidden_dim))
         
-        # Added dropout=0.1 to regularize the attention mechanism
+        # Now uses the dynamic dropout variable instead of a hardcoded 0.1
         decoder_layer = nn.TransformerDecoderLayer(
             d_model=hidden_dim, 
             nhead=nheads, 
-            dropout=0.1, 
+            dropout=dropout, 
             batch_first=True
         )
         self.transformer_decoder = nn.TransformerDecoder(decoder_layer, num_layers=num_layers)
@@ -187,3 +187,61 @@ class GridTransformer(nn.Module):
         
         out = self.transformer_decoder(tgt, memory)
         return self.fc_out(out).squeeze(-1)
+    
+class PatchTST(nn.Module):
+    """
+    An adapted Patch Time Series Transformer.
+    Groups the 168-hour history into 7 daily patches (24h each) to capture 
+    local semantic meaning, processes via attention, and fuses with future covariates.
+    """
+    def __init__(self, hist_input_dim, future_input_dim, seq_len=168, patch_len=24, horizon=24, hidden_dim=128, nheads=4, num_layers=2, dropout=0.2):
+        super(PatchTST, self).__init__()
+        
+        self.patch_len = patch_len
+        # Calculate number of non-overlapping patches (168 / 24 = 7)
+        self.num_patches = seq_len // patch_len 
+        
+        # 1. Patch Embedding: Maps a 24-hour chunk of all features to the hidden dimension
+        self.patch_embedding = nn.Linear(patch_len * hist_input_dim, hidden_dim)
+        self.position_embedding = nn.Parameter(torch.randn(1, self.num_patches, hidden_dim))
+        
+        # 2. Transformer Encoder (Process the 7 patches)
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=hidden_dim, 
+            nhead=nheads, 
+            dropout=dropout, 
+            batch_first=True
+        )
+        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+        
+        # 3. Future Covariate Embedding
+        self.future_embedding = nn.Linear(horizon * future_input_dim, hidden_dim)
+        
+        # 4. Final Projection Head
+        # Output takes the flattened encoded patches + the embedded future weather
+        self.fc_out = nn.Linear((self.num_patches * hidden_dim) + hidden_dim, horizon)
+
+    def forward(self, x_hist, x_future):
+        B, L, C = x_hist.shape
+        
+        # 1. Create Patches: Reshape (B, 168, C) -> (B, 7, 24 * C)
+        patches = x_hist.view(B, self.num_patches, self.patch_len * C)
+        
+        # 2. Embed Patches and add Positional Encoding
+        x = self.patch_embedding(patches) + self.position_embedding
+        
+        # 3. Apply Attention across the 7 patches
+        enc_out = self.transformer_encoder(x)
+        
+        # 4. Flatten the encoder output: (B, 7 * hidden_dim)
+        enc_flat = enc_out.view(B, -1)
+        
+        # 5. Process Future Covariates: (B, 24 * future_dim) -> (B, hidden_dim)
+        fut_flat = x_future.view(B, -1)
+        fut_emb = self.future_embedding(fut_flat)
+        
+        # 6. Concatenate and Project
+        combined = torch.cat([enc_flat, fut_emb], dim=1)
+        out = self.fc_out(combined)
+        
+        return out

@@ -2,7 +2,7 @@ import random
 import os
 import numpy as np
 import torch
-from sklearn.ensemble import RandomForestRegressor
+import lightgbm as lgb
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 from data import train_df, val_df, test_df, scaler
@@ -23,9 +23,9 @@ def main():
     SEQ_LEN = 168
     TARGET_IDX = 4
     
-    print("--- Starting 24-Model Specialized Random Forest Pipeline ---")
+    print("--- Starting 24-Model Specialized LightGBM Pipeline ---")
     
-    # 1. Generate sliding window tensors
+    # 1. Generate sliding window tensors (using the 3-item unpack)
     X_train_hist, X_train_fut, Y_train = create_safe_sequences(train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     X_test_hist, X_test_fut, Y_test    = create_safe_sequences(test_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     
@@ -42,8 +42,8 @@ def main():
     Y_train_flat = Y_train.numpy() # Shape: (N, 24)
     Y_test_flat = Y_test.numpy()   # Shape: (N, 24)
     
-    # 3. Train 24 Separate Random Forest Models (Direct Multi-Model Strategy)
-    print("Training 24 specialized Random Forest models (one per horizon step)...")
+    # 3. Train 24 Separate LightGBM Models (Direct Multi-Model Strategy)
+    print("Training 24 specialized LightGBM models (one per horizon step)...")
     preds_list = []
     
     for h in range(HORIZON):
@@ -51,18 +51,20 @@ def main():
         # Isolate the target vector strictly for hour h
         y_train_h = Y_train_flat[:, h]
         
-        rf_h = RandomForestRegressor(
+        lgbm_h = lgb.LGBMRegressor(
             n_estimators=100,
+            learning_rate=0.05,
             max_depth=15,
-            min_samples_split=20,
-            max_features=0.3,
+            subsample=0.8,
+            colsample_bytree=0.8,
             random_state=42,
-            n_jobs=4
+            n_jobs=4,
+            verbosity=-1
         )
-        rf_h.fit(X_train_combined, y_train_h)
+        lgbm_h.fit(X_train_combined, y_train_h)
         
         # Predict for this specific hour on the test set
-        pred_h = rf_h.predict(X_test_combined)
+        pred_h = lgbm_h.predict(X_test_combined)
         preds_list.append(pred_h)
         
     # Stack the predictions back into an (N, 24) matrix
@@ -82,7 +84,7 @@ def main():
     mae = mean_absolute_error(targets_mw, preds_mw)
     wape = np.sum(np.abs(targets_mw - preds_mw)) / np.sum(np.abs(targets_mw)) * 100
     
-    print("\n--- 24-Model Random Forest Evaluation Metrics (MW) ---")
+    print("\n--- 24-Model LightGBM Evaluation Metrics (MW) ---")
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     
     # 6. Plot Forecast
@@ -90,8 +92,8 @@ def main():
         targets_mw, 
         preds_mw, 
         start_idx=0, 
-        model_name="24-Model RF", 
-        save_path='rf_specialized_forecast.png'
+        model_name="24-Model LGBM", 
+        save_path='lgbm_specialized_forecast.png'
     )
 
 if __name__ == "__main__":
