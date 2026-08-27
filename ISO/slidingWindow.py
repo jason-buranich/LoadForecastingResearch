@@ -4,12 +4,13 @@ import torch
 def create_safe_sequences(df, seq_len=168, horizon=24, target_idx=4, covariate_start_idx=5):
     """
     Extracts sliding windows ensuring sequences do not cross month boundaries.
-    Now extracts future known covariates (weather & time) for the Decoder.
+    Automatically adjusts column indices to account for the dropped 'Month' column.
     """
     X_hist_list, X_future_list, Y_list = [], [], []
     
     # Process each month independently to avoid gaps
     for month in df['Month'].unique():
+        # Dropping a column shifts all subsequent indices left by 1
         month_data = df[df['Month'] == month].drop(columns=['Month']).values
         
         if len(month_data) < seq_len + horizon:
@@ -19,11 +20,11 @@ def create_safe_sequences(df, seq_len=168, horizon=24, target_idx=4, covariate_s
             # 168-hour history (all features)
             x_seq = month_data[i : i + seq_len]
             
-            # 24-hour future forecast (only weather and time features)
-            x_fut = month_data[i + seq_len : i + seq_len + horizon, covariate_start_idx:] # -1 because we dropped 'Month'
+            # 24-hour future forecast (adjusted for dropped 'Month' column)
+            x_fut = month_data[i + seq_len : i + seq_len + horizon, covariate_start_idx - 1:] 
             
-            # 24-hour future target (only CAISO load)
-            y_seq = month_data[i + seq_len : i + seq_len + horizon, target_idx]
+            # 24-hour future target (adjusted for dropped 'Month' column)
+            y_seq = month_data[i + seq_len : i + seq_len + horizon, target_idx - 1]
             
             X_hist_list.append(x_seq)
             X_future_list.append(x_fut)
