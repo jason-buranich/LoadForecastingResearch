@@ -6,35 +6,38 @@ from models import get_tabular_models
 # ==========================================
 # 1. Tabular Baseline Evaluation (MLR)
 # ==========================================
-def evaluate_tabular_baseline(X_train_hist, X_train_fut, Y_train, X_test_hist, X_test_fut, Y_test, scaler, target_col_idx=4, horizon=24):
-    print("\n--- Training Tabular ISO Baseline (MLR) with Future Covariates ---")
+def evaluate_tabular_baseline(X_train_hist, X_train_fut, Y_train, X_test_hist, X_test_fut, Y_test, scaler, target_col_idx=4, horizon=24, model_type='mlr'):
+    print(f"\n--- Training Tabular Baseline ({model_type.upper()}) with Future Covariates ---")
     
-    # 1. Flatten the historical 3D tensors: (Batch, 168, features) -> (Batch, 168 * features)
     X_train_h_flat = X_train_hist.numpy().reshape(X_train_hist.shape[0], -1)
     X_test_h_flat = X_test_hist.numpy().reshape(X_test_hist.shape[0], -1)
     
-    # 2. Flatten the future covariates 3D tensors: (Batch, 24, weather_features) -> (Batch, 24 * weather_features)
     X_train_f_flat = X_train_fut.numpy().reshape(X_train_fut.shape[0], -1)
     X_test_f_flat = X_test_fut.numpy().reshape(X_test_fut.shape[0], -1)
     
-    # 3. Concatenate history and future horizontally
-    # This gives the MLR access to both the past week AND tomorrow's weather forecast
     X_train_combined = np.hstack((X_train_h_flat, X_train_f_flat))
     X_test_combined = np.hstack((X_test_h_flat, X_test_f_flat))
     
-    # Y is already 2D (Batch, 24)
     Y_train_flat = Y_train.numpy()
     Y_test_flat = Y_test.numpy()
     
-    # 4. Instantiate and Train
-    mlr, _, _ = get_tabular_models(horizon=horizon)
-    print("Fitting MLR with historical data + 24-hour weather forecast...")
-    mlr.fit(X_train_combined, Y_train_flat)
+    mlr, rf, lgbm = get_tabular_models(horizon=horizon)
     
-    # 5. Generate Predictions
-    preds = mlr.predict(X_test_combined)
+    # Dynamically select the model
+    if model_type.lower() == 'mlr':
+        model = mlr
+    elif model_type.lower() == 'rf':
+        model = rf
+    elif model_type.lower() == 'lgbm':
+        model = lgbm
+    else:
+        raise ValueError("model_type must be 'mlr', 'rf', or 'lgbm'")
+        
+    print(f"Fitting {model_type.upper()} with historical data + 24-hour weather forecast...")
+    model.fit(X_train_combined, Y_train_flat)
     
-    # 6. Inverse-Scale to absolute Megawatts (MW)
+    preds = model.predict(X_test_combined)
+    
     def inverse_scale(data_flat):
         dummy = np.zeros((len(data_flat), scaler.mean_.shape[0]))
         dummy[:, target_col_idx] = data_flat
@@ -43,17 +46,16 @@ def evaluate_tabular_baseline(X_train_hist, X_train_fut, Y_train, X_test_hist, X
     preds_mw = inverse_scale(preds.flatten())
     targets_mw = inverse_scale(Y_test_flat.flatten())
     
-    # 7. Calculate Metrics
     rmse = np.sqrt(mean_squared_error(targets_mw, preds_mw))
     mae = mean_absolute_error(targets_mw, preds_mw)
     wape = np.sum(np.abs(targets_mw - preds_mw)) / np.sum(np.abs(targets_mw)) * 100
     
-    print("\n--- MLR Baseline (With Future Weather) Metrics (MW) ---")
+    print(f"\n--- {model_type.upper()} Baseline (With Future Weather) Metrics (MW) ---")
     print(f"RMSE (MW): {rmse:.2f}")
     print(f"MAE (MW):  {mae:.2f}")
     print(f"WAPE (%):  {wape:.2f}")
     
-    return mlr, preds_mw
+    return model, preds_mw
 
 # ==========================================
 # 2. PyTorch Neural Network Evaluation

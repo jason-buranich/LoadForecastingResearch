@@ -43,24 +43,40 @@ class SeasonalNaiveBaseline:
 # ==============================================================================
 # 2. TABULAR MODELS: RANDOM FOREST & LIGHTGBM
 # ==============================================================================
-def get_tabular_models(horizon=24, n_estimators=100, random_state=42):
+def get_tabular_models(horizon=24, random_state=42):
     """
     Instantiates the traditional ISO baseline (Ridge Regression) alongside 
-    Random Forest and LightGBM models.
-    Wraps single-output estimators in MultiOutputRegressor if horizon > 1.
+    optimized Random Forest and LightGBM models.
     """
+    # 1. Linear Baseline
+    mlr = Ridge(alpha=500.0, solver='lsqr')
+    
+    # 2. Optimized Tree Baselines (using the hyperparams from our tuning)
+    rf_base = RandomForestRegressor(
+        n_estimators=50,
+        max_depth=15,
+        min_samples_split=20,
+        max_features=0.3,
+        random_state=random_state,
+        n_jobs=-1
+    )
+    
+    lgbm_base = lgb.LGBMRegressor(
+        n_estimators=50,
+        max_depth=15,
+        random_state=random_state,
+        n_jobs=-1,
+        verbosity=-1
+    )
+    
+    # 3. Horizon Wrapping
     if horizon == 1:
-        # Fast iterative solver for high-dimensional data
-        mlr = Ridge(alpha=500.0, solver='lsqr')
-        
-        rf = RandomForestRegressor(n_estimators=n_estimators, random_state=random_state, n_jobs=-1)
-        lgbm = lgb.LGBMRegressor(n_estimators=n_estimators, random_state=random_state, n_jobs=-1, verbosity=-1)
+        rf = rf_base
+        lgbm = lgbm_base
     else:
-        # Ridge natively supports multi-output. DO NOT wrap it in MultiOutputRegressor!
-        mlr = Ridge(alpha=500.0, solver='lsqr')
-        
-        rf = MultiOutputRegressor(RandomForestRegressor(n_estimators=n_estimators, random_state=random_state, n_jobs=-1))
-        lgbm = MultiOutputRegressor(lgb.LGBMRegressor(n_estimators=n_estimators, random_state=random_state, n_jobs=-1, verbosity=-1))
+        # MultiOutputRegressor automatically executes the 24-specialized-model loop natively
+        rf = MultiOutputRegressor(rf_base)
+        lgbm = MultiOutputRegressor(lgbm_base)
         
     return mlr, rf, lgbm
 

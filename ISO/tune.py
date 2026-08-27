@@ -1,8 +1,8 @@
 import optuna
 import torch
+from torch.utils.data import TensorDataset, DataLoader
 from data import train_df, val_df, test_df
 from slidingWindow import create_safe_sequences
-from optimize import get_dataloaders
 from models import DirectLSTM
 from trainingLoop import train_model
 
@@ -10,7 +10,7 @@ from trainingLoop import train_model
 HORIZON = 24
 SEQ_LEN = 168
 TARGET_IDX = 4
-EPOCHS_PER_TRIAL = 15 # Keep epochs low for rapid hyperparameter searching
+EPOCHS_PER_TRIAL = 15
 
 def objective(trial):
     """
@@ -23,15 +23,19 @@ def objective(trial):
     lr = trial.suggest_float('lr', 1e-4, 1e-2, log=True)
     batch_size = trial.suggest_categorical('batch_size', [32, 64, 128])
     
-    # 2. Generate Tensors (Only needs to happen once, but kept here for simplicity)
-    X_train, Y_train = create_safe_sequences(train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
-    X_val, Y_val     = create_safe_sequences(val_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
+    # 2. FIX: Unpack all 3 items (ignore the future covariates with '_')
+    X_train_hist, _, Y_train = create_safe_sequences(train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
+    X_val_hist, _, Y_val     = create_safe_sequences(val_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     
-    # 3. Build DataLoaders with the trial's batch size
-    train_loader, val_loader = get_dataloaders(X_train, Y_train, X_val, Y_val, batch_size=batch_size)
+    # 3. FIX: Create 2-item DataLoaders directly for the DirectLSTM
+    train_dataset = TensorDataset(X_train_hist, Y_train)
+    val_dataset = TensorDataset(X_val_hist, Y_val)
+    
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=4)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
     
     # 4. Initialize the Model with trial architectures
-    input_dim = X_train.shape[-1]
+    input_dim = X_train_hist.shape[-1]
     model = DirectLSTM(
         input_dim=input_dim, 
         hidden_dim=hidden_dim, 
@@ -41,7 +45,6 @@ def objective(trial):
     )
     
     # 5. Train the Model
-    # We unpack the tuple now that train_model returns (model, best_val_loss)
     _, best_val_loss = train_model(
         model=model,
         train_loader=train_loader,
@@ -51,16 +54,12 @@ def objective(trial):
         model_save_path=f"trial_{trial.number}_model.pth"
     )
     
-    # Optuna will attempt to minimize this returned metric
     return best_val_loss
 
 if __name__ == "__main__":
     print("--- Starting Optuna Hyperparameter Optimization ---")
     
-    # Create the study object
     study = optuna.create_study(direction="minimize", study_name="CAISO_DirectLSTM_Tuning")
-    
-    # Run the optimization for a set number of trials
     study.optimize(objective, n_trials=20)
     
     print("\n--- Optuna Search Complete ---")

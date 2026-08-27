@@ -63,7 +63,7 @@ def objective(trial):
             batch_y = batch_y.to(device)
             
             optimizer.zero_grad()
-            outputs = model(batch_x_hist, batch_x_fut)
+            outputs = model(batch_x_hist, batch_x_fut, y_target=batch_y, teacher_forcing_ratio=0.5)
             
             b_size = batch_x_hist.size(0)
             loss = criterion(outputs.view(b_size, -1), batch_y.view(b_size, -1))
@@ -79,7 +79,7 @@ def objective(trial):
                 batch_x_fut = batch_x_fut.to(device)
                 batch_y = batch_y.to(device)
                 
-                outputs = model(batch_x_hist, batch_x_fut)
+                outputs = model(batch_x_hist, batch_x_fut, y_target=batch_y, teacher_forcing_ratio=0.5)
                 
                 b_size = batch_x_hist.size(0)
                 loss = criterion(outputs.view(b_size, -1), batch_y.view(b_size, -1))

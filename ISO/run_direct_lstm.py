@@ -7,8 +7,11 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from data import train_df, val_df, test_df, scaler
 from slidingWindow import create_safe_sequences
 from models import DirectLSTM
-from visualize import plot_day_ahead_forecast
+from visualize import plot_single_model_forecast
 
+# ==========================================
+# 1. Training Components
+# ==========================================
 class EarlyStopping:
     def __init__(self, patience=7, min_delta=0, model_save_path='best_model.pth'):
         self.patience = patience
@@ -44,7 +47,6 @@ def train_direct_lstm(model, train_loader, val_loader, epochs=100, lr=1e-3, pati
     for epoch in range(epochs):
         model.train()
         train_loss = 0.0
-        # 2-item unpacking for Direct LSTM
         for batch_x, batch_y in train_loader:
             batch_x, batch_y = batch_x.to(device), batch_y.to(device)
             optimizer.zero_grad()
@@ -106,6 +108,9 @@ def evaluate_direct_lstm(model, test_loader, target_col_idx, device):
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     return preds_mw, targets_mw
 
+# ==========================================
+# 2. Main Execution
+# ==========================================
 def main():
     HORIZON = 24
     SEQ_LEN = 168
@@ -113,32 +118,52 @@ def main():
     
     print(f"--- Starting Standalone Direct LSTM Pipeline ---")
     
-    # 1. Generate tensors (ignoring future covariates)
+    # Generate tensors (ignoring future covariates)
     X_train_hist, _, Y_train = create_safe_sequences(train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     X_val_hist, _, Y_val     = create_safe_sequences(val_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     X_test_hist, _, Y_test   = create_safe_sequences(test_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     
-    # 2. DataLoaders
-    train_loader = DataLoader(TensorDataset(X_train_hist, Y_train), batch_size=32, shuffle=True, num_workers=4)
-    val_loader = DataLoader(TensorDataset(X_val_hist, Y_val), batch_size=32, shuffle=False, num_workers=4)
+    # Optuna Optimized Batch Size
+    train_loader = DataLoader(TensorDataset(X_train_hist, Y_train), batch_size=64, shuffle=True, num_workers=4)
+    val_loader = DataLoader(TensorDataset(X_val_hist, Y_val), batch_size=64, shuffle=False, num_workers=4)
     test_loader = DataLoader(TensorDataset(X_test_hist, Y_test), batch_size=64, shuffle=False, num_workers=4)
     
-    # 3. Initialize and Train
+    # Optuna Optimized Architecture
     model_path = f'tuned_direct_lstm_{HORIZON}h.pth'
-    model = DirectLSTM(input_dim=X_train_hist.shape[-1], hidden_dim=256, horizon=HORIZON, num_layers=1)
-    
-    trained_model = train_direct_lstm(
-        model=model, train_loader=train_loader, val_loader=val_loader, 
-        epochs=100, lr=0.000394, patience=10, model_save_path=model_path
+    model = DirectLSTM(
+        input_dim=X_train_hist.shape[-1], 
+        hidden_dim=256, 
+        horizon=HORIZON, 
+        num_layers=1,
+        dropout=0.2789 
     )
     
-    # 4. Evaluate
+    # Optuna Optimized Learning Rate
+    trained_model = train_direct_lstm(
+        model=model, 
+        train_loader=train_loader, 
+        val_loader=val_loader, 
+        epochs=100, 
+        lr=0.001437, 
+        patience=10, 
+        model_save_path=model_path
+    )
+    
+    # Evaluate
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     trained_model.load_state_dict(torch.load(model_path, weights_only=True))
     trained_model.to(device)
     
     lstm_preds, lstm_targets = evaluate_direct_lstm(trained_model, test_loader, TARGET_IDX, device)
-    plot_day_ahead_forecast(lstm_targets, lstm_preds, lstm_preds, start_idx=0, save_path='direct_lstm_forecast.png')
+    
+    # Fixed plotting function call
+    plot_single_model_forecast(
+        lstm_targets, 
+        lstm_preds, 
+        start_idx=0, 
+        model_name="Tuned Direct LSTM", 
+        save_path='direct_lstm_forecast.png'
+    )
 
 if __name__ == "__main__":
     main()

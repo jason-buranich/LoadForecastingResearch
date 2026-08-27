@@ -13,17 +13,22 @@ weather_df['Date'] = pd.to_datetime(weather_df['Date'])
 # Merge on Date and Hour
 df = pd.merge(caiso_df, weather_df, on=['Date', 'HR'], how='left')
 
-# 1. Drop messy columns
+# Drop messy columns
 cols_to_drop = [c for c in df.columns if 'Unnamed' in c or 'DST' in c]
 df = df.drop(columns=cols_to_drop).sort_values(by=['Date', 'HR']).reset_index(drop=True)
 
-# 2. Fix the missing Weather Data
-# Linearly interpolate missing hours, then backward/forward fill the edges
-df = df.interpolate(method='linear')
-df = df.bfill().ffill()
-
-# 2. Extract Time Features
+# 2. Extract Month Feature EARLY
 df['Month'] = df['Date'].dt.month
+
+# 3. Fix the missing Weather Data (No Data Leakage)
+# Isolate only the weather columns that need to be interpolated
+weather_cols = [c for c in df.columns if 'Temp' in c or 'Solar' in c]
+
+# Apply the interpolation strictly to the isolated columns grouped by month
+for col in weather_cols:
+    df[col] = df.groupby('Month')[col].transform(lambda x: x.interpolate(method='linear').bfill().ffill())
+
+# 4. Extract Remaining Time Features
 df['hour_sin'] = np.sin(2 * np.pi * df['HR'] / 24)
 df['hour_cos'] = np.cos(2 * np.pi * df['HR'] / 24)
 
@@ -31,7 +36,7 @@ df['day_of_week'] = df['Date'].dt.dayofweek
 df['dow_sin'] = np.sin(2 * np.pi * df['day_of_week'] / 7)
 df['dow_cos'] = np.cos(2 * np.pi * df['day_of_week'] / 7)
 
-# 3. Define the Splits
+# 5. Define the Splits
 val_months = [4, 10]
 test_months = [8, 12]
 train_months = [m for m in range(1, 13) if m not in val_months and m not in test_months]

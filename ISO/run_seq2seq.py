@@ -8,7 +8,7 @@ from slidingWindow import create_safe_sequences
 from models import Seq2SeqCovariateLSTM
 from trainingLoop import EarlyStopping
 from evaluate import evaluate_predictions
-from visualize import plot_day_ahead_forecast
+from visualize import plot_single_model_forecast
 
 def train_seq2seq_model(model, train_loader, val_loader, epochs=100, lr=1e-3, patience=10, model_save_path='best_seq2seq.pth'):
     """
@@ -142,6 +142,14 @@ def main():
         scaler=scaler, 
         target_col_idx=TARGET_IDX, 
         device=device
+    )
+
+    plot_single_model_forecast(
+        lstm_targets, 
+        lstm_preds, 
+        start_idx=0, 
+        model_name="Seq2Seq LSTM", 
+        save_path='seq2seq_forecast.png'
     )
 
 if __name__ == "__main__":
