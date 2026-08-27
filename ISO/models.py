@@ -86,26 +86,40 @@ def get_tabular_models(horizon=24, random_state=42):
 # ==============================================================================
 class DirectLSTM(nn.Module):
     """
-    Encodes the historical sequence and maps the final hidden state 
-    directly to the entire prediction horizon via a linear projection layer.
+    Encodes the historical sequence and concatenates the flattened future 
+    covariates before projecting directly to the entire prediction horizon.
     """
-    def __init__(self, input_dim=9, hidden_dim=64, horizon=24, num_layers=2, dropout=0.1):
+    def __init__(self, hist_input_dim, future_input_dim, hidden_dim=64, horizon=24, num_layers=2, dropout=0.1):
         super().__init__()
+        self.horizon = horizon
+        self.future_input_dim = future_input_dim
+        
         self.lstm = nn.LSTM(
-            input_size=input_dim,
+            input_size=hist_input_dim,
             hidden_size=hidden_dim,
             num_layers=num_layers,
             batch_first=True,
             dropout=dropout if num_layers > 1 else 0.0
         )
-        self.fc = nn.Linear(hidden_dim, horizon)
+        
+        # The FC layer now takes the LSTM's hidden state PLUS all flattened future weather data
+        fc_input_dim = hidden_dim + (horizon * future_input_dim)
+        self.fc = nn.Linear(fc_input_dim, horizon)
 
-    def forward(self, x):
-        # x shape: (batch_size, seq_len, input_dim)
-        _, (hn, _) = self.lstm(x)
-        # hn[-1] shape: (batch_size, hidden_dim)
-        out = self.fc(hn[-1])
-        return out  # Shape: (batch_size, horizon)
+    def forward(self, x_hist, x_future):
+        # 1. Process history
+        _, (hn, _) = self.lstm(x_hist)
+        last_hidden = hn[-1]  # Shape: (Batch, hidden_dim)
+        
+        # 2. Flatten future covariates: (Batch, 24, features) -> (Batch, 24 * features)
+        future_flat = x_future.view(x_future.size(0), -1)
+        
+        # 3. Concatenate historical momentum with tomorrow's forecast
+        combined = torch.cat((last_hidden, future_flat), dim=1)
+        
+        # 4. Project to the 24-hour load horizon
+        out = self.fc(combined)
+        return out
 
 
 # ==============================================================================

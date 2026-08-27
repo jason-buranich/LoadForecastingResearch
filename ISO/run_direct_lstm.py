@@ -9,9 +9,6 @@ from slidingWindow import create_safe_sequences
 from models import DirectLSTM
 from visualize import plot_single_model_forecast
 
-# ==========================================
-# 1. Training Components
-# ==========================================
 class EarlyStopping:
     def __init__(self, patience=7, min_delta=0, model_save_path='best_model.pth'):
         self.patience = patience
@@ -40,18 +37,26 @@ class EarlyStopping:
 def train_direct_lstm(model, train_loader, val_loader, epochs=100, lr=1e-3, patience=10, model_save_path='best_model.pth'):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
-    criterion = nn.MSELoss()
+    
+    # Switched to L1Loss to align directly with WAPE
+    criterion = nn.L1Loss()
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
+    
+    # Added Scheduler
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=3)
     early_stopping = EarlyStopping(patience=patience, model_save_path=model_save_path)
     
     for epoch in range(epochs):
         model.train()
         train_loss = 0.0
-        for batch_x, batch_y in train_loader:
-            batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+        # Now unpacking 3 items
+        for batch_x_hist, batch_x_fut, batch_y in train_loader:
+            batch_x_hist, batch_x_fut, batch_y = batch_x_hist.to(device), batch_x_fut.to(device), batch_y.to(device)
+            
             optimizer.zero_grad()
-            outputs = model(batch_x)
-            batch_size = batch_x.size(0)
+            outputs = model(batch_x_hist, batch_x_fut)
+            
+            batch_size = batch_x_hist.size(0)
             loss = criterion(outputs.view(batch_size, -1), batch_y.view(batch_size, -1))
             loss.backward()
             nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
@@ -61,18 +66,22 @@ def train_direct_lstm(model, train_loader, val_loader, epochs=100, lr=1e-3, pati
         model.eval()
         val_loss = 0.0
         with torch.no_grad():
-            for batch_x, batch_y in val_loader:
-                batch_x, batch_y = batch_x.to(device), batch_y.to(device)
-                outputs = model(batch_x)
-                batch_size = batch_x.size(0)
+            for batch_x_hist, batch_x_fut, batch_y in val_loader:
+                batch_x_hist, batch_x_fut, batch_y = batch_x_hist.to(device), batch_x_fut.to(device), batch_y.to(device)
+                
+                outputs = model(batch_x_hist, batch_x_fut)
+                
+                batch_size = batch_x_hist.size(0)
                 loss = criterion(outputs.view(batch_size, -1), batch_y.view(batch_size, -1))
                 val_loss += loss.item()
                 
         train_loss /= len(train_loader)
         val_loss /= len(val_loader)
-        print(f"Epoch {epoch+1}/{epochs} | Train: {train_loss:.4f} | Val: {val_loss:.4f}")
+        print(f"Epoch {epoch+1}/{epochs} | Train (L1): {train_loss:.4f} | Val (L1): {val_loss:.4f}")
         
+        scheduler.step(val_loss)
         early_stopping(val_loss, model)
+        
         if early_stopping.early_stop:
             print("Early stopping triggered.")
             break
@@ -83,9 +92,9 @@ def evaluate_direct_lstm(model, test_loader, target_col_idx, device):
     model.eval()
     predictions, targets = [], []
     with torch.no_grad():
-        for batch_x, batch_y in test_loader:
-            batch_x, batch_y = batch_x.to(device), batch_y.to(device)
-            preds = model(batch_x)
+        for batch_x_hist, batch_x_fut, batch_y in test_loader:
+            batch_x_hist, batch_x_fut, batch_y = batch_x_hist.to(device), batch_x_fut.to(device), batch_y.to(device)
+            preds = model(batch_x_hist, batch_x_fut)
             predictions.append(preds.cpu().numpy())
             targets.append(batch_y.cpu().numpy())
             
@@ -108,55 +117,51 @@ def evaluate_direct_lstm(model, test_loader, target_col_idx, device):
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     return preds_mw, targets_mw
 
-# ==========================================
-# 2. Main Execution
-# ==========================================
 def main():
     HORIZON = 24
     SEQ_LEN = 168
     TARGET_IDX = 4
     
-    print(f"--- Starting Standalone Direct LSTM Pipeline ---")
+    print(f"--- Starting Standalone Direct LSTM Pipeline (With Future Covariates) ---")
     
-    # Generate tensors (ignoring future covariates)
-    X_train_hist, _, Y_train = create_safe_sequences(train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
-    X_val_hist, _, Y_val     = create_safe_sequences(val_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
-    X_test_hist, _, Y_test   = create_safe_sequences(test_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
+    # 1. Unpack all three items 
+    X_train_hist, X_train_fut, Y_train = create_safe_sequences(train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
+    X_val_hist, X_val_fut, Y_val       = create_safe_sequences(val_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
+    X_test_hist, X_test_fut, Y_test    = create_safe_sequences(test_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     
-    # Optuna Optimized Batch Size
-    train_loader = DataLoader(TensorDataset(X_train_hist, Y_train), batch_size=64, shuffle=True, num_workers=4)
-    val_loader = DataLoader(TensorDataset(X_val_hist, Y_val), batch_size=64, shuffle=False, num_workers=4)
-    test_loader = DataLoader(TensorDataset(X_test_hist, Y_test), batch_size=64, shuffle=False, num_workers=4)
+    # 2. Update DataLoaders for 3 items
+    train_loader = DataLoader(TensorDataset(X_train_hist, X_train_fut, Y_train), batch_size=64, shuffle=True, num_workers=4)
+    val_loader = DataLoader(TensorDataset(X_val_hist, X_val_fut, Y_val), batch_size=64, shuffle=False, num_workers=4)
+    test_loader = DataLoader(TensorDataset(X_test_hist, X_test_fut, Y_test), batch_size=64, shuffle=False, num_workers=4)
     
-    # Optuna Optimized Architecture
     model_path = f'tuned_direct_lstm_{HORIZON}h.pth'
+    
+    # 3. Dynamic Dimension Mapping
     model = DirectLSTM(
-        input_dim=X_train_hist.shape[-1], 
-        hidden_dim=256, 
+        hist_input_dim=X_train_hist.shape[-1], 
+        future_input_dim=X_train_fut.shape[-1],
+        hidden_dim=128, 
         horizon=HORIZON, 
         num_layers=1,
-        dropout=0.2789 
+        dropout=0.3214 
     )
     
-    # Optuna Optimized Learning Rate
     trained_model = train_direct_lstm(
         model=model, 
         train_loader=train_loader, 
         val_loader=val_loader, 
         epochs=100, 
-        lr=0.001437, 
+        lr=0.001836, 
         patience=10, 
         model_save_path=model_path
     )
     
-    # Evaluate
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     trained_model.load_state_dict(torch.load(model_path, weights_only=True))
     trained_model.to(device)
     
     lstm_preds, lstm_targets = evaluate_direct_lstm(trained_model, test_loader, TARGET_IDX, device)
     
-    # Fixed plotting function call
     plot_single_model_forecast(
         lstm_targets, 
         lstm_preds, 
