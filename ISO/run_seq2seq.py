@@ -19,7 +19,7 @@ def train_seq2seq_model(model, train_loader, val_loader, epochs=100, lr=1e-3, pa
     print(f"Training on device: {device}")
     
     model = model.to(device)
-    criterion = nn.MSELoss()
+    criterion = nn.L1Loss()
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
     early_stopping = EarlyStopping(patience=patience, model_save_path=model_save_path)
     

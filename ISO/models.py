@@ -161,13 +161,13 @@ class Seq2SeqCovariateLSTM(nn.Module):
         return torch.stack(predictions, dim=1).squeeze(-1)
 
 class GridTransformer(nn.Module):
-    def __init__(self, hist_input_dim, future_input_dim, hidden_dim=128, horizon=24, nheads=4, num_layers=2, dropout=0.1):
+    def __init__(self, hist_input_dim, future_input_dim, hidden_dim=128, horizon=24, nheads=4, num_layers=2, dropout=0.1, seq_length=168):
         super(GridTransformer, self).__init__()
         
         self.hist_proj = nn.Linear(hist_input_dim, hidden_dim)
         self.fut_proj = nn.Linear(future_input_dim, hidden_dim)
         
-        self.pos_encoder_hist = nn.Parameter(torch.randn(1, 168, hidden_dim))
+        self.pos_encoder_hist = nn.Parameter(torch.randn(1, seq_length, hidden_dim))
         self.pos_encoder_fut = nn.Parameter(torch.randn(1, horizon, hidden_dim))
         
         # Now uses the dynamic dropout variable instead of a hardcoded 0.1

@@ -44,24 +44,19 @@ class EarlyStopping:
             if self.counter >= self.patience:
                 self.early_stop = True
 
-def train_tft(model, train_loader, val_loader, epochs=50, lr=1e-3):
+def train_tft(model, train_loader, val_loader, epochs=50, lr=1e-3, patience=10):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
-    criterion = nn.MSELoss()
+    
+    # 1. Switched to L1Loss to align directly with WAPE
+    criterion = nn.L1Loss()
     
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-3)
     
-    # 1. Initialize the OneCycleLR Scheduler
-    scheduler = torch.optim.lr_scheduler.OneCycleLR(
-        optimizer, 
-        max_lr=lr, 
-        steps_per_epoch=len(train_loader), 
-        epochs=epochs,
-        pct_start=0.3, # Spends the first 30% of training warming up
-        anneal_strategy='cos'
-    )
+    # 2. Replaced OneCycleLR with ReduceLROnPlateau
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=2)
     
-    early_stopping = EarlyStopping(model_save_path='best_tft.pth')
+    early_stopping = EarlyStopping(patience=patience, model_save_path='best_tft.pth')
     
     for epoch in range(epochs):
         model.train()
@@ -78,10 +73,6 @@ def train_tft(model, train_loader, val_loader, epochs=50, lr=1e-3):
             nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
             
             optimizer.step()
-            
-            # 2. Step the scheduler after EVERY batch update
-            scheduler.step()
-            
             train_loss += loss.item()
             
         model.eval()
@@ -97,7 +88,10 @@ def train_tft(model, train_loader, val_loader, epochs=50, lr=1e-3):
                 
         train_loss /= len(train_loader)
         val_loss /= len(val_loader)
-        print(f"Epoch {epoch+1}/{epochs} | Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f}")
+        print(f"Epoch {epoch+1}/{epochs} | Train Loss (L1): {train_loss:.4f} | Val Loss (L1): {val_loss:.4f}")
+        
+        # 3. Step the scheduler with validation loss at the end of each epoch
+        scheduler.step(val_loss)
         
         early_stopping(val_loss, model)
         if early_stopping.early_stop:
@@ -113,7 +107,6 @@ def seed_worker(worker_id):
     random.seed(worker_seed)
 
 def main():
-    # 1. Lock the global seed first
     set_seed(42) 
     
     HORIZON = 24
@@ -122,16 +115,13 @@ def main():
     
     print(f"--- Starting Grid Transformer (TFT-Core) Pipeline ---")
     
-    # 2. GENERATE THE DATA (This creates X_train_hist)
     X_train_hist, X_train_fut, Y_train = create_safe_sequences(train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     X_val_hist, X_val_fut, Y_val       = create_safe_sequences(val_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     X_test_hist, X_test_fut, Y_test    = create_safe_sequences(test_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     
-    # 3. Setup the deterministic generator
     g = torch.Generator()
     g.manual_seed(42)
     
-    # 4. PACK THE DATALOADERS (Now X_train_hist exists in memory)
     print("Preparing Deterministic 3-Item DataLoaders...")
     train_dataset = TensorDataset(X_train_hist, X_train_fut, Y_train)
     val_dataset = TensorDataset(X_val_hist, X_val_fut, Y_val)
@@ -149,7 +139,6 @@ def main():
     val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False, num_workers=4, worker_init_fn=seed_worker, generator=g)
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=4, worker_init_fn=seed_worker, generator=g)
     
-    # 5. Initialize and Train the Transformer
     model = GridTransformer(
         hist_input_dim=X_train_hist.shape[-1], 
         future_input_dim=X_train_fut.shape[-1], 
@@ -159,9 +148,9 @@ def main():
         dropout=0.0514,
     )
     
-    trained_model = train_tft(model, train_loader, val_loader, epochs=50, lr=5e-4)
+    # 4. Implement the optimized learning rate
+    trained_model = train_tft(model, train_loader, val_loader, epochs=50, lr=0.0001051, patience=10)
     
-    # 6. Evaluate
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     trained_model.load_state_dict(torch.load('best_tft.pth', weights_only=True))
     trained_model.to(device)
