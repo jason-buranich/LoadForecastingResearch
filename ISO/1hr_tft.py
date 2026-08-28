@@ -86,12 +86,6 @@ def train_tft(model, train_loader, val_loader, epochs=50, lr=1e-3, patience=10, 
             
     return model
 
-def seed_worker(worker_id):
-    """Ensures each dataloader worker gets a unique, but deterministic seed."""
-    worker_seed = torch.initial_seed() % 2**32
-    np.random.seed(worker_seed)
-    random.seed(worker_seed)
-
 def main():
     # 1. Hour-Ahead Configuration
     HORIZON = 1
@@ -106,16 +100,15 @@ def main():
     X_test_hist, X_test_fut, Y_test    = create_safe_sequences(test_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     
     g = torch.Generator()
-    g.manual_seed(42)
     
     # 3. DataLoaders
     train_dataset = TensorDataset(X_train_hist, X_train_fut, Y_train)
     val_dataset = TensorDataset(X_val_hist, X_val_fut, Y_val)
     test_dataset = TensorDataset(X_test_hist, X_test_fut, Y_test)
     
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=4, worker_init_fn=seed_worker, generator=g)
-    val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False, num_workers=4, worker_init_fn=seed_worker, generator=g)
-    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=4, worker_init_fn=seed_worker, generator=g)
+    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=4, generator=g)
+    val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False, num_workers=4, generator=g)
+    test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=4, generator=g)
     
     model_path = 'best_hour_ahead_tft.pth'
     
@@ -136,7 +129,7 @@ def main():
         model=model, 
         train_loader=train_loader, 
         val_loader=val_loader, 
-        epochs=50, 
+        epochs=100, 
         lr=0.0001051, 
         patience=10,
         model_save_path=model_path

@@ -132,7 +132,7 @@ def main():
     )
     
     # 4. Implement the optimized learning rate
-    trained_model = train_tft(model, train_loader, val_loader, epochs=50, lr=0.0001051, patience=10)
+    trained_model = train_tft(model, train_loader, val_loader, epochs=100, lr=0.0001051, patience=10)
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     trained_model.load_state_dict(torch.load('best_tft.pth', weights_only=True))
