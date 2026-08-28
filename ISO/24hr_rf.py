@@ -9,15 +9,7 @@ from data import train_df, val_df, test_df, scaler
 from slidingWindow import create_safe_sequences
 from visualize import plot_single_model_forecast
 
-def set_seed(seed=42):
-    """Locks all random number generators for strict reproducibility."""
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
-
 def main():
-    set_seed(42)
     
     HORIZON = 24
     SEQ_LEN = 168
@@ -56,7 +48,6 @@ def main():
             max_depth=15,
             min_samples_split=20,
             max_features=0.3,
-            random_state=42,
             n_jobs=4
         )
         rf_h.fit(X_train_combined, y_train_h)

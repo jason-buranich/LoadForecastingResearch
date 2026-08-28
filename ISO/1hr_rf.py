@@ -9,15 +9,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from data import train_df, test_df, scaler
 from slidingWindow import create_safe_sequences
 
-def set_seed(seed=42):
-    """Locks all random number generators for strict reproducibility."""
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
-
 def main():
-    set_seed(42)
     
     # 1. Hour-Ahead Specific Parameters
     HORIZON = 1
@@ -51,7 +43,6 @@ def main():
         max_depth=15,
         min_samples_split=20,
         max_features=0.3,
-        random_state=42,
         n_jobs=4
     )
     rf.fit(X_train_combined, y_train)

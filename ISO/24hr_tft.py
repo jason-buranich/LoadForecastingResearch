@@ -11,21 +11,6 @@ from slidingWindow import create_safe_sequences
 from models import GridTransformer
 from visualize import plot_single_model_forecast
 
-def set_seed(seed=42):
-    """Locks all random number generators for reproducibility."""
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
-    
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed(seed)
-        torch.cuda.manual_seed_all(seed)
-        # Forces cuDNN to use deterministic algorithms
-        torch.backends.cudnn.deterministic = True 
-        torch.backends.cudnn.benchmark = False
-
-
 class EarlyStopping:
     def __init__(self, patience=10, model_save_path='best_tft.pth'):
         self.patience = patience
@@ -107,7 +92,6 @@ def seed_worker(worker_id):
     random.seed(worker_seed)
 
 def main():
-    set_seed(42) 
     
     HORIZON = 24
     SEQ_LEN = 168
@@ -120,7 +104,6 @@ def main():
     X_test_hist, X_test_fut, Y_test    = create_safe_sequences(test_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
     
     g = torch.Generator()
-    g.manual_seed(42)
     
     print("Preparing Deterministic 3-Item DataLoaders...")
     train_dataset = TensorDataset(X_train_hist, X_train_fut, Y_train)

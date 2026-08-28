@@ -11,18 +11,6 @@ from slidingWindow import create_safe_sequences
 from models import GridTransformer
 from visualize import plot_single_model_forecast
 
-def set_seed(seed=42):
-    """Locks all random number generators for strict reproducibility."""
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed(seed)
-        torch.cuda.manual_seed_all(seed)
-        torch.backends.cudnn.deterministic = True 
-        torch.backends.cudnn.benchmark = False
-
 class EarlyStopping:
     def __init__(self, patience=10, min_delta=0, model_save_path='best_hour_ahead_tft.pth'):
         self.patience = patience
@@ -105,8 +93,6 @@ def seed_worker(worker_id):
     random.seed(worker_seed)
 
 def main():
-    set_seed(42) 
-    
     # 1. Hour-Ahead Configuration
     HORIZON = 1
     SEQ_LEN = 24

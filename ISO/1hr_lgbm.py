@@ -10,16 +10,7 @@ from data import train_df, test_df, scaler
 from slidingWindow import create_safe_sequences
 from visualize import plot_single_model_forecast
 
-def set_seed(seed=42):
-    """Locks all random number generators for strict reproducibility."""
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
-
 def main():
-    set_seed(42)
-    
     # 1. Hour-Ahead Specific Parameters
     HORIZON = 1
     SEQ_LEN = 24
@@ -53,7 +44,6 @@ def main():
         max_depth=15,
         subsample=0.8,
         colsample_bytree=0.8,
-        random_state=42,
         n_jobs=4,
         verbosity=-1
     )
