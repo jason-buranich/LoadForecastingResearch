@@ -1,0 +1,22 @@
+--extra-index-url https://download.pytorch.org/whl/cu126
+
+# Core
+pandas
+numpy
+meteostat
+openpyxl
+
+# Machine Learning & Gradient Boosting
+scikit-learn
+xgboost
+lightgbm
+
+# Deep Learning (LSTMs, Temporal Fusion Transformers, GNNs)
+torch==2.13.0
+
+# Reinforcement Learning Environments
+gymnasium
+
+# Visualization and Development
+jupyter
+matplotlib
