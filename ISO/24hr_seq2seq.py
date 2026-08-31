@@ -4,7 +4,7 @@ from torch.utils.data import TensorDataset, DataLoader
 
 # Import your pipeline modules
 from data import train_df, val_df, test_df, scaler
-from slidingWindow import create_safe_sequences
+from ISO.slidingWindow import create_safe_sequences
 from models import Seq2SeqCovariateLSTM
 from trainingLoop import EarlyStopping
 from evaluate import evaluate_predictions

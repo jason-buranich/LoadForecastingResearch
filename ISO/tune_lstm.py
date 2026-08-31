@@ -4,7 +4,7 @@ import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 
 from data import train_df, val_df
-from slidingWindow import create_safe_sequences
+from ISO.slidingWindow import create_safe_sequences
 from models import DirectLSTM
 
 # ==========================================

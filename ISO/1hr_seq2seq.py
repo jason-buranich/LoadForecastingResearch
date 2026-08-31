@@ -8,7 +8,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 # Import your pipeline modules safely
 from data import train_df, val_df, test_df, scaler
-from slidingWindow import create_safe_sequences
+from ISO.slidingWindow import create_safe_sequences
 from models import Seq2SeqCovariateLSTM
 from visualize import plot_single_model_forecast
 

@@ -7,7 +7,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 # Relying on your established modular pipeline
 from data import train_df, val_df, test_df, scaler
-from slidingWindow import create_safe_sequences
+from ISO.slidingWindow import create_safe_sequences
 from visualize import plot_single_model_forecast
 
 def main():

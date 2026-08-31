@@ -5,7 +5,7 @@ from torch.utils.data import TensorDataset, DataLoader
 
 # Import your pipeline modules
 from data import train_df, val_df
-from slidingWindow import create_safe_sequences
+from ISO.slidingWindow import create_safe_sequences
 from models import Seq2SeqCovariateLSTM
 
 # ==========================================
