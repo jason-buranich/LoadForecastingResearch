@@ -21,22 +21,15 @@ class SeasonalNaiveBaseline:
     def __init__(self, seasonal_lag=24):
         self.seasonal_lag = seasonal_lag
 
-    def predict(self, X):
-        """
-        X: Tensor or NumPy array of shape (N, seq_len, features) or (N, seq_len)
-           where target load is at feature index 4 (or single channel).
-        Returns: NumPy array of shape (N, horizon)
-        """
+    def predict(self, X, target_idx=0): # Default to 0
         if isinstance(X, torch.Tensor):
             X = X.cpu().numpy()
         
-        # If multidimensional, extract target column (e.g., CAISO at index 4)
         if X.ndim == 3:
-            load_history = X[:, :, 4]
+            load_history = X[:, :, target_idx] # Use dynamic variable
         else:
             load_history = X
             
-        # Select the last 'seasonal_lag' steps as the repeated forecast
         return load_history[:, -self.seasonal_lag:]
 
 

@@ -87,19 +87,25 @@ def train_direct_lstm(model, train_loader, val_loader, epochs=100, lr=1e-3, pati
 def main():
     
     # 1. 15-Minute Substation Configuration
-    HORIZON = 1       # Predict 1 step ahead (15 minutes)
-    SEQ_LEN = 96      # 96 intervals = 24 hours
-    TARGET_IDX = 3    # Load_MW is at index 3
+    HORIZON = 1              # Predict 1 step ahead (15 minutes)
+    SEQ_LEN = 96             # 96 intervals = 24 hours of history
+    TARGET_IDX = 1           # Load_MW is at index 1 before dropping Month
+    COVARIATE_START_IDX = 2  # Future covariates (Hour, DayOfWeek) start at index 2
     
     print(f"--- Starting 15-Minute-Ahead Direct LSTM Pipeline ---")
     
-    # 2. Slice Sequences
-    X_train_hist, X_train_fut, Y_train = create_safe_sequences(train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
-    X_val_hist, X_val_fut, Y_val       = create_safe_sequences(val_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
-    X_test_hist, X_test_fut, Y_test    = create_safe_sequences(test_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
+    # 2. Slice Sequences (Safely passing covariates to prevent data leaks)
+    X_train_hist, X_train_fut, Y_train = create_safe_sequences(
+        train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
+    )
+    X_val_hist, X_val_fut, Y_val = create_safe_sequences(
+        val_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
+    )
+    X_test_hist, X_test_fut, Y_test = create_safe_sequences(
+        test_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
+    )
     
-    # 3. DataLoaders
-    # Removing worker_init_fn and generator to allow natural batch shuffling variance
+    # 3. DataLoaders 
     train_loader = DataLoader(TensorDataset(X_train_hist, X_train_fut, Y_train), batch_size=64, shuffle=True, num_workers=4)
     val_loader   = DataLoader(TensorDataset(X_val_hist, X_val_fut, Y_val), batch_size=64, shuffle=False, num_workers=4)
     test_loader  = DataLoader(TensorDataset(X_test_hist, X_test_fut, Y_test), batch_size=64, shuffle=False, num_workers=4)
@@ -143,6 +149,7 @@ def main():
     preds_flat = np.concatenate(predictions, axis=0).flatten()
     targets_flat = np.concatenate(targets, axis=0).flatten()
     
+    # 6. Inverse Scaling
     def inverse_scale(data_flat):
         dummy = np.zeros((len(data_flat), scaler.mean_.shape[0]))
         dummy[:, TARGET_IDX] = data_flat
@@ -151,7 +158,7 @@ def main():
     preds_mw = inverse_scale(preds_flat)
     targets_mw = inverse_scale(targets_flat)
     
-    # 6. Metrics
+    # 7. Metrics
     rmse = np.sqrt(mean_squared_error(targets_mw, preds_mw))
     mae = mean_absolute_error(targets_mw, preds_mw)
     wape = np.sum(np.abs(targets_mw - preds_mw)) / np.sum(np.abs(targets_mw)) * 100
@@ -163,6 +170,7 @@ def main():
         targets_mw, 
         preds_mw, 
         start_idx=0, 
+        horizon=96,
         model_name="15-Min Direct LSTM", 
         save_path='direct_lstm_15min_ahead_forecast.png'
     )

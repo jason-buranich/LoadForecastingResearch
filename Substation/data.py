@@ -43,8 +43,8 @@ target_file = "Substation/Punchbowl 33_11kV FY25.csv"
 master_df = process_substation_data(target_file)
 
 # Extract covariates and target
-# Index 0: Hour, Index 1: DayOfWeek, Index 2: Month, Index 3: Load_MW (Target)
-features = master_df[['Hour', 'DayOfWeek', 'Month', 'Load_MW']].copy()
+# Index 0: Month, Index 1: Load_MW (Target), Index 2: Hour, Index 3: DayOfWeek
+features = master_df[['Month', 'Load_MW', 'Hour', 'DayOfWeek']].copy()
 
 # Month-Based Split for specific seasonal evaluation
 test_months = [8, 12]  # August and December
