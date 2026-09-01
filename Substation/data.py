@@ -40,11 +40,22 @@ def process_substation_data(filepath):
 # --- Pipeline Execution ---
 
 target_file = "Substation/Punchbowl 33_11kV FY25.csv"
-master_df = process_substation_data(target_file)
+weather_file = "Substation/punchbowl_weather_15min.csv"
+
+# Process Substation and Weather Data
+substation_df = process_substation_data(target_file)
+weather_df = pd.read_csv(weather_file, index_col='Datetime', parse_dates=True)
+
+# Merge on Datetime index (left join ensures we strictly keep the substation's timeline)
+master_df = substation_df.join(weather_df, how='left')
+
+# Impute any edge-case missing weather values using forward fill
+master_df[['Temperature_2m', 'Humidity', 'Solar_Rad']] = master_df[['Temperature_2m', 'Humidity', 'Solar_Rad']].ffill().bfill()
 
 # Extract covariates and target
 # Index 0: Month, Index 1: Load_MW (Target), Index 2: Hour, Index 3: DayOfWeek
-features = master_df[['Month', 'Load_MW', 'Hour', 'DayOfWeek']].copy()
+# Index 4: Temperature_2m, Index 5: Humidity, Index 6: Solar_Rad
+features = master_df[['Month', 'Load_MW', 'Hour', 'DayOfWeek', 'Temperature_2m', 'Humidity', 'Solar_Rad']].copy()
 
 # Month-Based Split for specific seasonal evaluation
 test_months = [8, 12]  # August and December
