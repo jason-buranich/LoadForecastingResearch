@@ -59,7 +59,6 @@ def main():
     preds_flat = mlr.predict(X_test_combined)
     
     def inverse_scale(data_flat):
-        # Create a dummy array matching the new 4-column feature stack (Hour, DayOfWeek, Month, Load_MW)
         dummy = np.zeros((len(data_flat), scaler.mean_.shape[0]))
         dummy[:, TARGET_IDX] = data_flat
         return scaler.inverse_transform(dummy)[:, TARGET_IDX]

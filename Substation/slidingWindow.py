@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 
-def create_safe_sequences(df, seq_len=168, horizon=24, target_idx=4, covariate_start_idx=5):
+def create_safe_sequences(df, seq_len=96, horizon=1, target_idx=1, covariate_start_idx=2):
     """
     Extracts sliding windows ensuring sequences do not cross month boundaries.
     Automatically adjusts column indices to account for the dropped 'Month' column.
