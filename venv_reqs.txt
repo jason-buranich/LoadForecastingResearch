@@ -5,6 +5,7 @@ pandas
 numpy
 meteostat
 openpyxl
+optuna
 
 # Machine Learning & Gradient Boosting
 scikit-learn
