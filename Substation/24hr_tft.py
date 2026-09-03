@@ -8,11 +8,11 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 # Import components from the updated data.py
 from data import train_df, val_df, test_df, scaler
 from slidingWindow import create_safe_sequences
-from models import Seq2SeqCovariateLSTM
+from models import GridTransformer
 from visualize import plot_single_model_forecast
 
 class EarlyStopping:
-    def __init__(self, patience=10, min_delta=0, model_save_path='best_1hr_seq2seq.pth'):
+    def __init__(self, patience=10, min_delta=0, model_save_path='best_24hr_transformer.pth'):
         self.patience = patience
         self.min_delta = min_delta
         self.model_save_path = model_save_path
@@ -36,7 +36,7 @@ class EarlyStopping:
     def save_checkpoint(self, val_loss, model):
         torch.save(model.state_dict(), self.model_save_path)
 
-def train_seq2seq(model, train_loader, val_loader, epochs=100, lr=0.0003038, weight_decay=1.539e-05, patience=10, model_save_path='best_1hr_seq2seq.pth'):
+def train_transformer(model, train_loader, val_loader, epochs=100, lr=0.000109, weight_decay=0.0009146, patience=10, model_save_path='best_24hr_transformer.pth'):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
     
@@ -52,8 +52,7 @@ def train_seq2seq(model, train_loader, val_loader, epochs=100, lr=0.0003038, wei
             batch_x_hist, batch_x_fut, batch_y = batch_x_hist.to(device), batch_x_fut.to(device), batch_y.to(device)
             
             optimizer.zero_grad()
-            # Passing ground truth y_target to enable teacher forcing during training
-            outputs = model(batch_x_hist, batch_x_fut, y_target=batch_y, teacher_forcing_ratio=0.5)
+            outputs = model(batch_x_hist, batch_x_fut)
             
             batch_size = batch_x_hist.size(0)
             loss = criterion(outputs.view(batch_size, -1), batch_y.view(batch_size, -1))
@@ -67,8 +66,7 @@ def train_seq2seq(model, train_loader, val_loader, epochs=100, lr=0.0003038, wei
         with torch.no_grad():
             for batch_x_hist, batch_x_fut, batch_y in val_loader:
                 batch_x_hist, batch_x_fut, batch_y = batch_x_hist.to(device), batch_x_fut.to(device), batch_y.to(device)
-                
-                outputs = model(batch_x_hist, batch_x_fut, y_target=None, teacher_forcing_ratio=0.0)
+                outputs = model(batch_x_hist, batch_x_fut)
                 
                 batch_size = batch_x_hist.size(0)
                 loss = criterion(outputs.view(batch_size, -1), batch_y.view(batch_size, -1))
@@ -87,13 +85,13 @@ def train_seq2seq(model, train_loader, val_loader, epochs=100, lr=0.0003038, wei
     return model
 
 def main():
-    # 1. 1-Hour Substation Configuration
-    HORIZON = 4              # Predict 4 steps ahead (1 hour)
+    # 1. 24-Hour Substation Configuration
+    HORIZON = 96             # Predict 96 steps ahead (24 hours)
     SEQ_LEN = 96             # 96 intervals = 24 hours of history
     TARGET_IDX = 1           # Load_MW is at index 1 before dropping Month
     COVARIATE_START_IDX = 2  # Future covariates start at index 2
     
-    print("--- Starting 1-Hour-Ahead Seq2Seq LSTM Pipeline ---")
+    print("--- Starting 24-Hour-Ahead Grid Transformer Pipeline ---")
     
     # 2. Slice Sequences
     X_train_hist, X_train_fut, Y_train = create_safe_sequences(
@@ -111,25 +109,27 @@ def main():
     val_loader   = DataLoader(TensorDataset(X_val_hist, X_val_fut, Y_val), batch_size=64, shuffle=False, num_workers=4)
     test_loader  = DataLoader(TensorDataset(X_test_hist, X_test_fut, Y_test), batch_size=64, shuffle=False, num_workers=4)
     
-    model_path = 'best_1hr_seq2seq.pth'
+    model_path = 'best_24hr_transformer.pth'
     
-    # 4. Instantiate Model
-    model = Seq2SeqCovariateLSTM(
+    # 4. Instantiate Model (seq_length matches SEQ_LEN=96 for positional encoding)
+    model = GridTransformer(
         hist_input_dim=X_train_hist.shape[-1],
         future_input_dim=X_train_fut.shape[-1],
-        hidden_dim=64,
+        hidden_dim=256,
         horizon=HORIZON,
-        num_layers=2,
-        target_idx=0  # Required because 'Month' is dropped, putting Load_MW at index 0 in the history tensor
+        nheads=4,
+        num_layers=1,
+        dropout=0.1617,
+        seq_length=SEQ_LEN
     )
     
-    trained_model = train_seq2seq(
+    trained_model = train_transformer(
         model=model,
         train_loader=train_loader,
         val_loader=val_loader,
         epochs=100,
-        lr=0.0003038,
-        weight_decay=1.539e-05,
+        lr=4e-4,
+        weight_decay=4e-5,
         patience=10,
         model_save_path=model_path
     )
@@ -144,21 +144,21 @@ def main():
     with torch.no_grad():
         for batch_x_hist, batch_x_fut, batch_y in test_loader:
             batch_x_hist, batch_x_fut = batch_x_hist.to(device), batch_x_fut.to(device)
-            preds = trained_model(batch_x_hist, batch_x_fut, y_target=None, teacher_forcing_ratio=0.0)
+            preds = trained_model(batch_x_hist, batch_x_fut)
             predictions.append(preds.cpu().numpy())
             targets.append(batch_y.numpy())
             
-    # Shape of arrays will be (N, 4)
+    # Shape of arrays will be (N, 96)
     preds_arr = np.concatenate(predictions, axis=0)
     targets_arr = np.concatenate(targets, axis=0)
     
-    # 6. Inverse Scaling
+    # 6. Inverse Scaling function
     def inverse_scale(data_flat):
         dummy = np.zeros((len(data_flat), scaler.mean_.shape[0]))
         dummy[:, TARGET_IDX] = data_flat
         return scaler.inverse_transform(dummy)[:, TARGET_IDX]
 
-    # Calculate overall metrics on flattened arrays to evaluate the entire 1-hour horizon
+    # Calculate overall metrics on flattened arrays to evaluate the entire 24-hour horizon
     preds_mw_flat = inverse_scale(preds_arr.ravel())
     targets_mw_flat = inverse_scale(targets_arr.ravel())
     
@@ -167,20 +167,20 @@ def main():
     mae = mean_absolute_error(targets_mw_flat, preds_mw_flat)
     wape = np.sum(np.abs(targets_mw_flat - preds_mw_flat)) / np.sum(np.abs(targets_mw_flat)) * 100
     
-    print("\n--- 1-Hour-Ahead Seq2Seq LSTM Metrics (MW) ---")
+    print("\n--- 24-Hour-Ahead Grid Transformer Metrics (MW) ---")
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     
-    # Isolate the t+4 interval (index 3) to prevent overlapping visualizations
-    t4_preds = inverse_scale(preds_arr[:, 3])
-    t4_targets = inverse_scale(targets_arr[:, 3])
+    # Isolate the t+96 interval (index 95) to prevent overlapping visualizations
+    t96_preds = inverse_scale(preds_arr[:, 95])
+    t96_targets = inverse_scale(targets_arr[:, 95])
     
     plot_single_model_forecast(
-        t4_targets, 
-        t4_preds, 
+        t96_targets, 
+        t96_preds, 
         start_idx=0, 
         horizon=96,
-        model_name="1-Hour Seq2Seq LSTM (t+4 step)", 
-        save_path='seq2seq_1hr_ahead_forecast.png'
+        model_name="24-Hour Grid Transformer (t+96 step)", 
+        save_path='transformer_24hr_ahead_forecast.png'
     )
 
 if __name__ == "__main__":
