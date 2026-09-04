@@ -12,7 +12,7 @@ from slidingWindow import create_safe_sequences
 from models import PatchTST
 
 # 1-Hour Substation Configuration
-HORIZON = 4              # Predict 4 steps ahead (1 hour)
+HORIZON = 96              # Predict 96 steps ahead (24 hours)
 SEQ_LEN = 96             # 24 hours of history
 TARGET_IDX = 1           
 COVARIATE_START_IDX = 2  
@@ -33,21 +33,24 @@ def objective(trial):
     
     num_layers = trial.suggest_int("num_layers", 1, 3)
     dropout = trial.suggest_float("dropout", 0.1, 0.5)
-    lr = trial.suggest_float("lr", 1e-4, 1e-2, log=True)
+    lr = trial.suggest_float("lr", 1e-4, 1e-3, log=True)
     weight_decay = trial.suggest_float("weight_decay", 1e-6, 1e-3, log=True)
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # Keep only the last 25% of the training data to speed up tuning
+    split_idx = int(len(train_df) * 0.75)
+    train_df_subset = train_df.iloc[split_idx:].copy()
     
-    # 2. Slice Sequences (using validation set for tuning)
+    # 2. Slice Sequences (using the smaller subset)
     X_train_hist, X_train_fut, Y_train = create_safe_sequences(
-        train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
+        train_df_subset, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
     )
     X_val_hist, X_val_fut, Y_val = create_safe_sequences(
         val_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
     )
     
-    train_loader = DataLoader(TensorDataset(X_train_hist, X_train_fut, Y_train), batch_size=64, shuffle=True, num_workers=4)
-    val_loader   = DataLoader(TensorDataset(X_val_hist, X_val_fut, Y_val), batch_size=64, shuffle=False, num_workers=4)
+    train_loader = DataLoader(TensorDataset(X_train_hist, X_train_fut, Y_train), batch_size=32, shuffle=True, num_workers=4)
+    val_loader   = DataLoader(TensorDataset(X_val_hist, X_val_fut, Y_val), batch_size=32, shuffle=False, num_workers=4)
 
     # 3. Instantiate Model
     model = PatchTST(
@@ -65,7 +68,9 @@ def objective(trial):
     criterion = nn.L1Loss()
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
     
-    epochs = 20 # Kept relatively short for tuning; scale up for final training
+    epochs = 10 # Kept relatively short for tuning; scale up for final training
+    
+    scaler_amp = torch.amp.GradScaler('cuda')
     
     for epoch in range(epochs):
         model.train()
@@ -73,10 +78,13 @@ def objective(trial):
             batch_x_hist, batch_x_fut, batch_y = batch_x_hist.to(device), batch_x_fut.to(device), batch_y.to(device)
             
             optimizer.zero_grad()
-            outputs = model(batch_x_hist, batch_x_fut)
             
+            # Removed torch.amp.autocast
+            outputs = model(batch_x_hist, batch_x_fut)
             batch_size = batch_x_hist.size(0)
             loss = criterion(outputs.view(batch_size, -1), batch_y.view(batch_size, -1))
+            
+            # Standard fp32 backpropagation (removed scaler_amp)
             loss.backward()
             nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
             optimizer.step()
@@ -107,11 +115,11 @@ def objective(trial):
     return val_wape
 
 def main():
-    print("--- Starting Optuna Tuning for 1-Hour PatchTST ---")
+    print("--- Starting Optuna Tuning for PatchTST ---")
     
     # Configure MedianPruner to allow 5 startup trials before pruning, and 10 warmup epochs per trial
-    pruner = MedianPruner(n_startup_trials=5, n_warmup_steps=10, interval_steps=1)
-    study = optuna.create_study(direction="minimize", pruner=pruner, study_name="1hr_patchtst_opt")
+    pruner = MedianPruner(n_startup_trials=5, n_warmup_steps=3, interval_steps=1)
+    study = optuna.create_study(direction="minimize", pruner=pruner, study_name="24hr_patchtst_opt")
     
     # Run 20 trials
     study.optimize(objective, n_trials=20, timeout=3600)

@@ -12,7 +12,7 @@ from slidingWindow import create_safe_sequences
 from models import DirectLSTM
 
 # 1-Hour Substation Configuration
-HORIZON = 4              # Predict 4 steps ahead (1 hour)
+HORIZON = 96              # Predict 4 steps ahead (1 hour)
 SEQ_LEN = 96             # 24 hours of history
 TARGET_IDX = 1           
 COVARIATE_START_IDX = 2  
@@ -25,23 +25,26 @@ def inverse_scale(data_flat, target_idx=TARGET_IDX):
 def objective(trial):
     # 1. Hyperparameter Search Space
     hidden_dim = trial.suggest_categorical("hidden_dim", [64, 128, 256])
-    num_layers = trial.suggest_int("num_layers", 1, 3)
+    num_layers = trial.suggest_int("num_layers", 1, 2)
     dropout = trial.suggest_float("dropout", 0.1, 0.5)
     lr = trial.suggest_float("lr", 1e-4, 1e-2, log=True)
     weight_decay = trial.suggest_float("weight_decay", 1e-6, 1e-3, log=True)
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-    # 2. Slice Sequences (using validation set for tuning)
+   # Keep only the last ~1 month of 15-minute intervals (approx 3000 rows)
+    train_df_subset = train_df.iloc[-3000:].copy()
+    
+    # 2. Slice Sequences (using the smaller subset)
     X_train_hist, X_train_fut, Y_train = create_safe_sequences(
-        train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
+        train_df_subset, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
     )
     X_val_hist, X_val_fut, Y_val = create_safe_sequences(
         val_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
     )
     
-    train_loader = DataLoader(TensorDataset(X_train_hist, X_train_fut, Y_train), batch_size=64, shuffle=True, num_workers=4)
-    val_loader   = DataLoader(TensorDataset(X_val_hist, X_val_fut, Y_val), batch_size=64, shuffle=False, num_workers=4)
+    train_loader = DataLoader(TensorDataset(X_train_hist, X_train_fut, Y_train), batch_size=256, shuffle=True, num_workers=4)
+    val_loader   = DataLoader(TensorDataset(X_val_hist, X_val_fut, Y_val), batch_size=256, shuffle=False, num_workers=4)
 
     # 3. Instantiate Model
     model = DirectLSTM(
@@ -98,11 +101,11 @@ def objective(trial):
     return val_wape
 
 def main():
-    print("--- Starting Optuna Tuning for 1-Hour Direct LSTM ---")
+    print("--- Starting Optuna Tuning for Direct LSTM ---")
     
     # Configure MedianPruner to allow 5 startup trials before pruning, and 10 warmup epochs per trial
     pruner = MedianPruner(n_startup_trials=5, n_warmup_steps=10, interval_steps=1)
-    study = optuna.create_study(direction="minimize", pruner=pruner, study_name="1hr_direct_lstm_opt")
+    study = optuna.create_study(direction="minimize", pruner=pruner, study_name="24hr_direct_lstm_opt")
     
     # Run 10 trials
     study.optimize(objective, n_trials=10, timeout=3600)
