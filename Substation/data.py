@@ -49,8 +49,8 @@ weather_df = pd.read_csv(weather_file, index_col='Datetime', parse_dates=True)
 # Merge on Datetime index (left join ensures we strictly keep the substation's timeline)
 master_df = substation_df.join(weather_df, how='left')
 
-# Impute any edge-case missing weather values using forward fill
-master_df[['Temperature_2m', 'Humidity', 'Solar_Rad']] = master_df[['Temperature_2m', 'Humidity', 'Solar_Rad']].ffill().bfill()
+# Impute using ONLY forward fill on the unbroken timeline (causally safe)
+master_df[['Temperature_2m', 'Humidity', 'Solar_Rad']] = master_df[['Temperature_2m', 'Humidity', 'Solar_Rad']].ffill()
 
 # Extract covariates and target
 # Index 0: Month, Index 1: Load_MW (Target), Index 2: Hour, Index 3: DayOfWeek
@@ -67,6 +67,9 @@ val_mask = features['Month'].isin(val_months)
 train_data = features[~test_mask & ~val_mask].copy()
 val_data = features[val_mask].copy()
 test_data = features[test_mask].copy()
+
+# Catch any missing values at the very start of the dataset strictly within the train set
+train_data[['Temperature_2m', 'Humidity', 'Solar_Rad']] = train_data[['Temperature_2m', 'Humidity', 'Solar_Rad']].bfill()
 
 # Fit the Scaler STRICTLY on the training set to prevent data leakage
 scaler = StandardScaler()

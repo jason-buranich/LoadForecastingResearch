@@ -12,7 +12,7 @@ from slidingWindow import create_safe_sequences
 from models import DirectLSTM
 
 # 1-Hour Substation Configuration
-HORIZON = 96              # Predict 4 steps ahead (1 hour)
+HORIZON = 96             
 SEQ_LEN = 96             # 24 hours of history
 TARGET_IDX = 1           
 COVARIATE_START_IDX = 2  
