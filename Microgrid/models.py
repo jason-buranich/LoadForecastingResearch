@@ -40,7 +40,7 @@ def get_tabular_models(horizon=96, random_state=42):
     optimized Random Forest and LightGBM models.
     """
     # 1. Linear Baseline
-    mlr = Ridge(alpha=500.0, solver='lsqr')
+    mlr = Ridge(alpha=1.0, solver='lsqr')
     
     # 2. Optimized Tree Baselines
     rf_base = RandomForestRegressor(
@@ -49,7 +49,7 @@ def get_tabular_models(horizon=96, random_state=42):
         min_samples_split=20,
         max_features=0.3,
         random_state=random_state,
-        n_jobs=-1
+        n_jobs=-1 # Ensure this is set to -1 to use all CPU cores
     )
     
     lgbm_base = lgb.LGBMRegressor(
@@ -65,7 +65,8 @@ def get_tabular_models(horizon=96, random_state=42):
         rf = rf_base
         lgbm = lgbm_base
     else:
-        rf = MultiOutputRegressor(rf_base)
+        # RF natively handles multi-target arrays; only wrap LightGBM
+        rf = rf_base 
         lgbm = MultiOutputRegressor(lgbm_base)
         
     return mlr, rf, lgbm
