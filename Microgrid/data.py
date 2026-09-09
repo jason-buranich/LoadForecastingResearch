@@ -3,45 +3,45 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 def process_austin_data(filepath, target_dataid=None):
-    """Loads, aggregates duplicate timestamps/meters, and imputes Austin microgrid data."""
+    """Loads, imputes missing meters independently, and aggregates Austin microgrid data."""
     df = pd.read_csv(filepath)
     
-    # 1. Identify Columns
     time_col = 'local_15min' if 'local_15min' in df.columns else df.columns[1]
-    target_col = 'grid' if 'grid' in df.columns else 'Load_MW'
+    target_col = 'grid' if 'grid' in df.columns else 'Load_kW'
     
-    # Optional: Filter for a single house if you do not want the community-aggregate microgrid
     if target_dataid is not None and 'dataid' in df.columns:
         df = df[df['dataid'] == target_dataid]
         
-    df = df.rename(columns={time_col: 'Datetime', target_col: 'Load_MW'})
+    df = df.rename(columns={time_col: 'Datetime', target_col: 'Load_kW'})
     
-    # 2. Harmonize Timezones (UTC -> Central -> Naive)
     df['Datetime'] = pd.to_datetime(df['Datetime'], utc=True)
     df['Datetime'] = df['Datetime'].dt.tz_convert('America/Chicago').dt.tz_localize(None)
     
-    # 3. Collapse duplicate timestamps by summing across meters/houses
-    df = df.groupby('Datetime')['Load_MW'].sum().to_frame()
-    df = df.sort_index()
+    # Pivot so each house/dataid is its own column
+    df_pivot = df.pivot_table(index='Datetime', columns='dataid', values='Load_kW')
     
-    # (Optional) Unit conversion: Pecan Street 'grid' is in kW. 
-    # If you want true MW, uncomment the line below:
-    # df['Load_MW'] = df['Load_MW'] / 1000.0
+    # NEW: Drop any house missing more than 5% of its data to ensure a stable microgrid baseline
+    threshold = int(len(df_pivot) * 0.95)
+    df_pivot = df_pivot.dropna(thresh=threshold, axis=1)
     
-    # 4. Reindex to strict 15-minute intervals across the timeline
-    full_idx = pd.date_range(start=df.index.min(), end=df.index.max(), freq='15min')
-    df = df.reindex(full_idx)
+    # Reindex to strict 15-minute intervals across the entire timeline
+    full_idx = pd.date_range(start=df_pivot.index.min(), end=df_pivot.index.max(), freq='15min')
+    df_pivot = df_pivot.reindex(full_idx)
     
-    # 5. Impute missing intervals using 7-day cyclical shift (672 steps) + linear interpolation
-    df['Load_MW'] = df['Load_MW'].fillna(df['Load_MW'].shift(672))
-    df['Load_MW'] = df['Load_MW'].interpolate(method='linear')
+    # Impute missing intervals for EACH stable house using 7-day cyclical shift + linear interpolation
+    df_pivot = df_pivot.fillna(df_pivot.shift(672))
+    df_pivot = df_pivot.interpolate(method='linear')
     
-    # 6. Generate temporal covariates
-    df['Hour'] = df.index.hour
-    df['DayOfWeek'] = df.index.dayofweek
-    df['Month'] = df.index.month
+    # Sum across all stable houses to create the aggregate microgrid load
+    df_agg = pd.DataFrame(index=df_pivot.index)
+    df_agg['Load_kW'] = df_pivot.sum(axis=1)
+
+    # Generate temporal covariates
+    df_agg['Hour'] = df_agg.index.hour
+    df_agg['DayOfWeek'] = df_agg.index.dayofweek
+    df_agg['Month'] = df_agg.index.month
     
-    return df
+    return df_agg
 
 # --- Pipeline Execution ---
 
@@ -59,9 +59,9 @@ master_df = austin_df.join(weather_df, how='left')
 master_df[['Temperature_2m', 'Humidity', 'Solar_Rad']] = master_df[['Temperature_2m', 'Humidity', 'Solar_Rad']].ffill()
 
 # Extract covariates and target
-# Index 0: Month, Index 1: Load_MW (Target), Index 2: Hour, Index 3: DayOfWeek
+# Index 0: Month, Index 1: Load_kW (Target), Index 2: Hour, Index 3: DayOfWeek
 # Index 4: Temperature_2m, Index 5: Humidity, Index 6: Solar_Rad
-features = master_df[['Month', 'Load_MW', 'Hour', 'DayOfWeek', 'Temperature_2m', 'Humidity', 'Solar_Rad']].copy()
+features = master_df[['Month', 'Load_kW', 'Hour', 'DayOfWeek', 'Temperature_2m', 'Humidity', 'Solar_Rad']].copy()
 
 # Month-Based Split for specific seasonal evaluation
 # Note: Ensure these months align with the boundaries of your specific 2023-2024 dataset

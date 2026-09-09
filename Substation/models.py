@@ -36,13 +36,13 @@ class SeasonalNaiveBaseline:
 # ==============================================================================
 # 2. TABULAR MODELS: RANDOM FOREST & LIGHTGBM
 # ==============================================================================
-def get_tabular_models(horizon=24, random_state=42):
+def get_tabular_models(horizon=96, random_state=42):
     """
     Instantiates the traditional ISO baseline (Ridge Regression) alongside 
     optimized Random Forest and LightGBM models.
     """
     # 1. Linear Baseline
-    mlr = Ridge(alpha=500.0, solver='lsqr')
+    mlr = Ridge(alpha=1.0, solver='lsqr')
     
     # 2. Optimized Tree Baselines (using the hyperparams from our tuning)
     rf_base = RandomForestRegressor(
@@ -59,7 +59,6 @@ def get_tabular_models(horizon=24, random_state=42):
         max_depth=15,
         random_state=random_state,
         n_jobs=-1,
-        verbosity=-1
     )
     
     # 3. Horizon Wrapping

@@ -27,7 +27,7 @@ def plot_day_ahead_forecast(targets_mw, mlr_preds_mw, lstm_preds_mw, start_idx=0
     # Formatting
     plt.title('24-Hour Day-Ahead Load Forecast: Model Comparison', fontsize=14, pad=15)
     plt.xlabel('Hour of Day', fontsize=12)
-    plt.ylabel('Microgrid Load (MW)', fontsize=12)
+    plt.ylabel('Microgrid Load (kW)', fontsize=12)
     
     # Set x-ticks to display every 2 hours instead of 96 individual intervals
     plt.xticks(np.arange(0, 25, 2))
@@ -54,12 +54,12 @@ def plot_single_model_forecast(targets, preds, start_idx=0, horizon=96, model_na
     # Create an x-axis representing fractional hours
     hours = np.arange(horizon) / 4.0
     
-    plt.plot(hours, target_slice, label='Actual Load (MW)', color='black', linewidth=2)
+    plt.plot(hours, target_slice, label='Actual Load (kW)', color='black', linewidth=2)
     plt.plot(hours, pred_slice, label=f'{model_name} Forecast', color='blue', linestyle='--', linewidth=2)
     
     plt.title(f'24-Hour Day-Ahead Forecast: Actual vs {model_name}')
     plt.xlabel('Hour of Day')
-    plt.ylabel('Load (MW)')
+    plt.ylabel('Load (kW)')
     
     # Set x-ticks to display every 2 hours
     plt.xticks(np.arange(0, 25, 2))
