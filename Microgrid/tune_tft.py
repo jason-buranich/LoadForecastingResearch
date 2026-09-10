@@ -15,11 +15,12 @@ from slidingWindow import create_safe_sequences
 # 1. GRID TRANSFORMER ARCHITECTURE
 # ==============================================================================
 class GridTransformer(nn.Module):
-    def __init__(self, hist_features, fut_features, seq_len=96, horizon=4, d_model=64, n_heads=4, num_layers=2, dropout=0.1):
+    def __init__(self, hist_features, fut_features, seq_len=96, horizon=96, d_model=64, n_heads=4, num_layers=2, dropout=0.1):
         super(GridTransformer, self).__init__()
         self.embedding = nn.Linear(hist_features, d_model)
         self.pos_encoder = nn.Parameter(torch.zeros(1, seq_len, d_model))
         
+        # Dropout parameter properly passed to the encoder layer
         encoder_layer = nn.TransformerEncoderLayer(
             d_model=d_model, nhead=n_heads, dim_feedforward=128, dropout=dropout, batch_first=True
         )
@@ -40,7 +41,7 @@ class GridTransformer(nn.Module):
 # ==============================================================================
 # 2. TUNING PIPELINE
 # ==============================================================================
-HORIZON = 96              # Predict 96 steps ahead (1 day)
+HORIZON = 96             # Predict 96 steps ahead (24 hours)
 SEQ_LEN = 96             # 96 intervals = 24 hours of history
 TARGET_IDX = 1           
 COVARIATE_START_IDX = 2  
@@ -61,8 +62,8 @@ def objective(trial):
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-    # Keep only the last 25% of the training data to massively speed up tuning
-    split_idx = int(len(train_df) * 0.75)
+    # Keep only the last 50% of the training data to speed up tuning
+    split_idx = int(len(train_df) * 0.5)
     train_df_subset = train_df.iloc[split_idx:].copy()
     
     # 2. Slice Sequences 
@@ -143,10 +144,12 @@ def objective(trial):
     return val_wape
 
 def main():
-    print("--- Starting Optuna Tuning Grid Transformer ---")
+    print("--- Starting Optuna Tuning 24-Hour Grid Transformer ---")
     
     # Allow 5 startup trials, but kill bad trials after just 3 epochs
     pruner = MedianPruner(n_startup_trials=5, n_warmup_steps=3, interval_steps=1)
+    
+    # Kept study name completely distinct to avoid database conflicts
     study = optuna.create_study(direction="minimize", pruner=pruner, study_name="24hr_tft_opt")
     
     # Run 20 trials

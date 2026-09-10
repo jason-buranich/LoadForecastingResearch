@@ -154,9 +154,9 @@ def main():
         seq_len=SEQ_LEN,
         horizon=HORIZON,
         d_model=128,               
-        n_heads=4,                
+        n_heads=2,                
         num_layers=1,             
-        dropout=0.4       
+        dropout=0.4      
     )
     
     # Train with Tuned Optimizer Parameters
@@ -165,8 +165,8 @@ def main():
         train_loader=train_loader,
         val_loader=val_loader,
         epochs=100,
-        lr=0.004,            
-        weight_decay=2.9e-05, 
+        lr=3e-4,            
+        weight_decay=2e-6, 
         patience=10, 
         model_save_path=model_path
     )
