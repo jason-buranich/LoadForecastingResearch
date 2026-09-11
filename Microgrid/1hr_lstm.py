@@ -9,13 +9,14 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 # Import components from your updated data pipeline
 from data import train_df, val_df, test_df, scaler
 from slidingWindow import create_safe_sequences
+from models import DirectLSTM
 from visualize import plot_single_model_forecast
 
 # ==============================================================================
-# 1. EARLY STOPPING & MODEL ARCHITECTURE
+# 1. EARLY STOPPING
 # ==============================================================================
 class EarlyStopping:
-    def __init__(self, patience=15, min_delta=0, model_save_path='best_15min_transformer.pth'):
+    def __init__(self, patience=15, min_delta=0, model_save_path='best_1hr_direct_lstm.pth'):
         self.patience = patience
         self.min_delta = min_delta
         self.model_save_path = model_save_path
@@ -39,35 +40,15 @@ class EarlyStopping:
     def save_checkpoint(self, val_loss, model):
         torch.save(model.state_dict(), self.model_save_path)
 
-class GridTransformer(nn.Module):
-    def __init__(self, hist_features, fut_features, seq_len=96, d_model=64, n_heads=4, num_layers=2):
-        super(GridTransformer, self).__init__()
-        self.embedding = nn.Linear(hist_features, d_model)
-        self.pos_encoder = nn.Parameter(torch.zeros(1, seq_len, d_model))
-        
-        encoder_layer = nn.TransformerEncoderLayer(
-            d_model=d_model, nhead=n_heads, dim_feedforward=128, dropout=0.1, batch_first=True
-        )
-        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
-        self.fc_out = nn.Linear(d_model + fut_features, 1)
-
-    def forward(self, x_hist, x_fut):
-        x = self.embedding(x_hist) + self.pos_encoder
-        encoded_seq = self.transformer(x)
-        context_vector = encoded_seq[:, -1, :]
-        fut_flat = x_fut.view(x_fut.size(0), -1)
-        combined = torch.cat((context_vector, fut_flat), dim=1)
-        return self.fc_out(combined)
-
 # ==============================================================================
 # 2. TRAINING LOOP
 # ==============================================================================
-def train_transformer(model, train_loader, val_loader, epochs=100, lr=1e-3, patience=15, model_save_path='best_15min_transformer.pth'):
+def train_direct_lstm(model, train_loader, val_loader, epochs=100, lr=1e-3, weight_decay=1e-4, patience=15, model_save_path='best_1hr_direct_lstm.pth'):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
     
     criterion = nn.L1Loss()
-    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=3)
     early_stopping = EarlyStopping(patience=patience, model_save_path=model_save_path)
     
@@ -114,15 +95,15 @@ def train_transformer(model, train_loader, val_loader, epochs=100, lr=1e-3, pati
 # 3. MAIN PIPELINE
 # ==============================================================================
 def main():
-    # Microgrid Configuration
-    HORIZON = 1              
+    # 1-Hour (4-Step) Microgrid Configuration
+    HORIZON = 4              
     SEQ_LEN = 96             
     TARGET_IDX = 1           
     COVARIATE_START_IDX = 2  
     
-    print("--- Starting 15-Minute-Ahead Grid Transformer Pipeline ---")
+    print("--- Starting 1-Hour-Ahead Direct LSTM Pipeline ---")
     
-    # Slice Sequences (Separating train and val to trigger early stopping properly)
+    # Slice Sequences
     X_train_hist, X_train_fut, Y_train = create_safe_sequences(
         train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
     )
@@ -133,29 +114,33 @@ def main():
         test_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
     )
     
-    # DataLoaders (num_workers=0 to prevent Docker OpenMP deadlocks)
+    # DataLoaders (num_workers=0 locked to prevent OpenMP deadlocks)
     train_loader = DataLoader(TensorDataset(X_train_hist, X_train_fut, Y_train), batch_size=64, shuffle=True, num_workers=0)
     val_loader   = DataLoader(TensorDataset(X_val_hist, X_val_fut, Y_val), batch_size=64, shuffle=False, num_workers=0)
     test_loader  = DataLoader(TensorDataset(X_test_hist, X_test_fut, Y_test), batch_size=64, shuffle=False, num_workers=0)
     
-    model_path = 'best_15min_transformer.pth'
+    model_path = 'best_1hr_direct_lstm.pth'
     hist_features = X_train_hist.shape[-1]
     fut_features = X_train_fut.shape[-1]
     
-    # Instantiate Model
-    model = GridTransformer(
-        hist_features=hist_features, 
-        fut_features=fut_features, 
-        seq_len=SEQ_LEN
+    # Instantiate Model from models.py
+    model = DirectLSTM(
+        hist_input_dim=hist_features, 
+        future_input_dim=fut_features,
+        hidden_dim=256,
+        horizon=HORIZON,
+        num_layers=1,   
+        dropout=0.4     
     )
     
     # Train
-    trained_model = train_transformer(
+    trained_model = train_direct_lstm(
         model=model,
         train_loader=train_loader,
         val_loader=val_loader,
         epochs=100,
-        lr=1e-3,
+        lr=4e-4,
+        weight_decay=1e-4,
         patience=10, 
         model_save_path=model_path
     )
@@ -174,8 +159,9 @@ def main():
             predictions.append(preds.cpu().numpy())
             targets.append(batch_y.numpy())
             
-    preds_flat = np.concatenate(predictions, axis=0).flatten()
-    targets_flat = np.concatenate(targets, axis=0).flatten()
+    # Retain the 2D shape (N, 4)
+    preds_np = np.concatenate(predictions, axis=0)
+    targets_np = np.concatenate(targets, axis=0)
     
     # Inverse Scaling
     def inverse_scale(data_flat):
@@ -183,24 +169,29 @@ def main():
         dummy[:, TARGET_IDX] = data_flat
         return scaler.inverse_transform(dummy)[:, TARGET_IDX]
 
-    preds_kw = inverse_scale(preds_flat)
-    targets_kw = inverse_scale(targets_flat)
+    # Calculate metrics across the entire 4-step composite block
+    preds_kw_flat = inverse_scale(preds_np.ravel())
+    targets_kw_flat = inverse_scale(targets_np.ravel())
     
     # Metrics
-    rmse = np.sqrt(mean_squared_error(targets_kw, preds_kw))
-    mae = mean_absolute_error(targets_kw, preds_kw)
-    wape = np.sum(np.abs(targets_kw - preds_kw)) / np.sum(np.abs(targets_kw)) * 100
+    rmse = np.sqrt(mean_squared_error(targets_kw_flat, preds_kw_flat))
+    mae = mean_absolute_error(targets_kw_flat, preds_kw_flat)
+    wape = np.sum(np.abs(targets_kw_flat - preds_kw_flat)) / np.sum(np.abs(targets_kw_flat)) * 100
     
-    print("\n--- 15-Minute-Ahead Grid Transformer Metrics (kW) ---")
+    print("\n--- 1-Hour-Ahead Direct LSTM Metrics (kW) ---")
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     
+    # Visualization: Isolate the t+4 interval (index 3) 
+    t4_preds = inverse_scale(preds_np[:, 3])
+    t4_targets = inverse_scale(targets_np[:, 3])
+    
     plot_single_model_forecast(
-        targets_kw, 
-        preds_kw, 
+        t4_targets, 
+        t4_preds, 
         start_idx=0, 
         horizon=96,
-        model_name="15-Min Grid Transformer", 
-        save_path='transformer_15min_ahead_forecast.png'
+        model_name="1-Hour Direct LSTM (t+4 step)", 
+        save_path='directlstm_1hr_ahead_forecast.png'
     )
 
 if __name__ == "__main__":
