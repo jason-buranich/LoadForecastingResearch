@@ -42,7 +42,7 @@ class GridTransformer(nn.Module):
 # ==============================================================================
 # 2. TUNING PIPELINE
 # ==============================================================================
-HORIZON = 1             # Predict 1 step ahead (15 minutes)
+HORIZON = 4             # Predict 4 steps ahead (60 minutes)
 SEQ_LEN = 96             # 96 intervals = 24 hours of history
 TARGET_IDX = 1           
 COVARIATE_START_IDX = 2  
@@ -153,8 +153,8 @@ def main():
     # Kept study name completely distinct to avoid database conflicts
     study = optuna.create_study(direction="minimize", pruner=pruner, study_name="24hr_tft_opt")
     
-    # Run 20 trials
-    study.optimize(objective, n_trials=20, timeout=3600)
+    # Run 10 trials
+    study.optimize(objective, n_trials=10, timeout=3600)
     
     print("\n--- Tuning Complete ---")
     print(f"Best Trial Validation WAPE: {study.best_trial.value:.2f}%")
