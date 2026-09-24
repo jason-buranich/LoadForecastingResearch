@@ -108,58 +108,42 @@ class DirectLSTM(nn.Module):
 # 4. PYTORCH: ENCODER-DECODER LSTM (Seq2Seq)
 # ==============================================================================
 class Seq2Seq(nn.Module):
-    """
-    Autoregressive encoder-decoder architecture for time series forecasting.
-    Includes dimensionality fixes for proper tensor slicing.
-    """
-    def __init__(self, hist_input_dim, future_input_dim, horizon=96, hidden_dim=64, num_layers=2, dropout=0.1):
+    def __init__(self, hist_input_dim, future_input_dim, horizon, hidden_dim=128, num_layers=2, dropout=0.1):
         super(Seq2Seq, self).__init__()
         self.horizon = horizon
         self.hidden_dim = hidden_dim
+        self.num_layers = num_layers
         
-        # Encoder: Processes the 96-step historical sequence
-        self.encoder = nn.LSTM(
-            input_size=hist_input_dim, 
-            hidden_size=hidden_dim, 
-            num_layers=num_layers, 
-            batch_first=True, 
-            dropout=dropout if num_layers > 1 else 0
+        self.total_input_dim = hist_input_dim + future_input_dim
+        
+        # PyTorch requires dropout=0 if num_layers=1
+        lstm_dropout = dropout if num_layers > 1 else 0.0
+        
+        self.lstm = nn.LSTM(
+            input_size=self.total_input_dim,
+            hidden_size=hidden_dim,
+            num_layers=num_layers,
+            batch_first=True,
+            dropout=lstm_dropout
         )
         
-        # Decoder: Processes future covariates + previous step prediction
-        self.decoder = nn.LSTM(
-            input_size=1 + future_input_dim, 
-            hidden_size=hidden_dim, 
-            num_layers=num_layers, 
-            batch_first=True, 
-            dropout=dropout if num_layers > 1 else 0
-        )
-        
-        self.fc_out = nn.Linear(hidden_dim, 1)
+        # Direct multi-step output from the final hidden state
+        self.fc = nn.Linear(hidden_dim, horizon)
 
-    def forward(self, x_hist, x_fut, **kwargs):
-        batch_size = x_hist.size(0)
-        
-        # 1. Encode History
-        _, (hidden, cell) = self.encoder(x_hist)
-        
-        # 2. Prepare Decoder
-        outputs = torch.zeros(batch_size, self.horizon, 1).to(x_hist.device)
-        dec_input = torch.zeros(batch_size, 1, 1).to(x_hist.device)
-        
-        # 3. Autoregressive Decoding Loop
-        for t in range(self.horizon):
-            covariates_t = x_fut[:, t, :].unsqueeze(1)
-            dec_input_combined = torch.cat((dec_input, covariates_t), dim=2)
+    def forward(self, x_hist, x_fut):
+        if x_fut is not None and x_fut.shape[2] > 0:
+            x_fut_aligned = x_fut[:, :x_hist.size(1), :] 
+            x = torch.cat([x_hist, x_fut_aligned], dim=-1)
+        else:
+            x = x_hist
             
-            out, (hidden, cell) = self.decoder(dec_input_combined, (hidden, cell))
-            pred = self.fc_out(out)
-            
-            # Squeeze the middle sequence dimension to match the 2D slice [Batch, 1]
-            outputs[:, t, :] = pred.squeeze(1)
-            dec_input = pred
-            
-        return outputs.squeeze(-1)
+        lstm_out, (hn, cn) = self.lstm(x)
+        
+        # Take the hidden state from the last layer, last time step
+        final_hidden_state = lstm_out[:, -1, :] 
+        
+        out = self.fc(final_hidden_state)
+        return out
 
 
 # ==============================================================================

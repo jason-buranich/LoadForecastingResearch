@@ -23,8 +23,8 @@ from visualize import plot_single_model_forecast
 # MAIN PIPELINE
 # ==============================================================================
 def main():
-    # 1-Hour (4-Step) Configuration
-    HORIZON = 4              
+    # 24-Hour (96-Step) Configuration
+    HORIZON = 96              
     SEQ_LEN = 96             
     TARGET_IDX = 1           
     COVARIATE_START_IDX = 2
@@ -33,11 +33,11 @@ def main():
     BATCH_SIZE = 64
     EPOCHS = 100
     PATIENCE = 10
-    LEARNING_RATE = 2e-3
-    WEIGHT_DECAY = 9e-6
+    LEARNING_RATE = 2e-4
+    WEIGHT_DECAY = 9e-5
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"--- Starting 1-Hour-Ahead Grid Transformer Pipeline on {device} ---")
+    print(f"--- Starting 24-Hour-Ahead Grid Transformer Pipeline on {device} ---")
     
     # 2. Extract 3D Tensors
     X_train_hist, X_train_fut, Y_train = create_safe_sequences(
@@ -57,7 +57,7 @@ def main():
     val_dataset = TensorDataset(X_val_hist, X_val_fut, Y_val)
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False)
     
-    # 4. Instantiate Model
+    # 4. Instantiate Model (Adjusted for sufficient capacity)
     hist_input_dim = X_train_hist.shape[2]
     future_input_dim = X_train_fut.shape[2]
     
@@ -66,13 +66,13 @@ def main():
         future_input_dim=future_input_dim,
         seq_len=SEQ_LEN,
         horizon=HORIZON,
-        d_model=256,
-        n_heads=8,
-        num_layers=1,
-        dropout=0.3
+        d_model=256,         
+        n_heads=2,           
+        num_layers=1,        
+        dropout=0.2          
     ).to(device)
     
-    # L1Loss is equivalent to MAE, aligning better with your target WAPE metric
+    # L1Loss for WAPE alignment
     criterion = nn.L1Loss()
     optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
     
@@ -81,7 +81,7 @@ def main():
     
     best_val_loss = float('inf')
     epochs_no_improve = 0
-    best_model_path = 'best_grid_transformer_1hr.pth'
+    best_model_path = 'best_grid_transformer_24hr.pth'
     
     for epoch in range(1, EPOCHS + 1):
         # --- Training Phase ---
@@ -117,7 +117,6 @@ def main():
                 
         val_loss /= len(val_loader.dataset)
         
-        # Print every epoch (Updated to reflect MAE/L1 calculation)
         print(f"Epoch {epoch:03d}/{EPOCHS} | Train Loss (MAE): {train_loss:.4f} | Val Loss (MAE): {val_loss:.4f}")
         
         # --- Early Stopping Check ---
@@ -146,7 +145,7 @@ def main():
             preds = model(batch_hist, batch_fut)
             test_preds.append(preds.cpu().numpy())
             
-    # test_preds shape: (N_samples, 4)
+    # test_preds shape: (N_samples, 96)
     preds_np = np.concatenate(test_preds, axis=0)
     Y_test_np = Y_test.numpy()
     
@@ -156,7 +155,7 @@ def main():
         dummy[:, TARGET_IDX] = data_flat
         return scaler.inverse_transform(dummy)[:, TARGET_IDX]
 
-    # Calculate aggregate metrics across all 4 steps
+    # Calculate aggregate metrics across all 96 steps
     preds_kw_flat = inverse_scale(preds_np.ravel())
     targets_kw_flat = inverse_scale(Y_test_np.ravel())
     
@@ -164,20 +163,20 @@ def main():
     mae = mean_absolute_error(targets_kw_flat, preds_kw_flat)
     wape = np.sum(np.abs(targets_kw_flat - preds_kw_flat)) / np.sum(np.abs(targets_kw_flat)) * 100
     
-    print("\n--- 1-Hour-Ahead Grid Transformer Metrics (kW) ---")
+    print("\n--- 24-Hour-Ahead Grid Transformer Metrics (kW) ---")
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     
-    # 8. Visualization: Isolate the t+4 interval (index 3)
-    t4_preds = inverse_scale(preds_np[:, 3])
-    t4_targets = inverse_scale(Y_test_np[:, 3])
+    # 8. Visualization: Isolate the t+96 interval (index 95)
+    t96_preds = inverse_scale(preds_np[:, 95])
+    t96_targets = inverse_scale(Y_test_np[:, 95])
     
     plot_single_model_forecast(
-        t4_targets, 
-        t4_preds, 
+        t96_targets, 
+        t96_preds, 
         start_idx=0, 
         horizon=96,
-        model_name="1-Hour Grid Transformer (t+4 step)", 
-        save_path='transformer_1hr_ahead_forecast.png'
+        model_name="24-Hour Grid Transformer (t+96 step)", 
+        save_path='transformer_24hr_ahead_forecast.png'
     )
     
     # Cleanup temporary weight file

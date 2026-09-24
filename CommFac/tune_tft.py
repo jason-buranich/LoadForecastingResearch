@@ -1,166 +1,123 @@
-import os
-import numpy as np
-import pandas as pd
+import optuna
 import torch
 import torch.nn as nn
-import optuna
-from optuna.pruners import MedianPruner
 from torch.utils.data import TensorDataset, DataLoader
 
-# Import components from your updated data pipeline
-from data import train_df, val_df, scaler
-from slidingWindow import create_safe_sequences
-from models import GridTransformer
+# Import your pipeline modules
+from data import train_df, val_df
+from ISO.slidingWindow import create_safe_sequences
+from models import Seq2SeqCovariateLSTM
 
-# ==============================================================================
-# 1. GRID TRANSFORMER ARCHITECTURE
-# ==============================================================================
-class GridTransformer(nn.Module):
-    def __init__(self, hist_features, fut_features, seq_len=96, horizon=96, d_model=64, n_heads=4, num_layers=2, dropout=0.1):
-        super(GridTransformer, self).__init__()
-        self.embedding = nn.Linear(hist_features, d_model)
-        self.pos_encoder = nn.Parameter(torch.zeros(1, seq_len, d_model))
-        
-        # Dropout parameter properly passed to the encoder layer
-        encoder_layer = nn.TransformerEncoderLayer(
-            d_model=d_model, nhead=n_heads, dim_feedforward=128, dropout=dropout, batch_first=True
-        )
-        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
-        
-        # Scale output layer for multi-step horizon
-        self.fc_out = nn.Linear(d_model + (fut_features * horizon), horizon)
+# ==========================================
+# 1. Global Data Generation
+# (Done once to save I/O overhead during tuning)
+# ==========================================
+HORIZON = 24
+SEQ_LEN = 168
+TARGET_IDX = 4
 
-    def forward(self, x_hist, x_fut):
-        x = self.embedding(x_hist) + self.pos_encoder
-        encoded_seq = self.transformer(x)
-        context_vector = encoded_seq[:, -1, :]
-        
-        fut_flat = x_fut.view(x_fut.size(0), -1)
-        combined = torch.cat((context_vector, fut_flat), dim=1)
-        return self.fc_out(combined)
+print("Generating 3-item sliding window tensors for tuning...")
+X_train_hist, X_train_fut, Y_train = create_safe_sequences(train_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
+X_val_hist, X_val_fut, Y_val       = create_safe_sequences(val_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX)
 
-# ==============================================================================
-# 2. TUNING PIPELINE
-# ==============================================================================
-HORIZON = 4             # Predict 4 steps ahead (60 minutes)
-SEQ_LEN = 96             # 96 intervals = 24 hours of history
-TARGET_IDX = 1           
-COVARIATE_START_IDX = 2  
+hist_input_dim = X_train_hist.shape[-1]
+future_input_dim = X_train_fut.shape[-1]
 
-def inverse_scale(data_flat, target_idx=TARGET_IDX):
-    dummy = np.zeros((len(data_flat), scaler.mean_.shape[0]))
-    dummy[:, target_idx] = data_flat
-    return scaler.inverse_transform(dummy)[:, target_idx]
-
+# ==========================================
+# 2. Optuna Objective Function
+# ==========================================
 def objective(trial):
-    # 1. Hyperparameter Search Space
-    d_model = trial.suggest_categorical("hidden_dim", [64, 128, 256])
-    n_heads = trial.suggest_categorical("nheads", [2, 4, 8])
+    # Suggest hyperparameters
+    hidden_dim = trial.suggest_categorical("hidden_dim", [64, 128, 256, 512])
     num_layers = trial.suggest_int("num_layers", 1, 3)
-    dropout = trial.suggest_float("dropout", 0.1, 0.5)
-    lr = trial.suggest_float("lr", 1e-4, 1e-2, log=True)
-    weight_decay = trial.suggest_float("weight_decay", 1e-6, 1e-3, log=True)
-    
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    
-    # Keep only the last 50% of the training data to speed up tuning
-    split_idx = int(len(train_df) * 0.5)
-    train_df_subset = train_df.iloc[split_idx:].copy()
-    
-    # 2. Slice Sequences 
-    X_train_hist, X_train_fut, Y_train = create_safe_sequences(
-        train_df_subset, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
-    )
-    X_val_hist, X_val_fut, Y_val = create_safe_sequences(
-        val_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
-    )
-    
-    # STRICT num_workers=0 to prevent joblib/OpenMP container deadlocks
-    train_loader = DataLoader(TensorDataset(X_train_hist, X_train_fut, Y_train), batch_size=32, shuffle=True, num_workers=0)
-    val_loader   = DataLoader(TensorDataset(X_val_hist, X_val_fut, Y_val), batch_size=32, shuffle=False, num_workers=0)
+    lr = trial.suggest_float("lr", 1e-4, 5e-3, log=True)
+    batch_size = trial.suggest_categorical("batch_size", [16, 32, 64])
 
-    # 3. Instantiate Model
-    model = GridTransformer(
-        hist_features=X_train_hist.shape[-1],
-        fut_features=X_train_fut.shape[-1],
-        seq_len=SEQ_LEN,
-        horizon=HORIZON,
-        d_model=d_model,
-        n_heads=n_heads,
-        num_layers=num_layers,
-        dropout=dropout
+    # Create DataLoaders
+    train_loader = DataLoader(TensorDataset(X_train_hist, X_train_fut, Y_train), batch_size=batch_size, shuffle=True, num_workers=4)
+    val_loader = DataLoader(TensorDataset(X_val_hist, X_val_fut, Y_val), batch_size=batch_size, shuffle=False, num_workers=4)
+
+    # Initialize Model
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = Seq2SeqCovariateLSTM(
+        hist_input_dim=hist_input_dim, 
+        future_input_dim=future_input_dim, 
+        hidden_dim=hidden_dim, 
+        horizon=HORIZON, 
+        num_layers=num_layers
     ).to(device)
     
-    criterion = nn.L1Loss()
-    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
+    criterion = nn.MSELoss()
+    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
+    
+    best_val_loss = float('inf')
+    patience = 4
+    counter = 0
 
-    # Automatic Mixed Precision for speed
-    scaler_amp = torch.amp.GradScaler('cuda')
-    
-    epochs = 10 # Kept relatively short for tuning
-    
-    for epoch in range(epochs):
+    # Fast Training Loop (Cap at 25 epochs for tuning speed)
+    for epoch in range(25):
         model.train()
         for batch_x_hist, batch_x_fut, batch_y in train_loader:
-            batch_x_hist, batch_x_fut, batch_y = batch_x_hist.to(device), batch_x_fut.to(device), batch_y.to(device)
+            batch_x_hist = batch_x_hist.to(device)
+            batch_x_fut = batch_x_fut.to(device)
+            batch_y = batch_y.to(device)
             
             optimizer.zero_grad()
+            outputs = model(batch_x_hist, batch_x_fut, y_target=batch_y, teacher_forcing_ratio=0.5)
             
-            # Cast operations to mixed precision
-            with torch.amp.autocast('cuda'):
-                outputs = model(batch_x_hist, batch_x_fut)
-                batch_size = batch_x_hist.size(0)
-                loss = criterion(outputs.view(batch_size, -1), batch_y.view(batch_size, -1))
-            
-            # Scale the loss and backpropagate
-            scaler_amp.scale(loss).backward()
-            scaler_amp.unscale_(optimizer)
+            b_size = batch_x_hist.size(0)
+            loss = criterion(outputs.view(b_size, -1), batch_y.view(b_size, -1))
+            loss.backward()
             nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-            scaler_amp.step(optimizer)
-            scaler_amp.update()
+            optimizer.step()
             
-        # 4. Validation Loop to calculate WAPE
         model.eval()
-        predictions, targets = [], []
+        val_loss = 0.0
         with torch.no_grad():
             for batch_x_hist, batch_x_fut, batch_y in val_loader:
-                batch_x_hist, batch_x_fut = batch_x_hist.to(device), batch_x_fut.to(device)
-                preds = model(batch_x_hist, batch_x_fut)
-                predictions.append(preds.cpu().numpy())
-                targets.append(batch_y.numpy())
+                batch_x_hist = batch_x_hist.to(device)
+                batch_x_fut = batch_x_fut.to(device)
+                batch_y = batch_y.to(device)
                 
-        preds_arr = np.concatenate(predictions, axis=0)
-        targets_arr = np.concatenate(targets, axis=0)
-        
-        preds_mw_flat = inverse_scale(preds_arr.ravel())
-        targets_mw_flat = inverse_scale(targets_arr.ravel())
-        
-        val_wape = np.sum(np.abs(targets_mw_flat - preds_mw_flat)) / np.sum(np.abs(targets_mw_flat)) * 100
-        
-        # 5. Report to Optuna and evaluate pruning
-        trial.report(val_wape, epoch)
+                outputs = model(batch_x_hist, batch_x_fut, y_target=batch_y, teacher_forcing_ratio=0.5)
+                
+                b_size = batch_x_hist.size(0)
+                loss = criterion(outputs.view(b_size, -1), batch_y.view(b_size, -1))
+                val_loss += loss.item()
+                
+        val_loss /= len(val_loader)
+
+        # Optuna Pruning: Kill the trial if it's underperforming early
+        trial.report(val_loss, epoch)
         if trial.should_prune():
             raise optuna.exceptions.TrialPruned()
-            
-    return val_wape
 
-def main():
-    print("--- Starting Optuna Tuning 24-Hour Grid Transformer ---")
-    
-    # Allow 5 startup trials, but kill bad trials after just 3 epochs
-    pruner = MedianPruner(n_startup_trials=5, n_warmup_steps=3, interval_steps=1)
-    
-    # Kept study name completely distinct to avoid database conflicts
-    study = optuna.create_study(direction="minimize", pruner=pruner, study_name="24hr_tft_opt")
-    
-    # Run 10 trials
-    study.optimize(objective, n_trials=10, timeout=3600)
-    
-    print("\n--- Tuning Complete ---")
-    print(f"Best Trial Validation WAPE: {study.best_trial.value:.2f}%")
-    print("Best Hyperparameters:")
-    for key, value in study.best_trial.params.items():
-        print(f"  {key}: {value}")
+        # Early Stopping Logic
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            counter = 0
+        else:
+            counter += 1
+            if counter >= patience:
+                break
+                
+    return best_val_loss
 
+# ==========================================
+# 3. Execution
+# ==========================================
 if __name__ == "__main__":
-    main()
+    # Use MedianPruner to automatically stop bad trials
+    pruner = optuna.pruners.MedianPruner(n_startup_trials=5, n_warmup_steps=5, interval_steps=1)
+    study = optuna.create_study(direction="minimize", pruner=pruner)
+    
+    print("\n--- Launching Seq2Seq Optuna Tuning ---")
+    study.optimize(objective, n_trials=30)  # Adjust n_trials based on your time constraints
+    
+    print("\n==================================================")
+    print("Optimization Complete.")
+    print(f"Best Validation Loss: {study.best_value:.4f}")
+    print("Best Hyperparameters:")
+    for key, value in study.best_params.items():
+        print(f"  {key}: {value}")
+    print("==================================================")
