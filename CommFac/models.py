@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.multioutput import MultiOutputRegressor
 import lightgbm as lgb
 import random
-
+import math
 # ==============================================================================
 # 1. BASELINE: SEASONAL NAIVE / PERSISTENCE
 # ==============================================================================
@@ -115,8 +115,6 @@ class Seq2Seq(nn.Module):
         self.num_layers = num_layers
         
         self.total_input_dim = hist_input_dim + future_input_dim
-        
-        # PyTorch requires dropout=0 if num_layers=1
         lstm_dropout = dropout if num_layers > 1 else 0.0
         
         self.lstm = nn.LSTM(
@@ -127,21 +125,21 @@ class Seq2Seq(nn.Module):
             dropout=lstm_dropout
         )
         
-        # Direct multi-step output from the final hidden state
         self.fc = nn.Linear(hidden_dim, horizon)
 
     def forward(self, x_hist, x_fut):
         if x_fut is not None and x_fut.shape[2] > 0:
-            x_fut_aligned = x_fut[:, :x_hist.size(1), :] 
+            # Dynamically repeat future covariates if horizon < history length
+            if x_fut.size(1) < x_hist.size(1):
+                x_fut_aligned = x_fut.mean(dim=1, keepdim=True).expand(-1, x_hist.size(1), -1)
+            else:
+                x_fut_aligned = x_fut[:, :x_hist.size(1), :] 
             x = torch.cat([x_hist, x_fut_aligned], dim=-1)
         else:
             x = x_hist
             
         lstm_out, (hn, cn) = self.lstm(x)
-        
-        # Take the hidden state from the last layer, last time step
         final_hidden_state = lstm_out[:, -1, :] 
-        
         out = self.fc(final_hidden_state)
         return out
 
