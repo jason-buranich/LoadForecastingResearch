@@ -10,12 +10,12 @@ from torch.utils.data import TensorDataset, DataLoader
 # Import components from your updated data pipeline
 from data import train_df, val_df, scaler
 from slidingWindow import create_safe_sequences
-from models import Seq2Seq
+from models import DirectLSTM
 
 # ==============================================================================
 # 1. TUNING PIPELINE CONFIGURATION
 # ==============================================================================
-HORIZON = 1              # Predict 1 step ahead
+HORIZON = 96             # Set to 1, 4, or 96 depending on target horizon
 SEQ_LEN = 96             # 96 intervals = 24 hours of history
 TARGET_IDX = 1           
 COVARIATE_START_IDX = 2  
@@ -26,11 +26,11 @@ def inverse_scale(data_flat, target_idx=TARGET_IDX):
     return scaler.inverse_transform(dummy)[:, target_idx]
 
 def objective(trial):
-    # 1. Hyperparameter Search Space
-    hidden_dim = trial.suggest_categorical("hidden_dim", [32, 64, 128])
+    # 1. Hyperparameter Search Space for DirectLSTM
+    hidden_dim = trial.suggest_categorical("hidden_dim", [32, 64, 128, 256])
     num_layers = trial.suggest_int("num_layers", 1, 3)
-    dropout = trial.suggest_float("dropout", 0.1, 0.3)
-    lr = trial.suggest_float("lr", 1e-4, 1e-2, log=True)
+    dropout = trial.suggest_float("dropout", 0.1, 0.4)
+    lr = trial.suggest_float("lr", 1e-4, 5e-3, log=True)
     weight_decay = trial.suggest_float("weight_decay", 1e-6, 1e-3, log=True)
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -51,8 +51,8 @@ def objective(trial):
     train_loader = DataLoader(TensorDataset(X_train_hist, X_train_fut, Y_train), batch_size=32, shuffle=True, num_workers=0)
     val_loader   = DataLoader(TensorDataset(X_val_hist, X_val_fut, Y_val), batch_size=32, shuffle=False, num_workers=0)
 
-    # 3. Instantiate Model from models.py
-    model = Seq2Seq(
+    # 3. Instantiate Model
+    model = DirectLSTM(
         hist_input_dim=X_train_hist.shape[-1],
         future_input_dim=X_train_fut.shape[-1],
         horizon=HORIZON,
@@ -67,7 +67,7 @@ def objective(trial):
     # Automatic Mixed Precision for speed
     scaler_amp = torch.amp.GradScaler('cuda')
     
-    epochs = 20 # Kept relatively short for tuning
+    epochs = 15 # Kept relatively short for tuning
     
     for epoch in range(epochs):
         model.train()
@@ -107,6 +107,10 @@ def objective(trial):
         
         val_wape = np.sum(np.abs(targets_mw_flat - preds_mw_flat)) / np.sum(np.abs(targets_mw_flat)) * 100
         
+        # Failsafe to immediately prune the trial if gradients explode into NaN or Inf
+        if np.isnan(val_wape) or np.isinf(val_wape):
+            raise optuna.exceptions.TrialPruned()
+            
         # 5. Report to Optuna and evaluate pruning
         trial.report(val_wape, epoch)
         if trial.should_prune():
@@ -115,13 +119,14 @@ def objective(trial):
     return val_wape
 
 def main():
-    print("--- Starting Optuna Tuning Seq2Seq ---")
+    print(f"--- Starting Optuna Tuning DirectLSTM ({HORIZON}-Step) ---")
     
     # Allow 5 startup trials, but kill bad trials after just 3 epochs
     pruner = MedianPruner(n_startup_trials=5, n_warmup_steps=3, interval_steps=1)
     
-    # Study name distinct to 15-minute Seq2Seq architecture
-    study = optuna.create_study(direction="minimize", pruner=pruner, study_name="15min_seq2seq_opt")
+    # Distinct study name to prevent overwriting
+    study_name = f"directlstm_{HORIZON}step_opt"
+    study = optuna.create_study(direction="minimize", pruner=pruner, study_name=study_name)
     
     # Run 20 trials
     study.optimize(objective, n_trials=20, timeout=3600)

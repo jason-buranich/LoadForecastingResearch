@@ -26,8 +26,8 @@ def main():
     BATCH_SIZE = 256  
     EPOCHS = 100
     PATIENCE = 10
-    LEARNING_RATE = 1e-3
-    WEIGHT_DECAY = 1e-4
+    LEARNING_RATE = 2e-3
+    WEIGHT_DECAY = 7e-6
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"--- Starting 15-Minute-Ahead PatchTST Pipeline on {device} ---")
@@ -60,9 +60,9 @@ def main():
         future_input_dim=future_input_dim,  
         seq_len=SEQ_LEN,
         horizon=HORIZON,
-        patch_len=16,                       
+        patch_len=12,                       
         hidden_dim=64,
-        nheads=4,
+        nheads=8,
         num_layers=2,
         dropout=0.1
     ).to(device)

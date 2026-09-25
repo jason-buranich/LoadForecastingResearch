@@ -6,34 +6,38 @@ import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
+# 1. Enforce Deterministic Behavior
+torch.manual_seed(42)
+np.random.seed(42)
+random.seed(42)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed_all(42)
+
 # Import components from the configured La Trobe pipeline
 from data import train_df, val_df, test_df, scaler
 from slidingWindow import create_safe_sequences
-from models import Seq2Seq
+from models import PatchTST
 from visualize import plot_single_model_forecast
 
 # ==============================================================================
 # MAIN PIPELINE
 # ==============================================================================
 def main():
-    # 15-Minute (1-Step) Configuration
-    HORIZON = 1              
+    # 24-Hour (96-Step) Configuration
+    HORIZON = 96              
     SEQ_LEN = 96             
     TARGET_IDX = 1           
     COVARIATE_START_IDX = 2
     
-    # Hyperparameters (Using stable baselines)
-    BATCH_SIZE = 128 
+    # Hyperparameters
+    BATCH_SIZE = 64
     EPOCHS = 100
     PATIENCE = 10
-    LEARNING_RATE = 2e-4
-    WEIGHT_DECAY = 2e-6
-    HIDDEN_DIM = 128
-    NUM_LAYERS = 2
-    DROPOUT = 0.15
+    LEARNING_RATE = 1e-3
+    WEIGHT_DECAY = 1e-4
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"--- Starting 15-Minute-Ahead Seq2Seq Pipeline on {device} ---")
+    print(f"--- Starting 24-Hour-Ahead PatchTST Pipeline on {device} ---")
     
     # 2. Extract 3D Tensors
     X_train_hist, X_train_fut, Y_train = create_safe_sequences(
@@ -46,7 +50,7 @@ def main():
         test_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
     )
     
-    # 3. Build DataLoaders (with pinned memory for faster CPU-to-GPU transfer)
+    # 3. Build DataLoaders (with pinned memory)
     train_dataset = TensorDataset(X_train_hist, X_train_fut, Y_train)
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, pin_memory=True)
     
@@ -57,16 +61,17 @@ def main():
     hist_input_dim = X_train_hist.shape[2]
     future_input_dim = X_train_fut.shape[2]
     
-    # Guard against PyTorch crashing on single-layer dropout
-    dropout_val = DROPOUT if NUM_LAYERS > 1 else 0.0
-    
-    model = Seq2Seq(
+    # PatchTST does direct multi-step forecasting, so no teacher forcing is required
+    model = PatchTST(
         hist_input_dim=hist_input_dim,
         future_input_dim=future_input_dim,
+        seq_len=SEQ_LEN,
+        patch_len=8,
         horizon=HORIZON,
-        hidden_dim=HIDDEN_DIM,
-        num_layers=NUM_LAYERS,
-        dropout=dropout_val
+        hidden_dim=256,      
+        nheads=4,
+        num_layers=1,        
+        dropout=0.2
     ).to(device)
     
     # L1Loss for WAPE alignment
@@ -78,7 +83,7 @@ def main():
     
     best_val_loss = float('inf')
     epochs_no_improve = 0
-    best_model_path = 'best_seq2seq_15min.pth'
+    best_model_path = 'best_patchtst_24hr.pth'
     
     for epoch in range(1, EPOCHS + 1):
         # --- Training Phase ---
@@ -89,9 +94,8 @@ def main():
             batch_hist, batch_fut, batch_y = batch_hist.to(device), batch_fut.to(device), batch_y.to(device)
             
             optimizer.zero_grad()
-            predictions = model(batch_hist, batch_fut, y_true=batch_y, teacher_forcing_ratio=0.5)
+            predictions = model(batch_hist, batch_fut)
             
-            # Defensive guard against broadcasting mismatch errors
             if predictions.dim() != batch_y.dim():
                 predictions = predictions.view_as(batch_y)
                 
@@ -111,14 +115,12 @@ def main():
             for batch_hist, batch_fut, batch_y in val_loader:
                 batch_hist, batch_fut, batch_y = batch_hist.to(device), batch_fut.to(device), batch_y.to(device)
                 
-                predictions = model(batch_hist, batch_fut, y_true=batch_y, teacher_forcing_ratio=0.5)
+                predictions = model(batch_hist, batch_fut)
                 
-                # Defensive guard against broadcasting mismatch errors
                 if predictions.dim() != batch_y.dim():
                     predictions = predictions.view_as(batch_y)
                     
                 loss = criterion(predictions, batch_y)
-                
                 val_loss += loss.item() * batch_hist.size(0)
                 
         val_loss /= len(val_loader.dataset)
@@ -148,10 +150,10 @@ def main():
         
         for batch_hist, batch_fut in test_loader:
             batch_hist, batch_fut = batch_hist.to(device), batch_fut.to(device)
-            preds = model(batch_hist, batch_fut, y_true=None, teacher_forcing_ratio=0.0)
+            preds = model(batch_hist, batch_fut)
             test_preds.append(preds.cpu().numpy())
             
-    # test_preds shape: (N_samples, 1)
+    # test_preds shape: (N_samples, 96)
     preds_np = np.concatenate(test_preds, axis=0)
     Y_test_np = Y_test.numpy()
     
@@ -161,6 +163,7 @@ def main():
         dummy[:, TARGET_IDX] = data_flat
         return scaler.inverse_transform(dummy)[:, TARGET_IDX]
 
+    # Calculate aggregate metrics across all 96 steps
     preds_kw_flat = inverse_scale(preds_np.ravel())
     targets_kw_flat = inverse_scale(Y_test_np.ravel())
     
@@ -168,17 +171,20 @@ def main():
     mae = mean_absolute_error(targets_kw_flat, preds_kw_flat)
     wape = np.sum(np.abs(targets_kw_flat - preds_kw_flat)) / np.sum(np.abs(targets_kw_flat)) * 100
     
-    print("\n--- 15-Minute-Ahead Seq2Seq Metrics (kW) ---")
+    print("\n--- 24-Hour-Ahead PatchTST Metrics (kW) ---")
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     
-    # 8. Visualization
+    # 8. Visualization: Isolate the t+96 interval (index 95)
+    t96_preds = inverse_scale(preds_np[:, 95])
+    t96_targets = inverse_scale(Y_test_np[:, 95])
+    
     plot_single_model_forecast(
-        targets_kw_flat, 
-        preds_kw_flat, 
+        t96_targets, 
+        t96_preds, 
         start_idx=0, 
         horizon=96,
-        model_name="15-Min Seq2Seq", 
-        save_path='seq2seq_15min_ahead_forecast.png'
+        model_name="24-Hour PatchTST (t+96 step)", 
+        save_path='patchtst_24hr_ahead_forecast.png'
     )
     
     # Cleanup temporary weight file

@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.multioutput import MultiOutputRegressor
 import lightgbm as lgb
 import random
-import math
+
 # ==============================================================================
 # 1. BASELINE: SEASONAL NAIVE / PERSISTENCE
 # ==============================================================================
@@ -48,7 +48,7 @@ def get_tabular_models(horizon=96, random_state=42):
         min_samples_split=20,
         max_features=0.3,
         random_state=random_state,
-        n_jobs=-1  
+        n_jobs=4  
     )
     
     lgbm_base = lgb.LGBMRegressor(
@@ -108,40 +108,76 @@ class DirectLSTM(nn.Module):
 # 4. PYTORCH: ENCODER-DECODER LSTM (Seq2Seq)
 # ==============================================================================
 class Seq2Seq(nn.Module):
-    def __init__(self, hist_input_dim, future_input_dim, horizon, hidden_dim=128, num_layers=2, dropout=0.1):
+    """
+    Autoregressive encoder-decoder architecture for time series forecasting.
+    Updated with last-known-value initialization and optional teacher forcing.
+    """
+    def __init__(self, hist_input_dim, future_input_dim, horizon=96, hidden_dim=64, num_layers=2, dropout=0.1, target_idx=1):
         super(Seq2Seq, self).__init__()
         self.horizon = horizon
         self.hidden_dim = hidden_dim
-        self.num_layers = num_layers
+        self.target_idx = target_idx
         
-        self.total_input_dim = hist_input_dim + future_input_dim
-        lstm_dropout = dropout if num_layers > 1 else 0.0
-        
-        self.lstm = nn.LSTM(
-            input_size=self.total_input_dim,
-            hidden_size=hidden_dim,
-            num_layers=num_layers,
-            batch_first=True,
-            dropout=lstm_dropout
+        # Encoder: Processes the historical sequence
+        self.encoder = nn.LSTM(
+            input_size=hist_input_dim, 
+            hidden_size=hidden_dim, 
+            num_layers=num_layers, 
+            batch_first=True, 
+            dropout=dropout if num_layers > 1 else 0
         )
         
-        self.fc = nn.Linear(hidden_dim, horizon)
+        # Decoder: Processes future covariates + previous step prediction
+        self.decoder = nn.LSTM(
+            input_size=1 + future_input_dim, 
+            hidden_size=hidden_dim, 
+            num_layers=num_layers, 
+            batch_first=True, 
+            dropout=dropout if num_layers > 1 else 0
+        )
+        
+        self.fc_out = nn.Linear(hidden_dim, 1)
 
-    def forward(self, x_hist, x_fut):
-        if x_fut is not None and x_fut.shape[2] > 0:
-            # Dynamically repeat future covariates if horizon < history length
-            if x_fut.size(1) < x_hist.size(1):
-                x_fut_aligned = x_fut.mean(dim=1, keepdim=True).expand(-1, x_hist.size(1), -1)
-            else:
-                x_fut_aligned = x_fut[:, :x_hist.size(1), :] 
-            x = torch.cat([x_hist, x_fut_aligned], dim=-1)
-        else:
-            x = x_hist
+    def forward(self, x_hist, x_fut, y_true=None, teacher_forcing_ratio=0.0):
+        batch_size = x_hist.size(0)
+        
+        # 1. Encode History
+        _, (hidden, cell) = self.encoder(x_hist)
+        
+        # 2. Prepare Decoder Initialization
+        outputs = torch.zeros(batch_size, self.horizon, 1).to(x_hist.device)
+        
+        # Initialize with the last known historical target value (t=0) instead of blind zeros
+        dec_input = x_hist[:, -1, self.target_idx].unsqueeze(1).unsqueeze(2)
+        
+        # 3. Autoregressive Decoding Loop
+        for t in range(self.horizon):
             
-        lstm_out, (hn, cn) = self.lstm(x)
-        final_hidden_state = lstm_out[:, -1, :] 
-        out = self.fc(final_hidden_state)
-        return out
+            # Safely extract future covariates for step t (repeats if horizon > x_fut length)
+            if x_fut is not None and x_fut.size(1) > 0:
+                t_idx = t if t < x_fut.size(1) else -1
+                covariates_t = x_fut[:, t_idx, :].unsqueeze(1)
+                dec_input_combined = torch.cat((dec_input, covariates_t), dim=2)
+            else:
+                dec_input_combined = dec_input
+            
+            out, (hidden, cell) = self.decoder(dec_input_combined, (hidden, cell))
+            pred = self.fc_out(out)
+            
+            outputs[:, t, :] = pred.squeeze(1)
+            
+            # Apply teacher forcing if targets are provided and ratio threshold is met
+            if y_true is not None and random.random() < teacher_forcing_ratio:
+                # Target value used for the next step's input
+                if y_true.dim() == 2:
+                    dec_input = y_true[:, t].unsqueeze(1).unsqueeze(2)
+                else:
+                    dec_input = y_true[:, t, :].unsqueeze(1)
+            else:
+                # Model's own prediction used for the next step's input
+                dec_input = pred
+            
+        return outputs.squeeze(-1)
 
 
 # ==============================================================================
