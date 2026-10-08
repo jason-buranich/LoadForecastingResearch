@@ -99,9 +99,7 @@ def evaluate_predictions(model, test_loader, scaler, target_col_idx, device='cud
     wape = np.sum(np.abs(targets_mw - preds_mw)) / np.sum(np.abs(targets_mw)) * 100
     
     print("\n--- Seq2Seq LSTM Evaluation Metrics (MW) ---")
-    print(f"RMSE (MW): {rmse:.2f}")
-    print(f"MAE (MW):  {mae:.2f}")
-    print(f"WAPE (%):  {wape:.2f}")
+    print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     
     return {"rmse": rmse, "mae": mae, "wape": wape}, preds_mw, targets_mw
 

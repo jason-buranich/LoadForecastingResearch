@@ -33,11 +33,11 @@ def main():
     BATCH_SIZE = 64  
     EPOCHS = 100
     PATIENCE = 10
-    LEARNING_RATE = 1e-4
-    WEIGHT_DECAY = 2e-5
-    HIDDEN_DIM = 64
-    NUM_LAYERS = 2
-    DROPOUT = 0.3
+    LEARNING_RATE = 5e-4
+    WEIGHT_DECAY = 4e-6
+    HIDDEN_DIM = 256
+    NUM_LAYERS = 1
+    DROPOUT = 0.2
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"--- Starting 24-Hour-Ahead DirectLSTM Pipeline on {device} ---")

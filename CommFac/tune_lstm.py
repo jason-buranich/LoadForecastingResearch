@@ -15,7 +15,7 @@ from models import DirectLSTM
 # ==============================================================================
 # 1. TUNING PIPELINE CONFIGURATION
 # ==============================================================================
-HORIZON = 96             # Set to 1, 4, or 96 depending on target horizon
+HORIZON = 1             # Set to 1, 4, or 96 depending on target horizon
 SEQ_LEN = 96             # 96 intervals = 24 hours of history
 TARGET_IDX = 1           
 COVARIATE_START_IDX = 2  
@@ -35,8 +35,8 @@ def objective(trial):
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-    # Keep only the last 25% of the training data to massively speed up tuning
-    split_idx = int(len(train_df) * 0.75)
+    # Keep only the last 50% of the training data to speed up tuning
+    split_idx = int(len(train_df) * 0.50)
     train_df_subset = train_df.iloc[split_idx:].copy()
     
     # 2. Slice Sequences 
@@ -128,8 +128,8 @@ def main():
     study_name = f"directlstm_{HORIZON}step_opt"
     study = optuna.create_study(direction="minimize", pruner=pruner, study_name=study_name)
     
-    # Run 20 trials
-    study.optimize(objective, n_trials=20, timeout=3600)
+    # Run 15 trials
+    study.optimize(objective, n_trials=15, timeout=3600)
     
     print("\n--- Tuning Complete ---")
     print(f"Best Trial Validation WAPE: {study.best_trial.value:.2f}%")

@@ -4,7 +4,7 @@ from torch.utils.data import TensorDataset, DataLoader
 
 # Import your pipeline modules
 from data import train_df, val_df, test_df, scaler
-from ISO.slidingWindow import create_safe_sequences
+from slidingWindow import create_safe_sequences
 from models import Seq2SeqCovariateLSTM
 from trainingLoop import EarlyStopping
 from evaluate import evaluate_predictions
@@ -124,7 +124,7 @@ def main():
         train_loader=train_loader, 
         val_loader=val_loader, 
         epochs=100, 
-        lr=3e-4, # You may want to run Optuna again for this new architecture later
+        lr=3e-4, 
         patience=10,
         model_save_path=model_path
     )

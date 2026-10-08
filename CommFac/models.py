@@ -11,10 +11,6 @@ import random
 # 1. BASELINE: SEASONAL NAIVE / PERSISTENCE
 # ==============================================================================
 class SeasonalNaiveBaseline:
-    """
-    Persistence baseline that repeats values from the corresponding 
-    seasonal lag period. Defaulted to 96 steps (24 hours at 15-min intervals).
-    """
     def __init__(self, seasonal_lag=96):
         self.seasonal_lag = seasonal_lag
 
@@ -34,14 +30,8 @@ class SeasonalNaiveBaseline:
 # 2. TABULAR MODELS: RANDOM FOREST & LIGHTGBM
 # ==============================================================================
 def get_tabular_models(horizon=96, random_state=42):
-    """
-    Instantiates the traditional ISO baseline (Ridge Regression) alongside 
-    optimized Random Forest and LightGBM models.
-    """
-    # 1. Linear Baseline
     mlr = Ridge(alpha=500.0, solver='lsqr')
     
-    # 2. Optimized Tree Baselines (Throttled to prevent OpenMP deadlocks)
     rf_base = RandomForestRegressor(
         n_estimators=50,
         max_depth=15,
@@ -59,7 +49,6 @@ def get_tabular_models(horizon=96, random_state=42):
         verbosity=-1
     )
     
-    # 3. Horizon Wrapping for multi-step predictions
     if horizon == 1:
         rf = rf_base
         lgbm = lgbm_base
@@ -75,13 +64,12 @@ def get_tabular_models(horizon=96, random_state=42):
 # ==============================================================================
 class DirectLSTM(nn.Module):
     """
-    Encodes the historical sequence and concatenates the flattened future 
-    covariates before projecting directly to the entire prediction horizon.
+    Fixed: Preserves temporal dimension of future covariates and applies a 
+    time-distributed projection instead of flattening.
     """
     def __init__(self, hist_input_dim, future_input_dim, hidden_dim=64, horizon=96, num_layers=2, dropout=0.1):
         super().__init__()
         self.horizon = horizon
-        self.future_input_dim = future_input_dim
         
         self.lstm = nn.LSTM(
             input_size=hist_input_dim,
@@ -91,16 +79,28 @@ class DirectLSTM(nn.Module):
             dropout=dropout if num_layers > 1 else 0.0
         )
         
-        self.fc = nn.Linear(hidden_dim + (horizon * future_input_dim), horizon)
+        # Time-distributed projection (applied per step)
+        self.fc = nn.Linear(hidden_dim + future_input_dim, 1)
 
     def forward(self, x_hist, x_future):
         _, (hn, _) = self.lstm(x_hist)
         last_hidden = hn[-1]  
         
-        future_flat = x_future.reshape(x_future.size(0), -1)
-        combined = torch.cat((last_hidden, future_flat), dim=1)
+        # Expand context vector across the entire horizon: (Batch, Horizon, Hidden)
+        context_expanded = last_hidden.unsqueeze(1).expand(-1, self.horizon, -1)
         
-        out = self.fc(combined)
+        if x_future is not None and x_future.size(1) > 0:
+            if x_future.size(1) < self.horizon:
+                x_fut_aligned = x_future.mean(dim=1, keepdim=True).expand(-1, self.horizon, -1)
+            else:
+                x_fut_aligned = x_future[:, :self.horizon, :]
+                
+            # Fuse step-by-step
+            combined = torch.cat((context_expanded, x_fut_aligned), dim=-1)
+        else:
+            combined = context_expanded
+            
+        out = self.fc(combined).squeeze(-1) # Squeeze final dimension to return (Batch, Horizon)
         return out
 
 
@@ -108,17 +108,12 @@ class DirectLSTM(nn.Module):
 # 4. PYTORCH: ENCODER-DECODER LSTM (Seq2Seq)
 # ==============================================================================
 class Seq2Seq(nn.Module):
-    """
-    Autoregressive encoder-decoder architecture for time series forecasting.
-    Updated with last-known-value initialization and optional teacher forcing.
-    """
     def __init__(self, hist_input_dim, future_input_dim, horizon=96, hidden_dim=64, num_layers=2, dropout=0.1, target_idx=1):
         super(Seq2Seq, self).__init__()
         self.horizon = horizon
         self.hidden_dim = hidden_dim
         self.target_idx = target_idx
         
-        # Encoder: Processes the historical sequence
         self.encoder = nn.LSTM(
             input_size=hist_input_dim, 
             hidden_size=hidden_dim, 
@@ -127,7 +122,6 @@ class Seq2Seq(nn.Module):
             dropout=dropout if num_layers > 1 else 0
         )
         
-        # Decoder: Processes future covariates + previous step prediction
         self.decoder = nn.LSTM(
             input_size=1 + future_input_dim, 
             hidden_size=hidden_dim, 
@@ -141,19 +135,13 @@ class Seq2Seq(nn.Module):
     def forward(self, x_hist, x_fut, y_true=None, teacher_forcing_ratio=0.0):
         batch_size = x_hist.size(0)
         
-        # 1. Encode History
         _, (hidden, cell) = self.encoder(x_hist)
-        
-        # 2. Prepare Decoder Initialization
         outputs = torch.zeros(batch_size, self.horizon, 1).to(x_hist.device)
         
-        # Initialize with the last known historical target value (t=0) instead of blind zeros
+        # NOTE: Ensure self.target_idx points to the actual load consumption feature
         dec_input = x_hist[:, -1, self.target_idx].unsqueeze(1).unsqueeze(2)
         
-        # 3. Autoregressive Decoding Loop
         for t in range(self.horizon):
-            
-            # Safely extract future covariates for step t (repeats if horizon > x_fut length)
             if x_fut is not None and x_fut.size(1) > 0:
                 t_idx = t if t < x_fut.size(1) else -1
                 covariates_t = x_fut[:, t_idx, :].unsqueeze(1)
@@ -163,18 +151,14 @@ class Seq2Seq(nn.Module):
             
             out, (hidden, cell) = self.decoder(dec_input_combined, (hidden, cell))
             pred = self.fc_out(out)
-            
             outputs[:, t, :] = pred.squeeze(1)
             
-            # Apply teacher forcing if targets are provided and ratio threshold is met
             if y_true is not None and random.random() < teacher_forcing_ratio:
-                # Target value used for the next step's input
                 if y_true.dim() == 2:
                     dec_input = y_true[:, t].unsqueeze(1).unsqueeze(2)
                 else:
                     dec_input = y_true[:, t, :].unsqueeze(1)
             else:
-                # Model's own prediction used for the next step's input
                 dec_input = pred
             
         return outputs.squeeze(-1)
@@ -185,16 +169,16 @@ class Seq2Seq(nn.Module):
 # ==============================================================================
 class GridTransformer(nn.Module):
     """
-    Encoder-based Transformer that maps historical states to a single context 
-    vector before fusing with future covariates for projection.
+    Fixed: Preserves temporal dimension of future covariates and applies a 
+    time-distributed projection instead of flattening.
     """
     def __init__(self, hist_input_dim, future_input_dim, seq_len=96, horizon=96, d_model=64, n_heads=4, num_layers=2, dropout=0.1):
         super(GridTransformer, self).__init__()
+        self.horizon = horizon
         
         self.embedding = nn.Linear(hist_input_dim, d_model)
         self.pos_encoder = nn.Parameter(torch.zeros(1, seq_len, d_model))
         
-        # Transformer Encoder processing the sequence
         encoder_layer = nn.TransformerEncoderLayer(
             d_model=d_model, 
             nhead=n_heads, 
@@ -204,18 +188,28 @@ class GridTransformer(nn.Module):
         )
         self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
         
-        # Scale output layer for multi-step horizon
-        self.fc_out = nn.Linear(d_model + (future_input_dim * horizon), horizon)
+        # Time-distributed output layer
+        self.fc_out = nn.Linear(d_model + future_input_dim, 1)
 
     def forward(self, x_hist, x_future, **kwargs):
-        x = self.embedding(x_hist) + self.pos_encoder
+        x = self.embedding(x_hist) + self.pos_encoder[:, :x_hist.size(1), :]
         encoded_seq = self.transformer(x)
-        context_vector = encoded_seq[:, -1, :]
+        context_vector = encoded_seq[:, -1, :] # Grab final encoded state
         
-        fut_flat = x_future.view(x_future.size(0), -1)
-        combined = torch.cat((context_vector, fut_flat), dim=1)
+        # Expand context across horizon
+        context_expanded = context_vector.unsqueeze(1).expand(-1, self.horizon, -1)
         
-        return self.fc_out(combined)
+        if x_future is not None and x_future.size(1) > 0:
+            if x_future.size(1) < self.horizon:
+                x_fut_aligned = x_future.mean(dim=1, keepdim=True).expand(-1, self.horizon, -1)
+            else:
+                x_fut_aligned = x_future[:, :self.horizon, :]
+                
+            combined = torch.cat((context_expanded, x_fut_aligned), dim=-1)
+        else:
+            combined = context_expanded
+            
+        return self.fc_out(combined).squeeze(-1)
 
 
 # ==============================================================================
@@ -223,15 +217,12 @@ class GridTransformer(nn.Module):
 # ==============================================================================
 class PatchTST(nn.Module):
     """
-    Groups the historical history into non-overlapping patches to capture 
-    local semantic meaning, processes via attention, and fuses with future covariates.
+    Fixed: Reduces parameter bloat by extracting a unified context vector from 
+    the patches and mapping it to the horizon step-by-step.
     """
     def __init__(self, hist_input_dim, future_input_dim, seq_len=96, patch_len=16, horizon=96, hidden_dim=128, nheads=4, num_layers=2, dropout=0.2):
         super(PatchTST, self).__init__()
-        
-        # Ensure the sequence length is cleanly divisible by the patch length
-        assert seq_len % patch_len == 0, f"seq_len ({seq_len}) must be divisible by patch_len ({patch_len})"
-        
+        self.horizon = horizon
         self.patch_len = patch_len
         self.num_patches = seq_len // patch_len 
         
@@ -246,8 +237,11 @@ class PatchTST(nn.Module):
         )
         self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
         
-        self.future_embedding = nn.Linear(horizon * future_input_dim, hidden_dim)
-        self.fc_out = nn.Linear((self.num_patches * hidden_dim) + hidden_dim, horizon)
+        # Project flattened patches down to a single context vector
+        self.context_proj = nn.Linear(self.num_patches * hidden_dim, hidden_dim)
+        
+        # Time-distributed fusion layer
+        self.fc_out = nn.Linear(hidden_dim + future_input_dim, 1)
 
     def forward(self, x_hist, x_future, **kwargs):
         B, L, C = x_hist.shape
@@ -258,10 +252,19 @@ class PatchTST(nn.Module):
         enc_out = self.transformer_encoder(x)
         enc_flat = enc_out.view(B, -1)
         
-        fut_flat = x_future.reshape(B, -1)
-        fut_emb = self.future_embedding(fut_flat)
+        # Map patches to a unified state, expand across time
+        context_vector = self.context_proj(enc_flat)
+        context_expanded = context_vector.unsqueeze(1).expand(-1, self.horizon, -1)
         
-        combined = torch.cat([enc_flat, fut_emb], dim=1)
-        out = self.fc_out(combined)
-        
+        if x_future is not None and x_future.size(1) > 0:
+            if x_future.size(1) < self.horizon:
+                x_fut_aligned = x_future.mean(dim=1, keepdim=True).expand(-1, self.horizon, -1)
+            else:
+                x_fut_aligned = x_future[:, :self.horizon, :]
+                
+            combined = torch.cat([context_expanded, x_fut_aligned], dim=-1)
+        else:
+            combined = context_expanded
+            
+        out = self.fc_out(combined).squeeze(-1)
         return out
