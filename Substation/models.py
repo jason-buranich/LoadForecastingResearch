@@ -156,13 +156,24 @@ class GridTransformer(nn.Module):
     def __init__(self, hist_input_dim, future_input_dim, hidden_dim=128, horizon=24, nheads=4, num_layers=2, dropout=0.1, seq_length=168):
         super(GridTransformer, self).__init__()
         
+        # 1. Linear projections for input features
         self.hist_proj = nn.Linear(hist_input_dim, hidden_dim)
         self.fut_proj = nn.Linear(future_input_dim, hidden_dim)
         
+        # 2. Positional encodings
         self.pos_encoder_hist = nn.Parameter(torch.randn(1, seq_length, hidden_dim))
         self.pos_encoder_fut = nn.Parameter(torch.randn(1, horizon, hidden_dim))
         
-        # Now uses the dynamic dropout variable instead of a hardcoded 0.1
+        # 3. ADDED: Transformer Encoder for historical context (Self-Attention)
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=hidden_dim, 
+            nhead=nheads, 
+            dropout=dropout, 
+            batch_first=True
+        )
+        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+        
+        # 4. Transformer Decoder for future-to-history alignment (Cross-Attention)
         decoder_layer = nn.TransformerDecoderLayer(
             d_model=hidden_dim, 
             nhead=nheads, 
@@ -171,13 +182,21 @@ class GridTransformer(nn.Module):
         )
         self.transformer_decoder = nn.TransformerDecoder(decoder_layer, num_layers=num_layers)
         
+        # 5. Final projection step
         self.fc_out = nn.Linear(hidden_dim, 1)
 
     def forward(self, x_hist, x_future, **kwargs):
-        memory = self.hist_proj(x_hist) + self.pos_encoder_hist
+        # A. Process history: Project -> Add Positional Encoding -> ENCODE
+        raw_memory = self.hist_proj(x_hist) + self.pos_encoder_hist
+        encoded_memory = self.transformer_encoder(raw_memory)
+        
+        # B. Process future: Project -> Add Positional Encoding
         tgt = self.fut_proj(x_future) + self.pos_encoder_fut
         
-        out = self.transformer_decoder(tgt, memory)
+        # C. Decode: Query the fully contextualized history (memory) using the future (tgt)
+        out = self.transformer_decoder(tgt, encoded_memory)
+        
+        # D. Map the hidden dimension to a single continuous prediction value per step
         return self.fc_out(out).squeeze(-1)
     
 class PatchTST(nn.Module):

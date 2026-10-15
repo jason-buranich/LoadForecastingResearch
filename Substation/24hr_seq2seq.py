@@ -5,7 +5,7 @@ import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-# Import components from the updated data.py
+# Import components from data.py
 from data import train_df, val_df, test_df, scaler
 from slidingWindow import create_safe_sequences
 from models import Seq2SeqCovariateLSTM

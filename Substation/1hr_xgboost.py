@@ -46,7 +46,7 @@ def main():
         max_depth=6,
         learning_rate=0.1,
         random_state=42,
-        n_jobs=-1
+        n_jobs=4
     )
     
     multi_xgb = MultiOutputRegressor(xg_base)
