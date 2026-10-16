@@ -6,13 +6,6 @@ import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-# 1. Enforce Deterministic Behavior
-torch.manual_seed(42)
-np.random.seed(42)
-random.seed(42)
-if torch.cuda.is_available():
-    torch.cuda.manual_seed_all(42)
-
 # Import components from the configured La Trobe pipeline
 from data import train_df, val_df, test_df, scaler
 from slidingWindow import create_safe_sequences

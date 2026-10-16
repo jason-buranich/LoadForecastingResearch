@@ -8233,3 +8233,2956 @@ WAPE: 28.16% ± 0.00%
 BATCH EVALUATION COMPLETED: 2026-10-16 06:44:27
 ======================================================================
 
+======================================================================
+BATCH EVALUATION STARTED: 2026-10-16 13:39:58
+======================================================================
+
+--- STARTING EVALUATION: CommFac/15min_tft.py ---
+Timestamp: 2026-10-16 13:39:58
+
+--- Starting 5-Run Evaluation for CommFac/15min_tft.py ---
+
+[Trial 1/5] Executing CommFac/15min_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (L1): 0.2038 | Val Loss (L1): 0.1234
+Epoch 002/100 | Train Loss (L1): 0.1326 | Val Loss (L1): 0.1191
+Epoch 003/100 | Train Loss (L1): 0.1240 | Val Loss (L1): 0.1037
+Epoch 004/100 | Train Loss (L1): 0.1188 | Val Loss (L1): 0.1056
+Epoch 005/100 | Train Loss (L1): 0.1171 | Val Loss (L1): 0.1016
+Epoch 006/100 | Train Loss (L1): 0.1147 | Val Loss (L1): 0.1068
+Epoch 007/100 | Train Loss (L1): 0.1149 | Val Loss (L1): 0.1009
+Epoch 008/100 | Train Loss (L1): 0.1146 | Val Loss (L1): 0.1015
+Epoch 009/100 | Train Loss (L1): 0.1129 | Val Loss (L1): 0.1014
+Epoch 010/100 | Train Loss (L1): 0.1132 | Val Loss (L1): 0.1003
+Epoch 011/100 | Train Loss (L1): 0.1132 | Val Loss (L1): 0.1065
+Epoch 012/100 | Train Loss (L1): 0.1119 | Val Loss (L1): 0.1053
+Epoch 013/100 | Train Loss (L1): 0.1113 | Val Loss (L1): 0.0976
+Epoch 014/100 | Train Loss (L1): 0.1106 | Val Loss (L1): 0.0996
+Epoch 015/100 | Train Loss (L1): 0.1106 | Val Loss (L1): 0.0988
+Epoch 016/100 | Train Loss (L1): 0.1107 | Val Loss (L1): 0.1011
+Epoch 017/100 | Train Loss (L1): 0.1101 | Val Loss (L1): 0.0999
+Epoch 018/100 | Train Loss (L1): 0.1107 | Val Loss (L1): 0.1004
+Epoch 019/100 | Train Loss (L1): 0.1099 | Val Loss (L1): 0.0964
+Epoch 020/100 | Train Loss (L1): 0.1101 | Val Loss (L1): 0.0982
+Epoch 021/100 | Train Loss (L1): 0.1093 | Val Loss (L1): 0.0998
+Epoch 022/100 | Train Loss (L1): 0.1095 | Val Loss (L1): 0.0990
+Epoch 023/100 | Train Loss (L1): 0.1094 | Val Loss (L1): 0.0963
+Epoch 024/100 | Train Loss (L1): 0.1089 | Val Loss (L1): 0.1002
+Epoch 025/100 | Train Loss (L1): 0.1090 | Val Loss (L1): 0.0972
+Epoch 026/100 | Train Loss (L1): 0.1093 | Val Loss (L1): 0.0970
+Epoch 027/100 | Train Loss (L1): 0.1083 | Val Loss (L1): 0.1058
+Epoch 028/100 | Train Loss (L1): 0.1084 | Val Loss (L1): 0.0985
+Epoch 029/100 | Train Loss (L1): 0.1079 | Val Loss (L1): 0.0957
+Epoch 030/100 | Train Loss (L1): 0.1080 | Val Loss (L1): 0.0956
+Epoch 031/100 | Train Loss (L1): 0.1072 | Val Loss (L1): 0.0954
+Epoch 032/100 | Train Loss (L1): 0.1080 | Val Loss (L1): 0.0956
+Epoch 033/100 | Train Loss (L1): 0.1075 | Val Loss (L1): 0.0969
+Epoch 034/100 | Train Loss (L1): 0.1068 | Val Loss (L1): 0.0955
+Epoch 035/100 | Train Loss (L1): 0.1067 | Val Loss (L1): 0.0984
+Epoch 036/100 | Train Loss (L1): 0.1072 | Val Loss (L1): 0.0970
+Epoch 037/100 | Train Loss (L1): 0.1068 | Val Loss (L1): 0.0963
+Epoch 038/100 | Train Loss (L1): 0.1067 | Val Loss (L1): 0.0948
+Epoch 039/100 | Train Loss (L1): 0.1060 | Val Loss (L1): 0.0989
+Epoch 040/100 | Train Loss (L1): 0.1056 | Val Loss (L1): 0.0938
+Epoch 041/100 | Train Loss (L1): 0.1060 | Val Loss (L1): 0.1054
+Epoch 042/100 | Train Loss (L1): 0.1077 | Val Loss (L1): 0.0971
+Epoch 043/100 | Train Loss (L1): 0.1067 | Val Loss (L1): 0.0970
+Epoch 044/100 | Train Loss (L1): 0.1055 | Val Loss (L1): 0.0961
+Epoch 045/100 | Train Loss (L1): 0.1058 | Val Loss (L1): 0.0966
+Epoch 046/100 | Train Loss (L1): 0.1063 | Val Loss (L1): 0.0972
+Epoch 047/100 | Train Loss (L1): 0.1053 | Val Loss (L1): 0.0996
+Epoch 048/100 | Train Loss (L1): 0.1059 | Val Loss (L1): 0.0971
+Epoch 049/100 | Train Loss (L1): 0.1059 | Val Loss (L1): 0.0977
+Epoch 050/100 | Train Loss (L1): 0.1043 | Val Loss (L1): 0.0978
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 2.85 | MAE: 1.13 | WAPE: 9.19%
+Graph saved successfully to transformer_15min_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 2.85 | MAE: 1.13 | WAPE: 9.19%
+
+[Trial 2/5] Executing CommFac/15min_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (L1): 0.1932 | Val Loss (L1): 0.1160
+Epoch 002/100 | Train Loss (L1): 0.1330 | Val Loss (L1): 0.1122
+Epoch 003/100 | Train Loss (L1): 0.1244 | Val Loss (L1): 0.1218
+Epoch 004/100 | Train Loss (L1): 0.1211 | Val Loss (L1): 0.1101
+Epoch 005/100 | Train Loss (L1): 0.1176 | Val Loss (L1): 0.1064
+Epoch 006/100 | Train Loss (L1): 0.1169 | Val Loss (L1): 0.1036
+Epoch 007/100 | Train Loss (L1): 0.1152 | Val Loss (L1): 0.1036
+Epoch 008/100 | Train Loss (L1): 0.1140 | Val Loss (L1): 0.1049
+Epoch 009/100 | Train Loss (L1): 0.1139 | Val Loss (L1): 0.1054
+Epoch 010/100 | Train Loss (L1): 0.1137 | Val Loss (L1): 0.1024
+Epoch 011/100 | Train Loss (L1): 0.1131 | Val Loss (L1): 0.1003
+Epoch 012/100 | Train Loss (L1): 0.1128 | Val Loss (L1): 0.1013
+Epoch 013/100 | Train Loss (L1): 0.1120 | Val Loss (L1): 0.1022
+Epoch 014/100 | Train Loss (L1): 0.1106 | Val Loss (L1): 0.0985
+Epoch 015/100 | Train Loss (L1): 0.1107 | Val Loss (L1): 0.1009
+Epoch 016/100 | Train Loss (L1): 0.1103 | Val Loss (L1): 0.1023
+Epoch 017/100 | Train Loss (L1): 0.1107 | Val Loss (L1): 0.0985
+Epoch 018/100 | Train Loss (L1): 0.1091 | Val Loss (L1): 0.0996
+Epoch 019/100 | Train Loss (L1): 0.1088 | Val Loss (L1): 0.0998
+Epoch 020/100 | Train Loss (L1): 0.1083 | Val Loss (L1): 0.0959
+Epoch 021/100 | Train Loss (L1): 0.1081 | Val Loss (L1): 0.0987
+Epoch 022/100 | Train Loss (L1): 0.1084 | Val Loss (L1): 0.0985
+Epoch 023/100 | Train Loss (L1): 0.1076 | Val Loss (L1): 0.0994
+Epoch 024/100 | Train Loss (L1): 0.1075 | Val Loss (L1): 0.0967
+Epoch 025/100 | Train Loss (L1): 0.1078 | Val Loss (L1): 0.0990
+Epoch 026/100 | Train Loss (L1): 0.1075 | Val Loss (L1): 0.0972
+Epoch 027/100 | Train Loss (L1): 0.1078 | Val Loss (L1): 0.0962
+Epoch 028/100 | Train Loss (L1): 0.1074 | Val Loss (L1): 0.0996
+Epoch 029/100 | Train Loss (L1): 0.1075 | Val Loss (L1): 0.0966
+Epoch 030/100 | Train Loss (L1): 0.1076 | Val Loss (L1): 0.0969
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 2.71 | MAE: 1.08 | WAPE: 8.76%
+Graph saved successfully to transformer_15min_ahead_forecast.png
+
+  [Trial 2 Success] -> RMSE: 2.71 | MAE: 1.08 | WAPE: 8.76%
+
+[Trial 3/5] Executing CommFac/15min_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (L1): 0.2016 | Val Loss (L1): 0.1180
+Epoch 002/100 | Train Loss (L1): 0.1331 | Val Loss (L1): 0.1066
+Epoch 003/100 | Train Loss (L1): 0.1244 | Val Loss (L1): 0.1080
+Epoch 004/100 | Train Loss (L1): 0.1199 | Val Loss (L1): 0.1033
+Epoch 005/100 | Train Loss (L1): 0.1169 | Val Loss (L1): 0.1019
+Epoch 006/100 | Train Loss (L1): 0.1162 | Val Loss (L1): 0.1063
+Epoch 007/100 | Train Loss (L1): 0.1148 | Val Loss (L1): 0.1018
+Epoch 008/100 | Train Loss (L1): 0.1136 | Val Loss (L1): 0.1035
+Epoch 009/100 | Train Loss (L1): 0.1133 | Val Loss (L1): 0.1016
+Epoch 010/100 | Train Loss (L1): 0.1123 | Val Loss (L1): 0.1019
+Epoch 011/100 | Train Loss (L1): 0.1119 | Val Loss (L1): 0.1022
+Epoch 012/100 | Train Loss (L1): 0.1120 | Val Loss (L1): 0.1000
+Epoch 013/100 | Train Loss (L1): 0.1111 | Val Loss (L1): 0.1006
+Epoch 014/100 | Train Loss (L1): 0.1115 | Val Loss (L1): 0.0986
+Epoch 015/100 | Train Loss (L1): 0.1098 | Val Loss (L1): 0.0957
+Epoch 016/100 | Train Loss (L1): 0.1094 | Val Loss (L1): 0.1012
+Epoch 017/100 | Train Loss (L1): 0.1090 | Val Loss (L1): 0.1008
+Epoch 018/100 | Train Loss (L1): 0.1100 | Val Loss (L1): 0.0999
+Epoch 019/100 | Train Loss (L1): 0.1092 | Val Loss (L1): 0.0966
+Epoch 020/100 | Train Loss (L1): 0.1084 | Val Loss (L1): 0.0963
+Epoch 021/100 | Train Loss (L1): 0.1083 | Val Loss (L1): 0.0978
+Epoch 022/100 | Train Loss (L1): 0.1080 | Val Loss (L1): 0.0952
+Epoch 023/100 | Train Loss (L1): 0.1078 | Val Loss (L1): 0.0948
+Epoch 024/100 | Train Loss (L1): 0.1081 | Val Loss (L1): 0.0985
+Epoch 025/100 | Train Loss (L1): 0.1079 | Val Loss (L1): 0.0970
+Epoch 026/100 | Train Loss (L1): 0.1065 | Val Loss (L1): 0.0954
+Epoch 027/100 | Train Loss (L1): 0.1072 | Val Loss (L1): 0.0935
+Epoch 028/100 | Train Loss (L1): 0.1069 | Val Loss (L1): 0.0964
+Epoch 029/100 | Train Loss (L1): 0.1070 | Val Loss (L1): 0.0940
+Epoch 030/100 | Train Loss (L1): 0.1060 | Val Loss (L1): 0.0940
+Epoch 031/100 | Train Loss (L1): 0.1063 | Val Loss (L1): 0.0911
+Epoch 032/100 | Train Loss (L1): 0.1062 | Val Loss (L1): 0.0941
+Epoch 033/100 | Train Loss (L1): 0.1062 | Val Loss (L1): 0.0937
+Epoch 034/100 | Train Loss (L1): 0.1069 | Val Loss (L1): 0.0970
+Epoch 035/100 | Train Loss (L1): 0.1072 | Val Loss (L1): 0.0987
+Epoch 036/100 | Train Loss (L1): 0.1057 | Val Loss (L1): 0.0967
+Epoch 037/100 | Train Loss (L1): 0.1059 | Val Loss (L1): 0.1009
+Epoch 038/100 | Train Loss (L1): 0.1050 | Val Loss (L1): 0.0935
+Epoch 039/100 | Train Loss (L1): 0.1056 | Val Loss (L1): 0.0959
+Epoch 040/100 | Train Loss (L1): 0.1051 | Val Loss (L1): 0.0954
+Epoch 041/100 | Train Loss (L1): 0.1055 | Val Loss (L1): 0.0955
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 2.87 | MAE: 1.14 | WAPE: 9.26%
+Graph saved successfully to transformer_15min_ahead_forecast.png
+
+  [Trial 3 Success] -> RMSE: 2.87 | MAE: 1.14 | WAPE: 9.26%
+
+[Trial 4/5] Executing CommFac/15min_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (L1): 0.1851 | Val Loss (L1): 0.1189
+Epoch 002/100 | Train Loss (L1): 0.1304 | Val Loss (L1): 0.1179
+Epoch 003/100 | Train Loss (L1): 0.1220 | Val Loss (L1): 0.1064
+Epoch 004/100 | Train Loss (L1): 0.1209 | Val Loss (L1): 0.1052
+Epoch 005/100 | Train Loss (L1): 0.1174 | Val Loss (L1): 0.1020
+Epoch 006/100 | Train Loss (L1): 0.1165 | Val Loss (L1): 0.1033
+Epoch 007/100 | Train Loss (L1): 0.1141 | Val Loss (L1): 0.1009
+Epoch 008/100 | Train Loss (L1): 0.1133 | Val Loss (L1): 0.1017
+Epoch 009/100 | Train Loss (L1): 0.1131 | Val Loss (L1): 0.1057
+Epoch 010/100 | Train Loss (L1): 0.1131 | Val Loss (L1): 0.1015
+Epoch 011/100 | Train Loss (L1): 0.1142 | Val Loss (L1): 0.1057
+Epoch 012/100 | Train Loss (L1): 0.1121 | Val Loss (L1): 0.0988
+Epoch 013/100 | Train Loss (L1): 0.1119 | Val Loss (L1): 0.1015
+Epoch 014/100 | Train Loss (L1): 0.1108 | Val Loss (L1): 0.1010
+Epoch 015/100 | Train Loss (L1): 0.1124 | Val Loss (L1): 0.1012
+Epoch 016/100 | Train Loss (L1): 0.1124 | Val Loss (L1): 0.1013
+Epoch 017/100 | Train Loss (L1): 0.1104 | Val Loss (L1): 0.1047
+Epoch 018/100 | Train Loss (L1): 0.1110 | Val Loss (L1): 0.0978
+Epoch 019/100 | Train Loss (L1): 0.1109 | Val Loss (L1): 0.1006
+Epoch 020/100 | Train Loss (L1): 0.1106 | Val Loss (L1): 0.0987
+Epoch 021/100 | Train Loss (L1): 0.1096 | Val Loss (L1): 0.1055
+Epoch 022/100 | Train Loss (L1): 0.1092 | Val Loss (L1): 0.0995
+Epoch 023/100 | Train Loss (L1): 0.1085 | Val Loss (L1): 0.0963
+Epoch 024/100 | Train Loss (L1): 0.1100 | Val Loss (L1): 0.0958
+Epoch 025/100 | Train Loss (L1): 0.1099 | Val Loss (L1): 0.0957
+Epoch 026/100 | Train Loss (L1): 0.1088 | Val Loss (L1): 0.0987
+Epoch 027/100 | Train Loss (L1): 0.1093 | Val Loss (L1): 0.0985
+Epoch 028/100 | Train Loss (L1): 0.1085 | Val Loss (L1): 0.0941
+Epoch 029/100 | Train Loss (L1): 0.1075 | Val Loss (L1): 0.0968
+Epoch 030/100 | Train Loss (L1): 0.1077 | Val Loss (L1): 0.0945
+Epoch 031/100 | Train Loss (L1): 0.1070 | Val Loss (L1): 0.0955
+Epoch 032/100 | Train Loss (L1): 0.1081 | Val Loss (L1): 0.0965
+Epoch 033/100 | Train Loss (L1): 0.1079 | Val Loss (L1): 0.0976
+Epoch 034/100 | Train Loss (L1): 0.1090 | Val Loss (L1): 0.0974
+Epoch 035/100 | Train Loss (L1): 0.1075 | Val Loss (L1): 0.0944
+Epoch 036/100 | Train Loss (L1): 0.1063 | Val Loss (L1): 0.0958
+Epoch 037/100 | Train Loss (L1): 0.1081 | Val Loss (L1): 0.0981
+Epoch 038/100 | Train Loss (L1): 0.1066 | Val Loss (L1): 0.0991
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 2.79 | MAE: 1.12 | WAPE: 9.05%
+Graph saved successfully to transformer_15min_ahead_forecast.png
+
+  [Trial 4 Success] -> RMSE: 2.79 | MAE: 1.12 | WAPE: 9.05%
+
+[Trial 5/5] Executing CommFac/15min_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (L1): 0.1818 | Val Loss (L1): 0.1236
+Epoch 002/100 | Train Loss (L1): 0.1299 | Val Loss (L1): 0.1071
+Epoch 003/100 | Train Loss (L1): 0.1230 | Val Loss (L1): 0.1084
+Epoch 004/100 | Train Loss (L1): 0.1196 | Val Loss (L1): 0.1028
+Epoch 005/100 | Train Loss (L1): 0.1158 | Val Loss (L1): 0.1023
+Epoch 006/100 | Train Loss (L1): 0.1152 | Val Loss (L1): 0.1082
+Epoch 007/100 | Train Loss (L1): 0.1151 | Val Loss (L1): 0.1062
+Epoch 008/100 | Train Loss (L1): 0.1129 | Val Loss (L1): 0.1044
+Epoch 009/100 | Train Loss (L1): 0.1129 | Val Loss (L1): 0.1010
+Epoch 010/100 | Train Loss (L1): 0.1132 | Val Loss (L1): 0.1001
+Epoch 011/100 | Train Loss (L1): 0.1124 | Val Loss (L1): 0.0990
+Epoch 012/100 | Train Loss (L1): 0.1124 | Val Loss (L1): 0.0987
+Epoch 013/100 | Train Loss (L1): 0.1122 | Val Loss (L1): 0.1000
+Epoch 014/100 | Train Loss (L1): 0.1102 | Val Loss (L1): 0.0984
+Epoch 015/100 | Train Loss (L1): 0.1110 | Val Loss (L1): 0.0971
+Epoch 016/100 | Train Loss (L1): 0.1106 | Val Loss (L1): 0.0998
+Epoch 017/100 | Train Loss (L1): 0.1099 | Val Loss (L1): 0.0985
+Epoch 018/100 | Train Loss (L1): 0.1104 | Val Loss (L1): 0.0969
+Epoch 019/100 | Train Loss (L1): 0.1087 | Val Loss (L1): 0.0973
+Epoch 020/100 | Train Loss (L1): 0.1107 | Val Loss (L1): 0.0994
+Epoch 021/100 | Train Loss (L1): 0.1094 | Val Loss (L1): 0.1009
+Epoch 022/100 | Train Loss (L1): 0.1098 | Val Loss (L1): 0.0974
+Epoch 023/100 | Train Loss (L1): 0.1086 | Val Loss (L1): 0.0997
+Epoch 024/100 | Train Loss (L1): 0.1085 | Val Loss (L1): 0.1019
+Epoch 025/100 | Train Loss (L1): 0.1087 | Val Loss (L1): 0.0944
+Epoch 026/100 | Train Loss (L1): 0.1077 | Val Loss (L1): 0.0985
+Epoch 027/100 | Train Loss (L1): 0.1075 | Val Loss (L1): 0.0978
+Epoch 028/100 | Train Loss (L1): 0.1088 | Val Loss (L1): 0.0996
+Epoch 029/100 | Train Loss (L1): 0.1083 | Val Loss (L1): 0.1110
+Epoch 030/100 | Train Loss (L1): 0.1081 | Val Loss (L1): 0.0999
+Epoch 031/100 | Train Loss (L1): 0.1080 | Val Loss (L1): 0.1000
+Epoch 032/100 | Train Loss (L1): 0.1085 | Val Loss (L1): 0.0977
+Epoch 033/100 | Train Loss (L1): 0.1079 | Val Loss (L1): 0.0939
+Epoch 034/100 | Train Loss (L1): 0.1074 | Val Loss (L1): 0.0972
+Epoch 035/100 | Train Loss (L1): 0.1070 | Val Loss (L1): 0.0960
+Epoch 036/100 | Train Loss (L1): 0.1073 | Val Loss (L1): 0.0971
+Epoch 037/100 | Train Loss (L1): 0.1073 | Val Loss (L1): 0.0978
+Epoch 038/100 | Train Loss (L1): 0.1067 | Val Loss (L1): 0.1001
+Epoch 039/100 | Train Loss (L1): 0.1072 | Val Loss (L1): 0.0987
+Epoch 040/100 | Train Loss (L1): 0.1093 | Val Loss (L1): 0.0987
+Epoch 041/100 | Train Loss (L1): 0.1078 | Val Loss (L1): 0.0965
+Epoch 042/100 | Train Loss (L1): 0.1069 | Val Loss (L1): 0.0972
+Epoch 043/100 | Train Loss (L1): 0.1061 | Val Loss (L1): 0.0973
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 2.63 | MAE: 1.06 | WAPE: 8.61%
+Graph saved successfully to transformer_15min_ahead_forecast.png
+
+  [Trial 5 Success] -> RMSE: 2.63 | MAE: 1.06 | WAPE: 8.61%
+
+==================================================
+FINAL STATISTICAL SUMMARY (5 SUCCESSFUL TRIALS)
+Target Script: CommFac/15min_tft.py
+==================================================
+RMSE: 2.77 ± 0.09
+MAE:  1.11 ± 0.03
+WAPE: 8.97% ± 0.25%
+==================================================
+
+--- SUCCESS: CommFac/15min_tft.py ---
+
+--- STARTING EVALUATION: CommFac/15min_seq2seq.py ---
+Timestamp: 2026-10-16 13:51:29
+
+--- Starting 5-Run Evaluation for CommFac/15min_seq2seq.py ---
+
+[Trial 1/5] Executing CommFac/15min_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3209 | Val Loss (MAE): 0.1271
+Epoch 002/100 | Train Loss (MAE): 0.1347 | Val Loss (MAE): 0.1070
+Epoch 003/100 | Train Loss (MAE): 0.1223 | Val Loss (MAE): 0.1040
+Epoch 004/100 | Train Loss (MAE): 0.1174 | Val Loss (MAE): 0.1013
+Epoch 005/100 | Train Loss (MAE): 0.1150 | Val Loss (MAE): 0.1004
+Epoch 006/100 | Train Loss (MAE): 0.1140 | Val Loss (MAE): 0.0983
+Epoch 007/100 | Train Loss (MAE): 0.1118 | Val Loss (MAE): 0.0987
+Epoch 008/100 | Train Loss (MAE): 0.1114 | Val Loss (MAE): 0.0979
+Epoch 009/100 | Train Loss (MAE): 0.1109 | Val Loss (MAE): 0.0984
+Epoch 010/100 | Train Loss (MAE): 0.1094 | Val Loss (MAE): 0.0969
+Epoch 011/100 | Train Loss (MAE): 0.1094 | Val Loss (MAE): 0.0979
+Epoch 012/100 | Train Loss (MAE): 0.1091 | Val Loss (MAE): 0.0963
+Epoch 013/100 | Train Loss (MAE): 0.1080 | Val Loss (MAE): 0.0968
+Epoch 014/100 | Train Loss (MAE): 0.1077 | Val Loss (MAE): 0.0958
+Epoch 015/100 | Train Loss (MAE): 0.1075 | Val Loss (MAE): 0.0955
+Epoch 016/100 | Train Loss (MAE): 0.1072 | Val Loss (MAE): 0.0952
+Epoch 017/100 | Train Loss (MAE): 0.1063 | Val Loss (MAE): 0.0957
+Epoch 018/100 | Train Loss (MAE): 0.1061 | Val Loss (MAE): 0.0962
+Epoch 019/100 | Train Loss (MAE): 0.1056 | Val Loss (MAE): 0.0937
+Epoch 020/100 | Train Loss (MAE): 0.1054 | Val Loss (MAE): 0.0941
+Epoch 021/100 | Train Loss (MAE): 0.1045 | Val Loss (MAE): 0.0935
+Epoch 022/100 | Train Loss (MAE): 0.1044 | Val Loss (MAE): 0.0930
+Epoch 023/100 | Train Loss (MAE): 0.1039 | Val Loss (MAE): 0.0936
+Epoch 024/100 | Train Loss (MAE): 0.1041 | Val Loss (MAE): 0.0944
+Epoch 025/100 | Train Loss (MAE): 0.1035 | Val Loss (MAE): 0.0939
+Epoch 026/100 | Train Loss (MAE): 0.1035 | Val Loss (MAE): 0.0927
+Epoch 027/100 | Train Loss (MAE): 0.1030 | Val Loss (MAE): 0.0936
+Epoch 028/100 | Train Loss (MAE): 0.1034 | Val Loss (MAE): 0.0932
+Epoch 029/100 | Train Loss (MAE): 0.1029 | Val Loss (MAE): 0.0939
+Epoch 030/100 | Train Loss (MAE): 0.1027 | Val Loss (MAE): 0.0924
+Epoch 031/100 | Train Loss (MAE): 0.1025 | Val Loss (MAE): 0.0923
+Epoch 032/100 | Train Loss (MAE): 0.1019 | Val Loss (MAE): 0.0937
+Epoch 033/100 | Train Loss (MAE): 0.1024 | Val Loss (MAE): 0.0913
+Epoch 034/100 | Train Loss (MAE): 0.1019 | Val Loss (MAE): 0.0935
+Epoch 035/100 | Train Loss (MAE): 0.1017 | Val Loss (MAE): 0.0916
+Epoch 036/100 | Train Loss (MAE): 0.1017 | Val Loss (MAE): 0.0924
+Epoch 037/100 | Train Loss (MAE): 0.1014 | Val Loss (MAE): 0.0923
+Epoch 038/100 | Train Loss (MAE): 0.1012 | Val Loss (MAE): 0.0913
+Epoch 039/100 | Train Loss (MAE): 0.1013 | Val Loss (MAE): 0.0923
+Epoch 040/100 | Train Loss (MAE): 0.1012 | Val Loss (MAE): 0.0913
+Epoch 041/100 | Train Loss (MAE): 0.1007 | Val Loss (MAE): 0.0911
+Epoch 042/100 | Train Loss (MAE): 0.1005 | Val Loss (MAE): 0.0918
+Epoch 043/100 | Train Loss (MAE): 0.1005 | Val Loss (MAE): 0.0924
+Epoch 044/100 | Train Loss (MAE): 0.1000 | Val Loss (MAE): 0.0910
+Epoch 045/100 | Train Loss (MAE): 0.1003 | Val Loss (MAE): 0.0923
+Epoch 046/100 | Train Loss (MAE): 0.1006 | Val Loss (MAE): 0.0924
+Epoch 047/100 | Train Loss (MAE): 0.1001 | Val Loss (MAE): 0.0907
+Epoch 048/100 | Train Loss (MAE): 0.1000 | Val Loss (MAE): 0.0900
+Epoch 049/100 | Train Loss (MAE): 0.0995 | Val Loss (MAE): 0.0917
+Epoch 050/100 | Train Loss (MAE): 0.0997 | Val Loss (MAE): 0.0911
+Epoch 051/100 | Train Loss (MAE): 0.0993 | Val Loss (MAE): 0.0901
+Epoch 052/100 | Train Loss (MAE): 0.0996 | Val Loss (MAE): 0.0914
+Epoch 053/100 | Train Loss (MAE): 0.0990 | Val Loss (MAE): 0.0904
+Epoch 054/100 | Train Loss (MAE): 0.0985 | Val Loss (MAE): 0.0900
+Epoch 055/100 | Train Loss (MAE): 0.0986 | Val Loss (MAE): 0.0903
+Epoch 056/100 | Train Loss (MAE): 0.0988 | Val Loss (MAE): 0.0901
+Epoch 057/100 | Train Loss (MAE): 0.0982 | Val Loss (MAE): 0.0908
+Epoch 058/100 | Train Loss (MAE): 0.0983 | Val Loss (MAE): 0.0903
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead Seq2Seq Metrics (kW) ---
+RMSE: 2.76 | MAE: 1.15 | WAPE: 9.31%
+Graph saved successfully to seq2seq_15min_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 2.76 | MAE: 1.15 | WAPE: 9.31%
+
+[Trial 2/5] Executing CommFac/15min_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3145 | Val Loss (MAE): 0.1304
+Epoch 002/100 | Train Loss (MAE): 0.1321 | Val Loss (MAE): 0.1090
+Epoch 003/100 | Train Loss (MAE): 0.1202 | Val Loss (MAE): 0.1024
+Epoch 004/100 | Train Loss (MAE): 0.1170 | Val Loss (MAE): 0.0997
+Epoch 005/100 | Train Loss (MAE): 0.1142 | Val Loss (MAE): 0.0994
+Epoch 006/100 | Train Loss (MAE): 0.1125 | Val Loss (MAE): 0.1002
+Epoch 007/100 | Train Loss (MAE): 0.1120 | Val Loss (MAE): 0.0973
+Epoch 008/100 | Train Loss (MAE): 0.1111 | Val Loss (MAE): 0.0969
+Epoch 009/100 | Train Loss (MAE): 0.1101 | Val Loss (MAE): 0.0990
+Epoch 010/100 | Train Loss (MAE): 0.1098 | Val Loss (MAE): 0.0963
+Epoch 011/100 | Train Loss (MAE): 0.1093 | Val Loss (MAE): 0.0978
+Epoch 012/100 | Train Loss (MAE): 0.1084 | Val Loss (MAE): 0.0959
+Epoch 013/100 | Train Loss (MAE): 0.1081 | Val Loss (MAE): 0.0965
+Epoch 014/100 | Train Loss (MAE): 0.1079 | Val Loss (MAE): 0.0958
+Epoch 015/100 | Train Loss (MAE): 0.1077 | Val Loss (MAE): 0.0953
+Epoch 016/100 | Train Loss (MAE): 0.1069 | Val Loss (MAE): 0.0954
+Epoch 017/100 | Train Loss (MAE): 0.1068 | Val Loss (MAE): 0.0949
+Epoch 018/100 | Train Loss (MAE): 0.1062 | Val Loss (MAE): 0.0982
+Epoch 019/100 | Train Loss (MAE): 0.1061 | Val Loss (MAE): 0.0967
+Epoch 020/100 | Train Loss (MAE): 0.1054 | Val Loss (MAE): 0.0941
+Epoch 021/100 | Train Loss (MAE): 0.1051 | Val Loss (MAE): 0.0941
+Epoch 022/100 | Train Loss (MAE): 0.1047 | Val Loss (MAE): 0.0958
+Epoch 023/100 | Train Loss (MAE): 0.1048 | Val Loss (MAE): 0.0954
+Epoch 024/100 | Train Loss (MAE): 0.1046 | Val Loss (MAE): 0.0932
+Epoch 025/100 | Train Loss (MAE): 0.1041 | Val Loss (MAE): 0.0935
+Epoch 026/100 | Train Loss (MAE): 0.1034 | Val Loss (MAE): 0.0935
+Epoch 027/100 | Train Loss (MAE): 0.1038 | Val Loss (MAE): 0.0934
+Epoch 028/100 | Train Loss (MAE): 0.1030 | Val Loss (MAE): 0.0933
+Epoch 029/100 | Train Loss (MAE): 0.1027 | Val Loss (MAE): 0.0921
+Epoch 030/100 | Train Loss (MAE): 0.1025 | Val Loss (MAE): 0.0918
+Epoch 031/100 | Train Loss (MAE): 0.1030 | Val Loss (MAE): 0.0922
+Epoch 032/100 | Train Loss (MAE): 0.1023 | Val Loss (MAE): 0.0929
+Epoch 033/100 | Train Loss (MAE): 0.1021 | Val Loss (MAE): 0.0913
+Epoch 034/100 | Train Loss (MAE): 0.1018 | Val Loss (MAE): 0.0913
+Epoch 035/100 | Train Loss (MAE): 0.1025 | Val Loss (MAE): 0.0923
+Epoch 036/100 | Train Loss (MAE): 0.1015 | Val Loss (MAE): 0.0927
+Epoch 037/100 | Train Loss (MAE): 0.1015 | Val Loss (MAE): 0.0913
+Epoch 038/100 | Train Loss (MAE): 0.1012 | Val Loss (MAE): 0.0914
+Epoch 039/100 | Train Loss (MAE): 0.1009 | Val Loss (MAE): 0.0913
+Epoch 040/100 | Train Loss (MAE): 0.1006 | Val Loss (MAE): 0.0915
+Epoch 041/100 | Train Loss (MAE): 0.1005 | Val Loss (MAE): 0.0923
+Epoch 042/100 | Train Loss (MAE): 0.1005 | Val Loss (MAE): 0.0918
+Epoch 043/100 | Train Loss (MAE): 0.1001 | Val Loss (MAE): 0.0904
+Epoch 044/100 | Train Loss (MAE): 0.1007 | Val Loss (MAE): 0.0909
+Epoch 045/100 | Train Loss (MAE): 0.0995 | Val Loss (MAE): 0.0912
+Epoch 046/100 | Train Loss (MAE): 0.0999 | Val Loss (MAE): 0.0907
+Epoch 047/100 | Train Loss (MAE): 0.0995 | Val Loss (MAE): 0.0911
+Epoch 048/100 | Train Loss (MAE): 0.0991 | Val Loss (MAE): 0.0904
+Epoch 049/100 | Train Loss (MAE): 0.0994 | Val Loss (MAE): 0.0903
+Epoch 050/100 | Train Loss (MAE): 0.0987 | Val Loss (MAE): 0.0908
+Epoch 051/100 | Train Loss (MAE): 0.0988 | Val Loss (MAE): 0.0902
+Epoch 052/100 | Train Loss (MAE): 0.0989 | Val Loss (MAE): 0.0904
+Epoch 053/100 | Train Loss (MAE): 0.0983 | Val Loss (MAE): 0.0906
+Epoch 054/100 | Train Loss (MAE): 0.0986 | Val Loss (MAE): 0.0902
+Epoch 055/100 | Train Loss (MAE): 0.0982 | Val Loss (MAE): 0.0903
+Epoch 056/100 | Train Loss (MAE): 0.0982 | Val Loss (MAE): 0.0895
+Epoch 057/100 | Train Loss (MAE): 0.0978 | Val Loss (MAE): 0.0894
+Epoch 058/100 | Train Loss (MAE): 0.0975 | Val Loss (MAE): 0.0893
+Epoch 059/100 | Train Loss (MAE): 0.0972 | Val Loss (MAE): 0.0917
+Epoch 060/100 | Train Loss (MAE): 0.0970 | Val Loss (MAE): 0.0910
+Epoch 061/100 | Train Loss (MAE): 0.0971 | Val Loss (MAE): 0.0896
+Epoch 062/100 | Train Loss (MAE): 0.0970 | Val Loss (MAE): 0.0901
+Epoch 063/100 | Train Loss (MAE): 0.0971 | Val Loss (MAE): 0.0895
+Epoch 064/100 | Train Loss (MAE): 0.0965 | Val Loss (MAE): 0.0900
+Epoch 065/100 | Train Loss (MAE): 0.0963 | Val Loss (MAE): 0.0898
+Epoch 066/100 | Train Loss (MAE): 0.0964 | Val Loss (MAE): 0.0897
+Epoch 067/100 | Train Loss (MAE): 0.0964 | Val Loss (MAE): 0.0913
+Epoch 068/100 | Train Loss (MAE): 0.0960 | Val Loss (MAE): 0.0902
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead Seq2Seq Metrics (kW) ---
+RMSE: 3.06 | MAE: 1.26 | WAPE: 10.20%
+Graph saved successfully to seq2seq_15min_ahead_forecast.png
+
+  [Trial 2 Success] -> RMSE: 3.06 | MAE: 1.26 | WAPE: 10.20%
+
+[Trial 3/5] Executing CommFac/15min_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3083 | Val Loss (MAE): 0.1234
+Epoch 002/100 | Train Loss (MAE): 0.1326 | Val Loss (MAE): 0.1059
+Epoch 003/100 | Train Loss (MAE): 0.1211 | Val Loss (MAE): 0.1018
+Epoch 004/100 | Train Loss (MAE): 0.1170 | Val Loss (MAE): 0.1043
+Epoch 005/100 | Train Loss (MAE): 0.1147 | Val Loss (MAE): 0.1001
+Epoch 006/100 | Train Loss (MAE): 0.1133 | Val Loss (MAE): 0.0986
+Epoch 007/100 | Train Loss (MAE): 0.1120 | Val Loss (MAE): 0.0992
+Epoch 008/100 | Train Loss (MAE): 0.1112 | Val Loss (MAE): 0.0970
+Epoch 009/100 | Train Loss (MAE): 0.1106 | Val Loss (MAE): 0.0974
+Epoch 010/100 | Train Loss (MAE): 0.1099 | Val Loss (MAE): 0.0978
+Epoch 011/100 | Train Loss (MAE): 0.1088 | Val Loss (MAE): 0.0971
+Epoch 012/100 | Train Loss (MAE): 0.1085 | Val Loss (MAE): 0.0959
+Epoch 013/100 | Train Loss (MAE): 0.1081 | Val Loss (MAE): 0.0972
+Epoch 014/100 | Train Loss (MAE): 0.1079 | Val Loss (MAE): 0.0954
+Epoch 015/100 | Train Loss (MAE): 0.1077 | Val Loss (MAE): 0.0958
+Epoch 016/100 | Train Loss (MAE): 0.1065 | Val Loss (MAE): 0.0956
+Epoch 017/100 | Train Loss (MAE): 0.1072 | Val Loss (MAE): 0.0949
+Epoch 018/100 | Train Loss (MAE): 0.1059 | Val Loss (MAE): 0.0954
+Epoch 019/100 | Train Loss (MAE): 0.1061 | Val Loss (MAE): 0.0957
+Epoch 020/100 | Train Loss (MAE): 0.1060 | Val Loss (MAE): 0.0949
+Epoch 021/100 | Train Loss (MAE): 0.1056 | Val Loss (MAE): 0.0972
+Epoch 022/100 | Train Loss (MAE): 0.1046 | Val Loss (MAE): 0.0944
+Epoch 023/100 | Train Loss (MAE): 0.1045 | Val Loss (MAE): 0.0965
+Epoch 024/100 | Train Loss (MAE): 0.1041 | Val Loss (MAE): 0.0948
+Epoch 025/100 | Train Loss (MAE): 0.1039 | Val Loss (MAE): 0.0936
+Epoch 026/100 | Train Loss (MAE): 0.1041 | Val Loss (MAE): 0.0934
+Epoch 027/100 | Train Loss (MAE): 0.1034 | Val Loss (MAE): 0.0940
+Epoch 028/100 | Train Loss (MAE): 0.1037 | Val Loss (MAE): 0.0929
+Epoch 029/100 | Train Loss (MAE): 0.1031 | Val Loss (MAE): 0.0928
+Epoch 030/100 | Train Loss (MAE): 0.1033 | Val Loss (MAE): 0.0933
+Epoch 031/100 | Train Loss (MAE): 0.1026 | Val Loss (MAE): 0.0929
+Epoch 032/100 | Train Loss (MAE): 0.1025 | Val Loss (MAE): 0.0938
+Epoch 033/100 | Train Loss (MAE): 0.1021 | Val Loss (MAE): 0.0927
+Epoch 034/100 | Train Loss (MAE): 0.1030 | Val Loss (MAE): 0.0917
+Epoch 035/100 | Train Loss (MAE): 0.1022 | Val Loss (MAE): 0.0923
+Epoch 036/100 | Train Loss (MAE): 0.1018 | Val Loss (MAE): 0.0922
+Epoch 037/100 | Train Loss (MAE): 0.1018 | Val Loss (MAE): 0.0922
+Epoch 038/100 | Train Loss (MAE): 0.1017 | Val Loss (MAE): 0.0924
+Epoch 039/100 | Train Loss (MAE): 0.1011 | Val Loss (MAE): 0.0912
+Epoch 040/100 | Train Loss (MAE): 0.1011 | Val Loss (MAE): 0.0927
+Epoch 041/100 | Train Loss (MAE): 0.1015 | Val Loss (MAE): 0.0930
+Epoch 042/100 | Train Loss (MAE): 0.1010 | Val Loss (MAE): 0.0910
+Epoch 043/100 | Train Loss (MAE): 0.1013 | Val Loss (MAE): 0.0916
+Epoch 044/100 | Train Loss (MAE): 0.1016 | Val Loss (MAE): 0.0909
+Epoch 045/100 | Train Loss (MAE): 0.1002 | Val Loss (MAE): 0.0914
+Epoch 046/100 | Train Loss (MAE): 0.1009 | Val Loss (MAE): 0.0920
+Epoch 047/100 | Train Loss (MAE): 0.1002 | Val Loss (MAE): 0.0909
+Epoch 048/100 | Train Loss (MAE): 0.0998 | Val Loss (MAE): 0.0912
+Epoch 049/100 | Train Loss (MAE): 0.0997 | Val Loss (MAE): 0.0909
+Epoch 050/100 | Train Loss (MAE): 0.0995 | Val Loss (MAE): 0.0917
+Epoch 051/100 | Train Loss (MAE): 0.0996 | Val Loss (MAE): 0.0906
+Epoch 052/100 | Train Loss (MAE): 0.0995 | Val Loss (MAE): 0.0912
+Epoch 053/100 | Train Loss (MAE): 0.0996 | Val Loss (MAE): 0.0908
+Epoch 054/100 | Train Loss (MAE): 0.0989 | Val Loss (MAE): 0.0918
+Epoch 055/100 | Train Loss (MAE): 0.0991 | Val Loss (MAE): 0.0918
+Epoch 056/100 | Train Loss (MAE): 0.0983 | Val Loss (MAE): 0.0900
+Epoch 057/100 | Train Loss (MAE): 0.0983 | Val Loss (MAE): 0.0906
+Epoch 058/100 | Train Loss (MAE): 0.0991 | Val Loss (MAE): 0.0904
+Epoch 059/100 | Train Loss (MAE): 0.0981 | Val Loss (MAE): 0.0900
+Epoch 060/100 | Train Loss (MAE): 0.0978 | Val Loss (MAE): 0.0905
+Epoch 061/100 | Train Loss (MAE): 0.0977 | Val Loss (MAE): 0.0904
+Epoch 062/100 | Train Loss (MAE): 0.0976 | Val Loss (MAE): 0.0919
+Epoch 063/100 | Train Loss (MAE): 0.0977 | Val Loss (MAE): 0.0911
+Epoch 064/100 | Train Loss (MAE): 0.0975 | Val Loss (MAE): 0.0897
+Epoch 065/100 | Train Loss (MAE): 0.0972 | Val Loss (MAE): 0.0901
+Epoch 066/100 | Train Loss (MAE): 0.0970 | Val Loss (MAE): 0.0921
+Epoch 067/100 | Train Loss (MAE): 0.0971 | Val Loss (MAE): 0.0892
+Epoch 068/100 | Train Loss (MAE): 0.0967 | Val Loss (MAE): 0.0898
+Epoch 069/100 | Train Loss (MAE): 0.0967 | Val Loss (MAE): 0.0898
+Epoch 070/100 | Train Loss (MAE): 0.0968 | Val Loss (MAE): 0.0912
+Epoch 071/100 | Train Loss (MAE): 0.0967 | Val Loss (MAE): 0.0920
+Epoch 072/100 | Train Loss (MAE): 0.0961 | Val Loss (MAE): 0.0896
+Epoch 073/100 | Train Loss (MAE): 0.0963 | Val Loss (MAE): 0.0895
+Epoch 074/100 | Train Loss (MAE): 0.0962 | Val Loss (MAE): 0.0893
+Epoch 075/100 | Train Loss (MAE): 0.0958 | Val Loss (MAE): 0.0894
+Epoch 076/100 | Train Loss (MAE): 0.0958 | Val Loss (MAE): 0.0902
+Epoch 077/100 | Train Loss (MAE): 0.0954 | Val Loss (MAE): 0.0890
+Epoch 078/100 | Train Loss (MAE): 0.0954 | Val Loss (MAE): 0.0888
+Epoch 079/100 | Train Loss (MAE): 0.0951 | Val Loss (MAE): 0.0913
+Epoch 080/100 | Train Loss (MAE): 0.0950 | Val Loss (MAE): 0.0888
+Epoch 081/100 | Train Loss (MAE): 0.0948 | Val Loss (MAE): 0.0894
+Epoch 082/100 | Train Loss (MAE): 0.0950 | Val Loss (MAE): 0.0892
+Epoch 083/100 | Train Loss (MAE): 0.0948 | Val Loss (MAE): 0.0903
+Epoch 084/100 | Train Loss (MAE): 0.0948 | Val Loss (MAE): 0.0886
+Epoch 085/100 | Train Loss (MAE): 0.0945 | Val Loss (MAE): 0.0891
+Epoch 086/100 | Train Loss (MAE): 0.0948 | Val Loss (MAE): 0.0887
+Epoch 087/100 | Train Loss (MAE): 0.0942 | Val Loss (MAE): 0.0891
+Epoch 088/100 | Train Loss (MAE): 0.0944 | Val Loss (MAE): 0.0884
+Epoch 089/100 | Train Loss (MAE): 0.0940 | Val Loss (MAE): 0.0888
+Epoch 090/100 | Train Loss (MAE): 0.0941 | Val Loss (MAE): 0.0885
+Epoch 091/100 | Train Loss (MAE): 0.0938 | Val Loss (MAE): 0.0890
+Epoch 092/100 | Train Loss (MAE): 0.0939 | Val Loss (MAE): 0.0885
+Epoch 093/100 | Train Loss (MAE): 0.0934 | Val Loss (MAE): 0.0909
+Epoch 094/100 | Train Loss (MAE): 0.0936 | Val Loss (MAE): 0.0890
+Epoch 095/100 | Train Loss (MAE): 0.0929 | Val Loss (MAE): 0.0897
+Epoch 096/100 | Train Loss (MAE): 0.0924 | Val Loss (MAE): 0.0889
+Epoch 097/100 | Train Loss (MAE): 0.0924 | Val Loss (MAE): 0.0884
+Epoch 098/100 | Train Loss (MAE): 0.0929 | Val Loss (MAE): 0.0900
+Epoch 099/100 | Train Loss (MAE): 0.0923 | Val Loss (MAE): 0.0896
+Epoch 100/100 | Train Loss (MAE): 0.0926 | Val Loss (MAE): 0.0891
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead Seq2Seq Metrics (kW) ---
+RMSE: 3.10 | MAE: 1.26 | WAPE: 10.24%
+Graph saved successfully to seq2seq_15min_ahead_forecast.png
+
+  [Trial 3 Success] -> RMSE: 3.10 | MAE: 1.26 | WAPE: 10.24%
+
+[Trial 4/5] Executing CommFac/15min_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3048 | Val Loss (MAE): 0.1225
+Epoch 002/100 | Train Loss (MAE): 0.1338 | Val Loss (MAE): 0.1098
+Epoch 003/100 | Train Loss (MAE): 0.1218 | Val Loss (MAE): 0.1025
+Epoch 004/100 | Train Loss (MAE): 0.1183 | Val Loss (MAE): 0.1040
+Epoch 005/100 | Train Loss (MAE): 0.1155 | Val Loss (MAE): 0.1011
+Epoch 006/100 | Train Loss (MAE): 0.1134 | Val Loss (MAE): 0.1013
+Epoch 007/100 | Train Loss (MAE): 0.1124 | Val Loss (MAE): 0.0987
+Epoch 008/100 | Train Loss (MAE): 0.1117 | Val Loss (MAE): 0.0986
+Epoch 009/100 | Train Loss (MAE): 0.1115 | Val Loss (MAE): 0.0976
+Epoch 010/100 | Train Loss (MAE): 0.1095 | Val Loss (MAE): 0.0968
+Epoch 011/100 | Train Loss (MAE): 0.1095 | Val Loss (MAE): 0.0966
+Epoch 012/100 | Train Loss (MAE): 0.1088 | Val Loss (MAE): 0.0965
+Epoch 013/100 | Train Loss (MAE): 0.1084 | Val Loss (MAE): 0.0971
+Epoch 014/100 | Train Loss (MAE): 0.1084 | Val Loss (MAE): 0.0964
+Epoch 015/100 | Train Loss (MAE): 0.1077 | Val Loss (MAE): 0.0957
+Epoch 016/100 | Train Loss (MAE): 0.1074 | Val Loss (MAE): 0.0973
+Epoch 017/100 | Train Loss (MAE): 0.1077 | Val Loss (MAE): 0.0949
+Epoch 018/100 | Train Loss (MAE): 0.1066 | Val Loss (MAE): 0.0957
+Epoch 019/100 | Train Loss (MAE): 0.1060 | Val Loss (MAE): 0.0983
+Epoch 020/100 | Train Loss (MAE): 0.1057 | Val Loss (MAE): 0.0950
+Epoch 021/100 | Train Loss (MAE): 0.1054 | Val Loss (MAE): 0.0957
+Epoch 022/100 | Train Loss (MAE): 0.1058 | Val Loss (MAE): 0.0936
+Epoch 023/100 | Train Loss (MAE): 0.1046 | Val Loss (MAE): 0.0938
+Epoch 024/100 | Train Loss (MAE): 0.1043 | Val Loss (MAE): 0.0945
+Epoch 025/100 | Train Loss (MAE): 0.1040 | Val Loss (MAE): 0.0937
+Epoch 026/100 | Train Loss (MAE): 0.1042 | Val Loss (MAE): 0.0927
+Epoch 027/100 | Train Loss (MAE): 0.1044 | Val Loss (MAE): 0.0928
+Epoch 028/100 | Train Loss (MAE): 0.1033 | Val Loss (MAE): 0.0930
+Epoch 029/100 | Train Loss (MAE): 0.1033 | Val Loss (MAE): 0.0929
+Epoch 030/100 | Train Loss (MAE): 0.1032 | Val Loss (MAE): 0.0937
+Epoch 031/100 | Train Loss (MAE): 0.1026 | Val Loss (MAE): 0.0924
+Epoch 032/100 | Train Loss (MAE): 0.1027 | Val Loss (MAE): 0.0928
+Epoch 033/100 | Train Loss (MAE): 0.1023 | Val Loss (MAE): 0.0938
+Epoch 034/100 | Train Loss (MAE): 0.1028 | Val Loss (MAE): 0.0925
+Epoch 035/100 | Train Loss (MAE): 0.1017 | Val Loss (MAE): 0.0920
+Epoch 036/100 | Train Loss (MAE): 0.1018 | Val Loss (MAE): 0.0920
+Epoch 037/100 | Train Loss (MAE): 0.1014 | Val Loss (MAE): 0.0921
+Epoch 038/100 | Train Loss (MAE): 0.1018 | Val Loss (MAE): 0.0912
+Epoch 039/100 | Train Loss (MAE): 0.1013 | Val Loss (MAE): 0.0923
+Epoch 040/100 | Train Loss (MAE): 0.1010 | Val Loss (MAE): 0.0916
+Epoch 041/100 | Train Loss (MAE): 0.1015 | Val Loss (MAE): 0.0928
+Epoch 042/100 | Train Loss (MAE): 0.1008 | Val Loss (MAE): 0.0917
+Epoch 043/100 | Train Loss (MAE): 0.1012 | Val Loss (MAE): 0.0910
+Epoch 044/100 | Train Loss (MAE): 0.1005 | Val Loss (MAE): 0.0917
+Epoch 045/100 | Train Loss (MAE): 0.1006 | Val Loss (MAE): 0.0933
+Epoch 046/100 | Train Loss (MAE): 0.1004 | Val Loss (MAE): 0.0906
+Epoch 047/100 | Train Loss (MAE): 0.0998 | Val Loss (MAE): 0.0907
+Epoch 048/100 | Train Loss (MAE): 0.1004 | Val Loss (MAE): 0.0909
+Epoch 049/100 | Train Loss (MAE): 0.0997 | Val Loss (MAE): 0.0907
+Epoch 050/100 | Train Loss (MAE): 0.0997 | Val Loss (MAE): 0.0915
+Epoch 051/100 | Train Loss (MAE): 0.0997 | Val Loss (MAE): 0.0914
+Epoch 052/100 | Train Loss (MAE): 0.0995 | Val Loss (MAE): 0.0904
+Epoch 053/100 | Train Loss (MAE): 0.0989 | Val Loss (MAE): 0.0898
+Epoch 054/100 | Train Loss (MAE): 0.0987 | Val Loss (MAE): 0.0909
+Epoch 055/100 | Train Loss (MAE): 0.0987 | Val Loss (MAE): 0.0904
+Epoch 056/100 | Train Loss (MAE): 0.0988 | Val Loss (MAE): 0.0910
+Epoch 057/100 | Train Loss (MAE): 0.0987 | Val Loss (MAE): 0.0902
+Epoch 058/100 | Train Loss (MAE): 0.0978 | Val Loss (MAE): 0.0897
+Epoch 059/100 | Train Loss (MAE): 0.0982 | Val Loss (MAE): 0.0905
+Epoch 060/100 | Train Loss (MAE): 0.0982 | Val Loss (MAE): 0.0900
+Epoch 061/100 | Train Loss (MAE): 0.0975 | Val Loss (MAE): 0.0908
+Epoch 062/100 | Train Loss (MAE): 0.0980 | Val Loss (MAE): 0.0890
+Epoch 063/100 | Train Loss (MAE): 0.0976 | Val Loss (MAE): 0.0890
+Epoch 064/100 | Train Loss (MAE): 0.0975 | Val Loss (MAE): 0.0888
+Epoch 065/100 | Train Loss (MAE): 0.0973 | Val Loss (MAE): 0.0885
+Epoch 066/100 | Train Loss (MAE): 0.0975 | Val Loss (MAE): 0.0916
+Epoch 067/100 | Train Loss (MAE): 0.0966 | Val Loss (MAE): 0.0904
+Epoch 068/100 | Train Loss (MAE): 0.0971 | Val Loss (MAE): 0.0891
+Epoch 069/100 | Train Loss (MAE): 0.0971 | Val Loss (MAE): 0.0892
+Epoch 070/100 | Train Loss (MAE): 0.0962 | Val Loss (MAE): 0.0887
+Epoch 071/100 | Train Loss (MAE): 0.0965 | Val Loss (MAE): 0.0924
+Epoch 072/100 | Train Loss (MAE): 0.0963 | Val Loss (MAE): 0.0887
+Epoch 073/100 | Train Loss (MAE): 0.0958 | Val Loss (MAE): 0.0891
+Epoch 074/100 | Train Loss (MAE): 0.0957 | Val Loss (MAE): 0.0891
+Epoch 075/100 | Train Loss (MAE): 0.0959 | Val Loss (MAE): 0.0892
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead Seq2Seq Metrics (kW) ---
+RMSE: 2.89 | MAE: 1.21 | WAPE: 9.80%
+Graph saved successfully to seq2seq_15min_ahead_forecast.png
+
+  [Trial 4 Success] -> RMSE: 2.89 | MAE: 1.21 | WAPE: 9.80%
+
+[Trial 5/5] Executing CommFac/15min_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3100 | Val Loss (MAE): 0.1235
+Epoch 002/100 | Train Loss (MAE): 0.1348 | Val Loss (MAE): 0.1067
+Epoch 003/100 | Train Loss (MAE): 0.1230 | Val Loss (MAE): 0.1046
+Epoch 004/100 | Train Loss (MAE): 0.1181 | Val Loss (MAE): 0.1004
+Epoch 005/100 | Train Loss (MAE): 0.1154 | Val Loss (MAE): 0.0998
+Epoch 006/100 | Train Loss (MAE): 0.1140 | Val Loss (MAE): 0.0987
+Epoch 007/100 | Train Loss (MAE): 0.1131 | Val Loss (MAE): 0.1002
+Epoch 008/100 | Train Loss (MAE): 0.1119 | Val Loss (MAE): 0.1014
+Epoch 009/100 | Train Loss (MAE): 0.1105 | Val Loss (MAE): 0.0973
+Epoch 010/100 | Train Loss (MAE): 0.1100 | Val Loss (MAE): 0.0979
+Epoch 011/100 | Train Loss (MAE): 0.1102 | Val Loss (MAE): 0.0967
+Epoch 012/100 | Train Loss (MAE): 0.1088 | Val Loss (MAE): 0.0959
+Epoch 013/100 | Train Loss (MAE): 0.1080 | Val Loss (MAE): 0.0965
+Epoch 014/100 | Train Loss (MAE): 0.1078 | Val Loss (MAE): 0.0966
+Epoch 015/100 | Train Loss (MAE): 0.1079 | Val Loss (MAE): 0.0992
+Epoch 016/100 | Train Loss (MAE): 0.1075 | Val Loss (MAE): 0.0955
+Epoch 017/100 | Train Loss (MAE): 0.1070 | Val Loss (MAE): 0.0955
+Epoch 018/100 | Train Loss (MAE): 0.1064 | Val Loss (MAE): 0.0945
+Epoch 019/100 | Train Loss (MAE): 0.1063 | Val Loss (MAE): 0.0945
+Epoch 020/100 | Train Loss (MAE): 0.1054 | Val Loss (MAE): 0.0953
+Epoch 021/100 | Train Loss (MAE): 0.1056 | Val Loss (MAE): 0.0957
+Epoch 022/100 | Train Loss (MAE): 0.1056 | Val Loss (MAE): 0.0955
+Epoch 023/100 | Train Loss (MAE): 0.1051 | Val Loss (MAE): 0.0944
+Epoch 024/100 | Train Loss (MAE): 0.1044 | Val Loss (MAE): 0.0935
+Epoch 025/100 | Train Loss (MAE): 0.1041 | Val Loss (MAE): 0.0945
+Epoch 026/100 | Train Loss (MAE): 0.1041 | Val Loss (MAE): 0.0944
+Epoch 027/100 | Train Loss (MAE): 0.1037 | Val Loss (MAE): 0.0943
+Epoch 028/100 | Train Loss (MAE): 0.1036 | Val Loss (MAE): 0.0931
+Epoch 029/100 | Train Loss (MAE): 0.1033 | Val Loss (MAE): 0.0934
+Epoch 030/100 | Train Loss (MAE): 0.1030 | Val Loss (MAE): 0.0926
+Epoch 031/100 | Train Loss (MAE): 0.1027 | Val Loss (MAE): 0.0930
+Epoch 032/100 | Train Loss (MAE): 0.1028 | Val Loss (MAE): 0.0930
+Epoch 033/100 | Train Loss (MAE): 0.1025 | Val Loss (MAE): 0.0941
+Epoch 034/100 | Train Loss (MAE): 0.1025 | Val Loss (MAE): 0.0926
+Epoch 035/100 | Train Loss (MAE): 0.1023 | Val Loss (MAE): 0.0921
+Epoch 036/100 | Train Loss (MAE): 0.1022 | Val Loss (MAE): 0.0927
+Epoch 037/100 | Train Loss (MAE): 0.1019 | Val Loss (MAE): 0.0921
+Epoch 038/100 | Train Loss (MAE): 0.1016 | Val Loss (MAE): 0.0935
+Epoch 039/100 | Train Loss (MAE): 0.1014 | Val Loss (MAE): 0.0920
+Epoch 040/100 | Train Loss (MAE): 0.1017 | Val Loss (MAE): 0.0919
+Epoch 041/100 | Train Loss (MAE): 0.1015 | Val Loss (MAE): 0.0916
+Epoch 042/100 | Train Loss (MAE): 0.1008 | Val Loss (MAE): 0.0912
+Epoch 043/100 | Train Loss (MAE): 0.1007 | Val Loss (MAE): 0.0922
+Epoch 044/100 | Train Loss (MAE): 0.1007 | Val Loss (MAE): 0.0913
+Epoch 045/100 | Train Loss (MAE): 0.1009 | Val Loss (MAE): 0.0937
+Epoch 046/100 | Train Loss (MAE): 0.1003 | Val Loss (MAE): 0.0912
+Epoch 047/100 | Train Loss (MAE): 0.0994 | Val Loss (MAE): 0.0926
+Epoch 048/100 | Train Loss (MAE): 0.1004 | Val Loss (MAE): 0.0910
+Epoch 049/100 | Train Loss (MAE): 0.1000 | Val Loss (MAE): 0.0908
+Epoch 050/100 | Train Loss (MAE): 0.0994 | Val Loss (MAE): 0.0905
+Epoch 051/100 | Train Loss (MAE): 0.0996 | Val Loss (MAE): 0.0916
+Epoch 052/100 | Train Loss (MAE): 0.0994 | Val Loss (MAE): 0.0919
+Epoch 053/100 | Train Loss (MAE): 0.0993 | Val Loss (MAE): 0.0907
+Epoch 054/100 | Train Loss (MAE): 0.0991 | Val Loss (MAE): 0.0923
+Epoch 055/100 | Train Loss (MAE): 0.0986 | Val Loss (MAE): 0.0906
+Epoch 056/100 | Train Loss (MAE): 0.0985 | Val Loss (MAE): 0.0906
+Epoch 057/100 | Train Loss (MAE): 0.0987 | Val Loss (MAE): 0.0916
+Epoch 058/100 | Train Loss (MAE): 0.0986 | Val Loss (MAE): 0.0906
+Epoch 059/100 | Train Loss (MAE): 0.0983 | Val Loss (MAE): 0.0899
+Epoch 060/100 | Train Loss (MAE): 0.0976 | Val Loss (MAE): 0.0904
+Epoch 061/100 | Train Loss (MAE): 0.0981 | Val Loss (MAE): 0.0903
+Epoch 062/100 | Train Loss (MAE): 0.0976 | Val Loss (MAE): 0.0897
+Epoch 063/100 | Train Loss (MAE): 0.0972 | Val Loss (MAE): 0.0899
+Epoch 064/100 | Train Loss (MAE): 0.0973 | Val Loss (MAE): 0.0909
+Epoch 065/100 | Train Loss (MAE): 0.0968 | Val Loss (MAE): 0.0915
+Epoch 066/100 | Train Loss (MAE): 0.0966 | Val Loss (MAE): 0.0903
+Epoch 067/100 | Train Loss (MAE): 0.0969 | Val Loss (MAE): 0.0901
+Epoch 068/100 | Train Loss (MAE): 0.0968 | Val Loss (MAE): 0.0901
+Epoch 069/100 | Train Loss (MAE): 0.0966 | Val Loss (MAE): 0.0906
+Epoch 070/100 | Train Loss (MAE): 0.0966 | Val Loss (MAE): 0.0894
+Epoch 071/100 | Train Loss (MAE): 0.0962 | Val Loss (MAE): 0.0895
+Epoch 072/100 | Train Loss (MAE): 0.0965 | Val Loss (MAE): 0.0899
+Epoch 073/100 | Train Loss (MAE): 0.0959 | Val Loss (MAE): 0.0917
+Epoch 074/100 | Train Loss (MAE): 0.0954 | Val Loss (MAE): 0.0910
+Epoch 075/100 | Train Loss (MAE): 0.0953 | Val Loss (MAE): 0.0897
+Epoch 076/100 | Train Loss (MAE): 0.0956 | Val Loss (MAE): 0.0903
+Epoch 077/100 | Train Loss (MAE): 0.0951 | Val Loss (MAE): 0.0907
+Epoch 078/100 | Train Loss (MAE): 0.0951 | Val Loss (MAE): 0.0910
+Epoch 079/100 | Train Loss (MAE): 0.0949 | Val Loss (MAE): 0.0891
+Epoch 080/100 | Train Loss (MAE): 0.0950 | Val Loss (MAE): 0.0899
+Epoch 081/100 | Train Loss (MAE): 0.0947 | Val Loss (MAE): 0.0894
+Epoch 082/100 | Train Loss (MAE): 0.0950 | Val Loss (MAE): 0.0888
+Epoch 083/100 | Train Loss (MAE): 0.0945 | Val Loss (MAE): 0.0892
+Epoch 084/100 | Train Loss (MAE): 0.0950 | Val Loss (MAE): 0.0896
+Epoch 085/100 | Train Loss (MAE): 0.0946 | Val Loss (MAE): 0.0895
+Epoch 086/100 | Train Loss (MAE): 0.0943 | Val Loss (MAE): 0.0902
+Epoch 087/100 | Train Loss (MAE): 0.0938 | Val Loss (MAE): 0.0903
+Epoch 088/100 | Train Loss (MAE): 0.0943 | Val Loss (MAE): 0.0903
+Epoch 089/100 | Train Loss (MAE): 0.0942 | Val Loss (MAE): 0.0902
+Epoch 090/100 | Train Loss (MAE): 0.0937 | Val Loss (MAE): 0.0906
+Epoch 091/100 | Train Loss (MAE): 0.0932 | Val Loss (MAE): 0.0901
+Epoch 092/100 | Train Loss (MAE): 0.0935 | Val Loss (MAE): 0.0896
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead Seq2Seq Metrics (kW) ---
+RMSE: 2.88 | MAE: 1.20 | WAPE: 9.74%
+Graph saved successfully to seq2seq_15min_ahead_forecast.png
+
+  [Trial 5 Success] -> RMSE: 2.88 | MAE: 1.20 | WAPE: 9.74%
+
+==================================================
+FINAL STATISTICAL SUMMARY (5 SUCCESSFUL TRIALS)
+Target Script: CommFac/15min_seq2seq.py
+==================================================
+RMSE: 2.94 ± 0.13
+MAE:  1.22 ± 0.04
+WAPE: 9.86% ± 0.34%
+==================================================
+
+--- SUCCESS: CommFac/15min_seq2seq.py ---
+
+--- STARTING EVALUATION: CommFac/15min_patchtst.py ---
+Timestamp: 2026-10-16 14:43:53
+
+--- Starting 5-Run Evaluation for CommFac/15min_patchtst.py ---
+
+[Trial 1/5] Executing CommFac/15min_patchtst.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead PatchTST Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.6530 | Val Loss (MAE): 0.1548
+Epoch 002/100 | Train Loss (MAE): 0.2150 | Val Loss (MAE): 0.1357
+Epoch 003/100 | Train Loss (MAE): 0.1560 | Val Loss (MAE): 0.1211
+Epoch 004/100 | Train Loss (MAE): 0.1400 | Val Loss (MAE): 0.1074
+Epoch 005/100 | Train Loss (MAE): 0.1324 | Val Loss (MAE): 0.1323
+Epoch 006/100 | Train Loss (MAE): 0.1311 | Val Loss (MAE): 0.1125
+Epoch 007/100 | Train Loss (MAE): 0.1268 | Val Loss (MAE): 0.1103
+Epoch 008/100 | Train Loss (MAE): 0.1196 | Val Loss (MAE): 0.1122
+Epoch 009/100 | Train Loss (MAE): 0.1237 | Val Loss (MAE): 0.1158
+Epoch 010/100 | Train Loss (MAE): 0.1206 | Val Loss (MAE): 0.1471
+Epoch 011/100 | Train Loss (MAE): 0.1195 | Val Loss (MAE): 0.0942
+Epoch 012/100 | Train Loss (MAE): 0.1191 | Val Loss (MAE): 0.0955
+Epoch 013/100 | Train Loss (MAE): 0.1151 | Val Loss (MAE): 0.1110
+Epoch 014/100 | Train Loss (MAE): 0.1145 | Val Loss (MAE): 0.1109
+Epoch 015/100 | Train Loss (MAE): 0.1120 | Val Loss (MAE): 0.1037
+Epoch 016/100 | Train Loss (MAE): 0.1130 | Val Loss (MAE): 0.0927
+Epoch 017/100 | Train Loss (MAE): 0.1069 | Val Loss (MAE): 0.1122
+Epoch 018/100 | Train Loss (MAE): 0.1082 | Val Loss (MAE): 0.1012
+Epoch 019/100 | Train Loss (MAE): 0.1082 | Val Loss (MAE): 0.1001
+Epoch 020/100 | Train Loss (MAE): 0.1089 | Val Loss (MAE): 0.0969
+Epoch 021/100 | Train Loss (MAE): 0.1090 | Val Loss (MAE): 0.1016
+Epoch 022/100 | Train Loss (MAE): 0.1086 | Val Loss (MAE): 0.1331
+Epoch 023/100 | Train Loss (MAE): 0.1077 | Val Loss (MAE): 0.1351
+Epoch 024/100 | Train Loss (MAE): 0.1057 | Val Loss (MAE): 0.0962
+Epoch 025/100 | Train Loss (MAE): 0.1060 | Val Loss (MAE): 0.1254
+Epoch 026/100 | Train Loss (MAE): 0.1101 | Val Loss (MAE): 0.0911
+Epoch 027/100 | Train Loss (MAE): 0.1069 | Val Loss (MAE): 0.0980
+Epoch 028/100 | Train Loss (MAE): 0.1047 | Val Loss (MAE): 0.1046
+Epoch 029/100 | Train Loss (MAE): 0.1044 | Val Loss (MAE): 0.1277
+Epoch 030/100 | Train Loss (MAE): 0.1050 | Val Loss (MAE): 0.0944
+Epoch 031/100 | Train Loss (MAE): 0.1016 | Val Loss (MAE): 0.1268
+Epoch 032/100 | Train Loss (MAE): 0.1042 | Val Loss (MAE): 0.1121
+Epoch 033/100 | Train Loss (MAE): 0.1025 | Val Loss (MAE): 0.1071
+Epoch 034/100 | Train Loss (MAE): 0.1033 | Val Loss (MAE): 0.1039
+Epoch 035/100 | Train Loss (MAE): 0.1043 | Val Loss (MAE): 0.0923
+Epoch 036/100 | Train Loss (MAE): 0.1033 | Val Loss (MAE): 0.0878
+Epoch 037/100 | Train Loss (MAE): 0.1032 | Val Loss (MAE): 0.0909
+Epoch 038/100 | Train Loss (MAE): 0.0985 | Val Loss (MAE): 0.0870
+Epoch 039/100 | Train Loss (MAE): 0.1018 | Val Loss (MAE): 0.0984
+Epoch 040/100 | Train Loss (MAE): 0.1017 | Val Loss (MAE): 0.0951
+Epoch 041/100 | Train Loss (MAE): 0.0997 | Val Loss (MAE): 0.1042
+Epoch 042/100 | Train Loss (MAE): 0.0999 | Val Loss (MAE): 0.0991
+Epoch 043/100 | Train Loss (MAE): 0.0993 | Val Loss (MAE): 0.1138
+Epoch 044/100 | Train Loss (MAE): 0.0987 | Val Loss (MAE): 0.1304
+Epoch 045/100 | Train Loss (MAE): 0.1016 | Val Loss (MAE): 0.1050
+Epoch 046/100 | Train Loss (MAE): 0.1005 | Val Loss (MAE): 0.0996
+Epoch 047/100 | Train Loss (MAE): 0.0987 | Val Loss (MAE): 0.0988
+Epoch 048/100 | Train Loss (MAE): 0.0985 | Val Loss (MAE): 0.0857
+Epoch 049/100 | Train Loss (MAE): 0.0986 | Val Loss (MAE): 0.0857
+Epoch 050/100 | Train Loss (MAE): 0.1009 | Val Loss (MAE): 0.1018
+Epoch 051/100 | Train Loss (MAE): 0.0987 | Val Loss (MAE): 0.0863
+Epoch 052/100 | Train Loss (MAE): 0.0998 | Val Loss (MAE): 0.0962
+Epoch 053/100 | Train Loss (MAE): 0.0974 | Val Loss (MAE): 0.1023
+Epoch 054/100 | Train Loss (MAE): 0.0958 | Val Loss (MAE): 0.0931
+Epoch 055/100 | Train Loss (MAE): 0.0980 | Val Loss (MAE): 0.1066
+Epoch 056/100 | Train Loss (MAE): 0.0989 | Val Loss (MAE): 0.1316
+Epoch 057/100 | Train Loss (MAE): 0.0981 | Val Loss (MAE): 0.0934
+Epoch 058/100 | Train Loss (MAE): 0.0955 | Val Loss (MAE): 0.0921
+Epoch 059/100 | Train Loss (MAE): 0.0963 | Val Loss (MAE): 0.0939
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead PatchTST Metrics (kW) ---
+RMSE: 2.79 | MAE: 1.20 | WAPE: 9.71%
+Graph saved successfully to patchtst_15min_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 2.79 | MAE: 1.20 | WAPE: 9.71%
+
+[Trial 2/5] Executing CommFac/15min_patchtst.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead PatchTST Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.7122 | Val Loss (MAE): 0.1753
+Epoch 002/100 | Train Loss (MAE): 0.1961 | Val Loss (MAE): 0.1323
+Epoch 003/100 | Train Loss (MAE): 0.1533 | Val Loss (MAE): 0.1239
+Epoch 004/100 | Train Loss (MAE): 0.1523 | Val Loss (MAE): 0.1339
+Epoch 005/100 | Train Loss (MAE): 0.1343 | Val Loss (MAE): 0.1121
+Epoch 006/100 | Train Loss (MAE): 0.1319 | Val Loss (MAE): 0.1164
+Epoch 007/100 | Train Loss (MAE): 0.1253 | Val Loss (MAE): 0.1074
+Epoch 008/100 | Train Loss (MAE): 0.1174 | Val Loss (MAE): 0.1081
+Epoch 009/100 | Train Loss (MAE): 0.1192 | Val Loss (MAE): 0.0978
+Epoch 010/100 | Train Loss (MAE): 0.1162 | Val Loss (MAE): 0.1008
+Epoch 011/100 | Train Loss (MAE): 0.1146 | Val Loss (MAE): 0.0970
+Epoch 012/100 | Train Loss (MAE): 0.1167 | Val Loss (MAE): 0.1011
+Epoch 013/100 | Train Loss (MAE): 0.1147 | Val Loss (MAE): 0.1086
+Epoch 014/100 | Train Loss (MAE): 0.1120 | Val Loss (MAE): 0.0942
+Epoch 015/100 | Train Loss (MAE): 0.1120 | Val Loss (MAE): 0.1069
+Epoch 016/100 | Train Loss (MAE): 0.1082 | Val Loss (MAE): 0.1159
+Epoch 017/100 | Train Loss (MAE): 0.1095 | Val Loss (MAE): 0.0906
+Epoch 018/100 | Train Loss (MAE): 0.1103 | Val Loss (MAE): 0.1018
+Epoch 019/100 | Train Loss (MAE): 0.1069 | Val Loss (MAE): 0.1183
+Epoch 020/100 | Train Loss (MAE): 0.1070 | Val Loss (MAE): 0.1320
+Epoch 021/100 | Train Loss (MAE): 0.1082 | Val Loss (MAE): 0.1281
+Epoch 022/100 | Train Loss (MAE): 0.1063 | Val Loss (MAE): 0.0939
+Epoch 023/100 | Train Loss (MAE): 0.1054 | Val Loss (MAE): 0.0968
+Epoch 024/100 | Train Loss (MAE): 0.1048 | Val Loss (MAE): 0.0978
+Epoch 025/100 | Train Loss (MAE): 0.1050 | Val Loss (MAE): 0.0956
+Epoch 026/100 | Train Loss (MAE): 0.1026 | Val Loss (MAE): 0.1228
+Epoch 027/100 | Train Loss (MAE): 0.1051 | Val Loss (MAE): 0.1062
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead PatchTST Metrics (kW) ---
+RMSE: 2.72 | MAE: 1.18 | WAPE: 9.58%
+Graph saved successfully to patchtst_15min_ahead_forecast.png
+
+  [Trial 2 Success] -> RMSE: 2.72 | MAE: 1.18 | WAPE: 9.58%
+
+[Trial 3/5] Executing CommFac/15min_patchtst.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead PatchTST Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3889 | Val Loss (MAE): 0.1509
+Epoch 002/100 | Train Loss (MAE): 0.1750 | Val Loss (MAE): 0.1387
+Epoch 003/100 | Train Loss (MAE): 0.1467 | Val Loss (MAE): 0.1074
+Epoch 004/100 | Train Loss (MAE): 0.1452 | Val Loss (MAE): 0.1326
+Epoch 005/100 | Train Loss (MAE): 0.1293 | Val Loss (MAE): 0.1036
+Epoch 006/100 | Train Loss (MAE): 0.1262 | Val Loss (MAE): 0.1219
+Epoch 007/100 | Train Loss (MAE): 0.1192 | Val Loss (MAE): 0.1073
+Epoch 008/100 | Train Loss (MAE): 0.1175 | Val Loss (MAE): 0.1277
+Epoch 009/100 | Train Loss (MAE): 0.1136 | Val Loss (MAE): 0.1102
+Epoch 010/100 | Train Loss (MAE): 0.1139 | Val Loss (MAE): 0.1004
+Epoch 011/100 | Train Loss (MAE): 0.1141 | Val Loss (MAE): 0.0949
+Epoch 012/100 | Train Loss (MAE): 0.1128 | Val Loss (MAE): 0.0925
+Epoch 013/100 | Train Loss (MAE): 0.1074 | Val Loss (MAE): 0.0939
+Epoch 014/100 | Train Loss (MAE): 0.1085 | Val Loss (MAE): 0.0952
+Epoch 015/100 | Train Loss (MAE): 0.1083 | Val Loss (MAE): 0.0934
+Epoch 016/100 | Train Loss (MAE): 0.1068 | Val Loss (MAE): 0.0913
+Epoch 017/100 | Train Loss (MAE): 0.1058 | Val Loss (MAE): 0.1064
+Epoch 018/100 | Train Loss (MAE): 0.1044 | Val Loss (MAE): 0.1016
+Epoch 019/100 | Train Loss (MAE): 0.1060 | Val Loss (MAE): 0.1032
+Epoch 020/100 | Train Loss (MAE): 0.1025 | Val Loss (MAE): 0.0991
+Epoch 021/100 | Train Loss (MAE): 0.1043 | Val Loss (MAE): 0.0899
+Epoch 022/100 | Train Loss (MAE): 0.1047 | Val Loss (MAE): 0.0962
+Epoch 023/100 | Train Loss (MAE): 0.1015 | Val Loss (MAE): 0.0950
+Epoch 024/100 | Train Loss (MAE): 0.1007 | Val Loss (MAE): 0.1129
+Epoch 025/100 | Train Loss (MAE): 0.1004 | Val Loss (MAE): 0.0962
+Epoch 026/100 | Train Loss (MAE): 0.1019 | Val Loss (MAE): 0.0915
+Epoch 027/100 | Train Loss (MAE): 0.1006 | Val Loss (MAE): 0.0935
+Epoch 028/100 | Train Loss (MAE): 0.0987 | Val Loss (MAE): 0.0876
+Epoch 029/100 | Train Loss (MAE): 0.0986 | Val Loss (MAE): 0.1103
+Epoch 030/100 | Train Loss (MAE): 0.0988 | Val Loss (MAE): 0.0946
+Epoch 031/100 | Train Loss (MAE): 0.0980 | Val Loss (MAE): 0.0969
+Epoch 032/100 | Train Loss (MAE): 0.0960 | Val Loss (MAE): 0.1166
+Epoch 033/100 | Train Loss (MAE): 0.0958 | Val Loss (MAE): 0.0907
+Epoch 034/100 | Train Loss (MAE): 0.0972 | Val Loss (MAE): 0.0929
+Epoch 035/100 | Train Loss (MAE): 0.0973 | Val Loss (MAE): 0.0950
+Epoch 036/100 | Train Loss (MAE): 0.0968 | Val Loss (MAE): 0.0898
+Epoch 037/100 | Train Loss (MAE): 0.0944 | Val Loss (MAE): 0.0990
+Epoch 038/100 | Train Loss (MAE): 0.0931 | Val Loss (MAE): 0.0865
+Epoch 039/100 | Train Loss (MAE): 0.0944 | Val Loss (MAE): 0.0997
+Epoch 040/100 | Train Loss (MAE): 0.0926 | Val Loss (MAE): 0.0886
+Epoch 041/100 | Train Loss (MAE): 0.0934 | Val Loss (MAE): 0.0839
+Epoch 042/100 | Train Loss (MAE): 0.0946 | Val Loss (MAE): 0.0853
+Epoch 043/100 | Train Loss (MAE): 0.0924 | Val Loss (MAE): 0.0848
+Epoch 044/100 | Train Loss (MAE): 0.0933 | Val Loss (MAE): 0.1012
+Epoch 045/100 | Train Loss (MAE): 0.0935 | Val Loss (MAE): 0.0886
+Epoch 046/100 | Train Loss (MAE): 0.0913 | Val Loss (MAE): 0.0899
+Epoch 047/100 | Train Loss (MAE): 0.0922 | Val Loss (MAE): 0.0884
+Epoch 048/100 | Train Loss (MAE): 0.0911 | Val Loss (MAE): 0.1037
+Epoch 049/100 | Train Loss (MAE): 0.0913 | Val Loss (MAE): 0.0879
+Epoch 050/100 | Train Loss (MAE): 0.0903 | Val Loss (MAE): 0.0852
+Epoch 051/100 | Train Loss (MAE): 0.0907 | Val Loss (MAE): 0.1004
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead PatchTST Metrics (kW) ---
+RMSE: 3.10 | MAE: 1.26 | WAPE: 10.23%
+Graph saved successfully to patchtst_15min_ahead_forecast.png
+
+  [Trial 3 Success] -> RMSE: 3.10 | MAE: 1.26 | WAPE: 10.23%
+
+[Trial 4/5] Executing CommFac/15min_patchtst.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead PatchTST Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.6963 | Val Loss (MAE): 0.2447
+Epoch 002/100 | Train Loss (MAE): 0.2072 | Val Loss (MAE): 0.1352
+Epoch 003/100 | Train Loss (MAE): 0.1628 | Val Loss (MAE): 0.1145
+Epoch 004/100 | Train Loss (MAE): 0.1573 | Val Loss (MAE): 0.1198
+Epoch 005/100 | Train Loss (MAE): 0.1360 | Val Loss (MAE): 0.1089
+Epoch 006/100 | Train Loss (MAE): 0.1296 | Val Loss (MAE): 0.1020
+Epoch 007/100 | Train Loss (MAE): 0.1236 | Val Loss (MAE): 0.1250
+Epoch 008/100 | Train Loss (MAE): 0.1292 | Val Loss (MAE): 0.1073
+Epoch 009/100 | Train Loss (MAE): 0.1184 | Val Loss (MAE): 0.0976
+Epoch 010/100 | Train Loss (MAE): 0.1172 | Val Loss (MAE): 0.1018
+Epoch 011/100 | Train Loss (MAE): 0.1182 | Val Loss (MAE): 0.1517
+Epoch 012/100 | Train Loss (MAE): 0.1138 | Val Loss (MAE): 0.0977
+Epoch 013/100 | Train Loss (MAE): 0.1123 | Val Loss (MAE): 0.0930
+Epoch 014/100 | Train Loss (MAE): 0.1191 | Val Loss (MAE): 0.1170
+Epoch 015/100 | Train Loss (MAE): 0.1147 | Val Loss (MAE): 0.1335
+Epoch 016/100 | Train Loss (MAE): 0.1114 | Val Loss (MAE): 0.1331
+Epoch 017/100 | Train Loss (MAE): 0.1122 | Val Loss (MAE): 0.1065
+Epoch 018/100 | Train Loss (MAE): 0.1100 | Val Loss (MAE): 0.1232
+Epoch 019/100 | Train Loss (MAE): 0.1095 | Val Loss (MAE): 0.1096
+Epoch 020/100 | Train Loss (MAE): 0.1089 | Val Loss (MAE): 0.1121
+Epoch 021/100 | Train Loss (MAE): 0.1099 | Val Loss (MAE): 0.0954
+Epoch 022/100 | Train Loss (MAE): 0.1109 | Val Loss (MAE): 0.1098
+Epoch 023/100 | Train Loss (MAE): 0.1077 | Val Loss (MAE): 0.0971
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead PatchTST Metrics (kW) ---
+RMSE: 2.37 | MAE: 1.06 | WAPE: 8.59%
+Graph saved successfully to patchtst_15min_ahead_forecast.png
+
+  [Trial 4 Success] -> RMSE: 2.37 | MAE: 1.06 | WAPE: 8.59%
+
+[Trial 5/5] Executing CommFac/15min_patchtst.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead PatchTST Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.6461 | Val Loss (MAE): 0.2271
+Epoch 002/100 | Train Loss (MAE): 0.2139 | Val Loss (MAE): 0.1649
+Epoch 003/100 | Train Loss (MAE): 0.1600 | Val Loss (MAE): 0.1180
+Epoch 004/100 | Train Loss (MAE): 0.1443 | Val Loss (MAE): 0.1336
+Epoch 005/100 | Train Loss (MAE): 0.1464 | Val Loss (MAE): 0.1126
+Epoch 006/100 | Train Loss (MAE): 0.1259 | Val Loss (MAE): 0.1179
+Epoch 007/100 | Train Loss (MAE): 0.1252 | Val Loss (MAE): 0.1401
+Epoch 008/100 | Train Loss (MAE): 0.1270 | Val Loss (MAE): 0.1423
+Epoch 009/100 | Train Loss (MAE): 0.1204 | Val Loss (MAE): 0.1082
+Epoch 010/100 | Train Loss (MAE): 0.1202 | Val Loss (MAE): 0.1390
+Epoch 011/100 | Train Loss (MAE): 0.1171 | Val Loss (MAE): 0.1065
+Epoch 012/100 | Train Loss (MAE): 0.1139 | Val Loss (MAE): 0.1055
+Epoch 013/100 | Train Loss (MAE): 0.1179 | Val Loss (MAE): 0.1274
+Epoch 014/100 | Train Loss (MAE): 0.1142 | Val Loss (MAE): 0.0982
+Epoch 015/100 | Train Loss (MAE): 0.1162 | Val Loss (MAE): 0.0973
+Epoch 016/100 | Train Loss (MAE): 0.1125 | Val Loss (MAE): 0.1041
+Epoch 017/100 | Train Loss (MAE): 0.1138 | Val Loss (MAE): 0.1014
+Epoch 018/100 | Train Loss (MAE): 0.1086 | Val Loss (MAE): 0.1064
+Epoch 019/100 | Train Loss (MAE): 0.1100 | Val Loss (MAE): 0.0973
+Epoch 020/100 | Train Loss (MAE): 0.1124 | Val Loss (MAE): 0.0970
+Epoch 021/100 | Train Loss (MAE): 0.1093 | Val Loss (MAE): 0.0996
+Epoch 022/100 | Train Loss (MAE): 0.1095 | Val Loss (MAE): 0.0932
+Epoch 023/100 | Train Loss (MAE): 0.1104 | Val Loss (MAE): 0.0962
+Epoch 024/100 | Train Loss (MAE): 0.1085 | Val Loss (MAE): 0.1074
+Epoch 025/100 | Train Loss (MAE): 0.1057 | Val Loss (MAE): 0.1088
+Epoch 026/100 | Train Loss (MAE): 0.1060 | Val Loss (MAE): 0.0910
+Epoch 027/100 | Train Loss (MAE): 0.1058 | Val Loss (MAE): 0.1150
+Epoch 028/100 | Train Loss (MAE): 0.1046 | Val Loss (MAE): 0.0915
+Epoch 029/100 | Train Loss (MAE): 0.1057 | Val Loss (MAE): 0.0936
+Epoch 030/100 | Train Loss (MAE): 0.1058 | Val Loss (MAE): 0.0906
+Epoch 031/100 | Train Loss (MAE): 0.1033 | Val Loss (MAE): 0.1123
+Epoch 032/100 | Train Loss (MAE): 0.1044 | Val Loss (MAE): 0.0974
+Epoch 033/100 | Train Loss (MAE): 0.1042 | Val Loss (MAE): 0.0993
+Epoch 034/100 | Train Loss (MAE): 0.1023 | Val Loss (MAE): 0.1034
+Epoch 035/100 | Train Loss (MAE): 0.1039 | Val Loss (MAE): 0.0919
+Epoch 036/100 | Train Loss (MAE): 0.1041 | Val Loss (MAE): 0.1125
+Epoch 037/100 | Train Loss (MAE): 0.1057 | Val Loss (MAE): 0.1063
+Epoch 038/100 | Train Loss (MAE): 0.1041 | Val Loss (MAE): 0.0985
+Epoch 039/100 | Train Loss (MAE): 0.1034 | Val Loss (MAE): 0.1025
+Epoch 040/100 | Train Loss (MAE): 0.1042 | Val Loss (MAE): 0.1000
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead PatchTST Metrics (kW) ---
+RMSE: 2.53 | MAE: 1.10 | WAPE: 8.90%
+Graph saved successfully to patchtst_15min_ahead_forecast.png
+
+  [Trial 5 Success] -> RMSE: 2.53 | MAE: 1.10 | WAPE: 8.90%
+
+==================================================
+FINAL STATISTICAL SUMMARY (5 SUCCESSFUL TRIALS)
+Target Script: CommFac/15min_patchtst.py
+==================================================
+RMSE: 2.70 ± 0.25
+MAE:  1.16 ± 0.07
+WAPE: 9.40% ± 0.59%
+==================================================
+
+--- SUCCESS: CommFac/15min_patchtst.py ---
+
+--- STARTING EVALUATION: CommFac/15min_lstm.py ---
+Timestamp: 2026-10-16 15:00:27
+
+--- Starting 5-Run Evaluation for CommFac/15min_lstm.py ---
+
+[Trial 1/5] Executing CommFac/15min_lstm.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead DirectLSTM Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2403 | Val Loss (MAE): 0.1200
+Epoch 002/100 | Train Loss (MAE): 0.1349 | Val Loss (MAE): 0.1086
+Epoch 003/100 | Train Loss (MAE): 0.1245 | Val Loss (MAE): 0.1026
+Epoch 004/100 | Train Loss (MAE): 0.1194 | Val Loss (MAE): 0.1006
+Epoch 005/100 | Train Loss (MAE): 0.1150 | Val Loss (MAE): 0.0986
+Epoch 006/100 | Train Loss (MAE): 0.1125 | Val Loss (MAE): 0.0957
+Epoch 007/100 | Train Loss (MAE): 0.1101 | Val Loss (MAE): 0.0975
+Epoch 008/100 | Train Loss (MAE): 0.1080 | Val Loss (MAE): 0.0962
+Epoch 009/100 | Train Loss (MAE): 0.1085 | Val Loss (MAE): 0.0969
+Epoch 010/100 | Train Loss (MAE): 0.1073 | Val Loss (MAE): 0.0948
+Epoch 011/100 | Train Loss (MAE): 0.1066 | Val Loss (MAE): 0.0960
+Epoch 012/100 | Train Loss (MAE): 0.1065 | Val Loss (MAE): 0.0957
+Epoch 013/100 | Train Loss (MAE): 0.1059 | Val Loss (MAE): 0.0998
+Epoch 014/100 | Train Loss (MAE): 0.1059 | Val Loss (MAE): 0.0974
+Epoch 015/100 | Train Loss (MAE): 0.1057 | Val Loss (MAE): 0.0941
+Epoch 016/100 | Train Loss (MAE): 0.1049 | Val Loss (MAE): 0.0949
+Epoch 017/100 | Train Loss (MAE): 0.1042 | Val Loss (MAE): 0.0965
+Epoch 018/100 | Train Loss (MAE): 0.1044 | Val Loss (MAE): 0.0975
+Epoch 019/100 | Train Loss (MAE): 0.1046 | Val Loss (MAE): 0.0947
+Epoch 020/100 | Train Loss (MAE): 0.1036 | Val Loss (MAE): 0.0932
+Epoch 021/100 | Train Loss (MAE): 0.1039 | Val Loss (MAE): 0.0930
+Epoch 022/100 | Train Loss (MAE): 0.1032 | Val Loss (MAE): 0.0923
+Epoch 023/100 | Train Loss (MAE): 0.1046 | Val Loss (MAE): 0.0929
+Epoch 024/100 | Train Loss (MAE): 0.1034 | Val Loss (MAE): 0.0926
+Epoch 025/100 | Train Loss (MAE): 0.1027 | Val Loss (MAE): 0.0936
+Epoch 026/100 | Train Loss (MAE): 0.1025 | Val Loss (MAE): 0.0921
+Epoch 027/100 | Train Loss (MAE): 0.1029 | Val Loss (MAE): 0.0922
+Epoch 028/100 | Train Loss (MAE): 0.1029 | Val Loss (MAE): 0.0945
+Epoch 029/100 | Train Loss (MAE): 0.1020 | Val Loss (MAE): 0.0908
+Epoch 030/100 | Train Loss (MAE): 0.1023 | Val Loss (MAE): 0.0916
+Epoch 031/100 | Train Loss (MAE): 0.1013 | Val Loss (MAE): 0.0906
+Epoch 032/100 | Train Loss (MAE): 0.1013 | Val Loss (MAE): 0.0922
+Epoch 033/100 | Train Loss (MAE): 0.1012 | Val Loss (MAE): 0.0909
+Epoch 034/100 | Train Loss (MAE): 0.1005 | Val Loss (MAE): 0.0913
+Epoch 035/100 | Train Loss (MAE): 0.1005 | Val Loss (MAE): 0.0919
+Epoch 036/100 | Train Loss (MAE): 0.1007 | Val Loss (MAE): 0.0899
+Epoch 037/100 | Train Loss (MAE): 0.1008 | Val Loss (MAE): 0.0925
+Epoch 038/100 | Train Loss (MAE): 0.1014 | Val Loss (MAE): 0.0950
+Epoch 039/100 | Train Loss (MAE): 0.1004 | Val Loss (MAE): 0.0899
+Epoch 040/100 | Train Loss (MAE): 0.1002 | Val Loss (MAE): 0.0934
+Epoch 041/100 | Train Loss (MAE): 0.1007 | Val Loss (MAE): 0.0897
+Epoch 042/100 | Train Loss (MAE): 0.1005 | Val Loss (MAE): 0.0918
+Epoch 043/100 | Train Loss (MAE): 0.0992 | Val Loss (MAE): 0.0895
+Epoch 044/100 | Train Loss (MAE): 0.0993 | Val Loss (MAE): 0.0896
+Epoch 045/100 | Train Loss (MAE): 0.0993 | Val Loss (MAE): 0.0929
+Epoch 046/100 | Train Loss (MAE): 0.0992 | Val Loss (MAE): 0.0914
+Epoch 047/100 | Train Loss (MAE): 0.0994 | Val Loss (MAE): 0.0897
+Epoch 048/100 | Train Loss (MAE): 0.0992 | Val Loss (MAE): 0.0897
+Epoch 049/100 | Train Loss (MAE): 0.0988 | Val Loss (MAE): 0.0884
+Epoch 050/100 | Train Loss (MAE): 0.0984 | Val Loss (MAE): 0.0915
+Epoch 051/100 | Train Loss (MAE): 0.0987 | Val Loss (MAE): 0.0884
+Epoch 052/100 | Train Loss (MAE): 0.0984 | Val Loss (MAE): 0.0883
+Epoch 053/100 | Train Loss (MAE): 0.0990 | Val Loss (MAE): 0.0889
+Epoch 054/100 | Train Loss (MAE): 0.0985 | Val Loss (MAE): 0.0879
+Epoch 055/100 | Train Loss (MAE): 0.0982 | Val Loss (MAE): 0.0884
+Epoch 056/100 | Train Loss (MAE): 0.0977 | Val Loss (MAE): 0.0885
+Epoch 057/100 | Train Loss (MAE): 0.0981 | Val Loss (MAE): 0.0901
+Epoch 058/100 | Train Loss (MAE): 0.0988 | Val Loss (MAE): 0.0914
+Epoch 059/100 | Train Loss (MAE): 0.0977 | Val Loss (MAE): 0.0887
+Epoch 060/100 | Train Loss (MAE): 0.0975 | Val Loss (MAE): 0.0895
+Epoch 061/100 | Train Loss (MAE): 0.0979 | Val Loss (MAE): 0.0884
+Epoch 062/100 | Train Loss (MAE): 0.0974 | Val Loss (MAE): 0.0879
+Epoch 063/100 | Train Loss (MAE): 0.0977 | Val Loss (MAE): 0.0880
+Epoch 064/100 | Train Loss (MAE): 0.0970 | Val Loss (MAE): 0.0879
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead DirectLSTM Metrics (kW) ---
+RMSE: 3.15 | MAE: 1.25 | WAPE: 10.14%
+Graph saved successfully to directlstm_15min_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 3.15 | MAE: 1.25 | WAPE: 10.14%
+
+[Trial 2/5] Executing CommFac/15min_lstm.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead DirectLSTM Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2498 | Val Loss (MAE): 0.1197
+Epoch 002/100 | Train Loss (MAE): 0.1326 | Val Loss (MAE): 0.1130
+Epoch 003/100 | Train Loss (MAE): 0.1248 | Val Loss (MAE): 0.1035
+Epoch 004/100 | Train Loss (MAE): 0.1197 | Val Loss (MAE): 0.1019
+Epoch 005/100 | Train Loss (MAE): 0.1143 | Val Loss (MAE): 0.0995
+Epoch 006/100 | Train Loss (MAE): 0.1123 | Val Loss (MAE): 0.0961
+Epoch 007/100 | Train Loss (MAE): 0.1100 | Val Loss (MAE): 0.0980
+Epoch 008/100 | Train Loss (MAE): 0.1093 | Val Loss (MAE): 0.0970
+Epoch 009/100 | Train Loss (MAE): 0.1080 | Val Loss (MAE): 0.0947
+Epoch 010/100 | Train Loss (MAE): 0.1071 | Val Loss (MAE): 0.0945
+Epoch 011/100 | Train Loss (MAE): 0.1067 | Val Loss (MAE): 0.0943
+Epoch 012/100 | Train Loss (MAE): 0.1060 | Val Loss (MAE): 0.0948
+Epoch 013/100 | Train Loss (MAE): 0.1054 | Val Loss (MAE): 0.0937
+Epoch 014/100 | Train Loss (MAE): 0.1050 | Val Loss (MAE): 0.0938
+Epoch 015/100 | Train Loss (MAE): 0.1048 | Val Loss (MAE): 0.0942
+Epoch 016/100 | Train Loss (MAE): 0.1050 | Val Loss (MAE): 0.0970
+Epoch 017/100 | Train Loss (MAE): 0.1042 | Val Loss (MAE): 0.0937
+Epoch 018/100 | Train Loss (MAE): 0.1045 | Val Loss (MAE): 0.0923
+Epoch 019/100 | Train Loss (MAE): 0.1027 | Val Loss (MAE): 0.0915
+Epoch 020/100 | Train Loss (MAE): 0.1033 | Val Loss (MAE): 0.0918
+Epoch 021/100 | Train Loss (MAE): 0.1033 | Val Loss (MAE): 0.0924
+Epoch 022/100 | Train Loss (MAE): 0.1036 | Val Loss (MAE): 0.0930
+Epoch 023/100 | Train Loss (MAE): 0.1029 | Val Loss (MAE): 0.0917
+Epoch 024/100 | Train Loss (MAE): 0.1018 | Val Loss (MAE): 0.0911
+Epoch 025/100 | Train Loss (MAE): 0.1022 | Val Loss (MAE): 0.0913
+Epoch 026/100 | Train Loss (MAE): 0.1020 | Val Loss (MAE): 0.0926
+Epoch 027/100 | Train Loss (MAE): 0.1018 | Val Loss (MAE): 0.0900
+Epoch 028/100 | Train Loss (MAE): 0.1021 | Val Loss (MAE): 0.0903
+Epoch 029/100 | Train Loss (MAE): 0.1020 | Val Loss (MAE): 0.0914
+Epoch 030/100 | Train Loss (MAE): 0.1013 | Val Loss (MAE): 0.0916
+Epoch 031/100 | Train Loss (MAE): 0.1021 | Val Loss (MAE): 0.0899
+Epoch 032/100 | Train Loss (MAE): 0.1015 | Val Loss (MAE): 0.0916
+Epoch 033/100 | Train Loss (MAE): 0.1010 | Val Loss (MAE): 0.0937
+Epoch 034/100 | Train Loss (MAE): 0.1012 | Val Loss (MAE): 0.0912
+Epoch 035/100 | Train Loss (MAE): 0.1006 | Val Loss (MAE): 0.0898
+Epoch 036/100 | Train Loss (MAE): 0.1007 | Val Loss (MAE): 0.0912
+Epoch 037/100 | Train Loss (MAE): 0.1001 | Val Loss (MAE): 0.0913
+Epoch 038/100 | Train Loss (MAE): 0.1003 | Val Loss (MAE): 0.0911
+Epoch 039/100 | Train Loss (MAE): 0.1004 | Val Loss (MAE): 0.0934
+Epoch 040/100 | Train Loss (MAE): 0.1008 | Val Loss (MAE): 0.0925
+Epoch 041/100 | Train Loss (MAE): 0.0995 | Val Loss (MAE): 0.0901
+Epoch 042/100 | Train Loss (MAE): 0.1001 | Val Loss (MAE): 0.0935
+Epoch 043/100 | Train Loss (MAE): 0.0997 | Val Loss (MAE): 0.0908
+Epoch 044/100 | Train Loss (MAE): 0.1004 | Val Loss (MAE): 0.0912
+Epoch 045/100 | Train Loss (MAE): 0.1003 | Val Loss (MAE): 0.0918
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead DirectLSTM Metrics (kW) ---
+RMSE: 2.65 | MAE: 1.13 | WAPE: 9.11%
+Graph saved successfully to directlstm_15min_ahead_forecast.png
+
+  [Trial 2 Success] -> RMSE: 2.65 | MAE: 1.13 | WAPE: 9.11%
+
+[Trial 3/5] Executing CommFac/15min_lstm.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead DirectLSTM Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2299 | Val Loss (MAE): 0.1188
+Epoch 002/100 | Train Loss (MAE): 0.1315 | Val Loss (MAE): 0.1108
+Epoch 003/100 | Train Loss (MAE): 0.1240 | Val Loss (MAE): 0.1049
+Epoch 004/100 | Train Loss (MAE): 0.1193 | Val Loss (MAE): 0.1026
+Epoch 005/100 | Train Loss (MAE): 0.1149 | Val Loss (MAE): 0.0969
+Epoch 006/100 | Train Loss (MAE): 0.1127 | Val Loss (MAE): 0.0988
+Epoch 007/100 | Train Loss (MAE): 0.1095 | Val Loss (MAE): 0.0965
+Epoch 008/100 | Train Loss (MAE): 0.1083 | Val Loss (MAE): 0.0956
+Epoch 009/100 | Train Loss (MAE): 0.1078 | Val Loss (MAE): 0.0948
+Epoch 010/100 | Train Loss (MAE): 0.1075 | Val Loss (MAE): 0.0940
+Epoch 011/100 | Train Loss (MAE): 0.1058 | Val Loss (MAE): 0.0953
+Epoch 012/100 | Train Loss (MAE): 0.1054 | Val Loss (MAE): 0.0938
+Epoch 013/100 | Train Loss (MAE): 0.1052 | Val Loss (MAE): 0.0943
+Epoch 014/100 | Train Loss (MAE): 0.1053 | Val Loss (MAE): 0.0939
+Epoch 015/100 | Train Loss (MAE): 0.1054 | Val Loss (MAE): 0.0929
+Epoch 016/100 | Train Loss (MAE): 0.1042 | Val Loss (MAE): 0.0995
+Epoch 017/100 | Train Loss (MAE): 0.1037 | Val Loss (MAE): 0.0917
+Epoch 018/100 | Train Loss (MAE): 0.1039 | Val Loss (MAE): 0.0919
+Epoch 019/100 | Train Loss (MAE): 0.1032 | Val Loss (MAE): 0.0918
+Epoch 020/100 | Train Loss (MAE): 0.1034 | Val Loss (MAE): 0.0912
+Epoch 021/100 | Train Loss (MAE): 0.1027 | Val Loss (MAE): 0.0917
+Epoch 022/100 | Train Loss (MAE): 0.1023 | Val Loss (MAE): 0.0913
+Epoch 023/100 | Train Loss (MAE): 0.1028 | Val Loss (MAE): 0.0907
+Epoch 024/100 | Train Loss (MAE): 0.1020 | Val Loss (MAE): 0.0938
+Epoch 025/100 | Train Loss (MAE): 0.1024 | Val Loss (MAE): 0.0963
+Epoch 026/100 | Train Loss (MAE): 0.1022 | Val Loss (MAE): 0.0917
+Epoch 027/100 | Train Loss (MAE): 0.1027 | Val Loss (MAE): 0.0902
+Epoch 028/100 | Train Loss (MAE): 0.1011 | Val Loss (MAE): 0.0922
+Epoch 029/100 | Train Loss (MAE): 0.1012 | Val Loss (MAE): 0.0921
+Epoch 030/100 | Train Loss (MAE): 0.1010 | Val Loss (MAE): 0.0911
+Epoch 031/100 | Train Loss (MAE): 0.1010 | Val Loss (MAE): 0.0893
+Epoch 032/100 | Train Loss (MAE): 0.1011 | Val Loss (MAE): 0.0919
+Epoch 033/100 | Train Loss (MAE): 0.1017 | Val Loss (MAE): 0.0895
+Epoch 034/100 | Train Loss (MAE): 0.1006 | Val Loss (MAE): 0.0900
+Epoch 035/100 | Train Loss (MAE): 0.1009 | Val Loss (MAE): 0.0921
+Epoch 036/100 | Train Loss (MAE): 0.1004 | Val Loss (MAE): 0.0890
+Epoch 037/100 | Train Loss (MAE): 0.0998 | Val Loss (MAE): 0.0901
+Epoch 038/100 | Train Loss (MAE): 0.1001 | Val Loss (MAE): 0.0917
+Epoch 039/100 | Train Loss (MAE): 0.0999 | Val Loss (MAE): 0.0897
+Epoch 040/100 | Train Loss (MAE): 0.0999 | Val Loss (MAE): 0.0896
+Epoch 041/100 | Train Loss (MAE): 0.0997 | Val Loss (MAE): 0.0901
+Epoch 042/100 | Train Loss (MAE): 0.0996 | Val Loss (MAE): 0.0922
+Epoch 043/100 | Train Loss (MAE): 0.0997 | Val Loss (MAE): 0.0929
+Epoch 044/100 | Train Loss (MAE): 0.0993 | Val Loss (MAE): 0.0894
+Epoch 045/100 | Train Loss (MAE): 0.0992 | Val Loss (MAE): 0.0908
+Epoch 046/100 | Train Loss (MAE): 0.0999 | Val Loss (MAE): 0.0927
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead DirectLSTM Metrics (kW) ---
+RMSE: 2.69 | MAE: 1.13 | WAPE: 9.14%
+Graph saved successfully to directlstm_15min_ahead_forecast.png
+
+  [Trial 3 Success] -> RMSE: 2.69 | MAE: 1.13 | WAPE: 9.14%
+
+[Trial 4/5] Executing CommFac/15min_lstm.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead DirectLSTM Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2209 | Val Loss (MAE): 0.1218
+Epoch 002/100 | Train Loss (MAE): 0.1328 | Val Loss (MAE): 0.1081
+Epoch 003/100 | Train Loss (MAE): 0.1248 | Val Loss (MAE): 0.1062
+Epoch 004/100 | Train Loss (MAE): 0.1187 | Val Loss (MAE): 0.1010
+Epoch 005/100 | Train Loss (MAE): 0.1164 | Val Loss (MAE): 0.0995
+Epoch 006/100 | Train Loss (MAE): 0.1130 | Val Loss (MAE): 0.0982
+Epoch 007/100 | Train Loss (MAE): 0.1110 | Val Loss (MAE): 0.0987
+Epoch 008/100 | Train Loss (MAE): 0.1090 | Val Loss (MAE): 0.0977
+Epoch 009/100 | Train Loss (MAE): 0.1083 | Val Loss (MAE): 0.0955
+Epoch 010/100 | Train Loss (MAE): 0.1082 | Val Loss (MAE): 0.0959
+Epoch 011/100 | Train Loss (MAE): 0.1066 | Val Loss (MAE): 0.0938
+Epoch 012/100 | Train Loss (MAE): 0.1058 | Val Loss (MAE): 0.0937
+Epoch 013/100 | Train Loss (MAE): 0.1056 | Val Loss (MAE): 0.0946
+Epoch 014/100 | Train Loss (MAE): 0.1052 | Val Loss (MAE): 0.0937
+Epoch 015/100 | Train Loss (MAE): 0.1055 | Val Loss (MAE): 0.0943
+Epoch 016/100 | Train Loss (MAE): 0.1049 | Val Loss (MAE): 0.0949
+Epoch 017/100 | Train Loss (MAE): 0.1052 | Val Loss (MAE): 0.0962
+Epoch 018/100 | Train Loss (MAE): 0.1043 | Val Loss (MAE): 0.0950
+Epoch 019/100 | Train Loss (MAE): 0.1045 | Val Loss (MAE): 0.0941
+Epoch 020/100 | Train Loss (MAE): 0.1040 | Val Loss (MAE): 0.0927
+Epoch 021/100 | Train Loss (MAE): 0.1033 | Val Loss (MAE): 0.0974
+Epoch 022/100 | Train Loss (MAE): 0.1032 | Val Loss (MAE): 0.0916
+Epoch 023/100 | Train Loss (MAE): 0.1030 | Val Loss (MAE): 0.0933
+Epoch 024/100 | Train Loss (MAE): 0.1034 | Val Loss (MAE): 0.0922
+Epoch 025/100 | Train Loss (MAE): 0.1030 | Val Loss (MAE): 0.0931
+Epoch 026/100 | Train Loss (MAE): 0.1023 | Val Loss (MAE): 0.0915
+Epoch 027/100 | Train Loss (MAE): 0.1030 | Val Loss (MAE): 0.0939
+Epoch 028/100 | Train Loss (MAE): 0.1024 | Val Loss (MAE): 0.0922
+Epoch 029/100 | Train Loss (MAE): 0.1023 | Val Loss (MAE): 0.0927
+Epoch 030/100 | Train Loss (MAE): 0.1020 | Val Loss (MAE): 0.0905
+Epoch 031/100 | Train Loss (MAE): 0.1019 | Val Loss (MAE): 0.0916
+Epoch 032/100 | Train Loss (MAE): 0.1015 | Val Loss (MAE): 0.0914
+Epoch 033/100 | Train Loss (MAE): 0.1013 | Val Loss (MAE): 0.0900
+Epoch 034/100 | Train Loss (MAE): 0.1014 | Val Loss (MAE): 0.0923
+Epoch 035/100 | Train Loss (MAE): 0.1023 | Val Loss (MAE): 0.0904
+Epoch 036/100 | Train Loss (MAE): 0.1013 | Val Loss (MAE): 0.0913
+Epoch 037/100 | Train Loss (MAE): 0.1008 | Val Loss (MAE): 0.0900
+Epoch 038/100 | Train Loss (MAE): 0.1009 | Val Loss (MAE): 0.0901
+Epoch 039/100 | Train Loss (MAE): 0.1009 | Val Loss (MAE): 0.0904
+Epoch 040/100 | Train Loss (MAE): 0.1005 | Val Loss (MAE): 0.0907
+Epoch 041/100 | Train Loss (MAE): 0.1004 | Val Loss (MAE): 0.0913
+Epoch 042/100 | Train Loss (MAE): 0.1008 | Val Loss (MAE): 0.0890
+Epoch 043/100 | Train Loss (MAE): 0.1013 | Val Loss (MAE): 0.0912
+Epoch 044/100 | Train Loss (MAE): 0.1003 | Val Loss (MAE): 0.0896
+Epoch 045/100 | Train Loss (MAE): 0.1006 | Val Loss (MAE): 0.0910
+Epoch 046/100 | Train Loss (MAE): 0.0998 | Val Loss (MAE): 0.0888
+Epoch 047/100 | Train Loss (MAE): 0.0997 | Val Loss (MAE): 0.0921
+Epoch 048/100 | Train Loss (MAE): 0.0996 | Val Loss (MAE): 0.0908
+Epoch 049/100 | Train Loss (MAE): 0.1005 | Val Loss (MAE): 0.0897
+Epoch 050/100 | Train Loss (MAE): 0.0993 | Val Loss (MAE): 0.0901
+Epoch 051/100 | Train Loss (MAE): 0.0994 | Val Loss (MAE): 0.0917
+Epoch 052/100 | Train Loss (MAE): 0.0995 | Val Loss (MAE): 0.0898
+Epoch 053/100 | Train Loss (MAE): 0.0985 | Val Loss (MAE): 0.0915
+Epoch 054/100 | Train Loss (MAE): 0.0996 | Val Loss (MAE): 0.0882
+Epoch 055/100 | Train Loss (MAE): 0.0994 | Val Loss (MAE): 0.0908
+Epoch 056/100 | Train Loss (MAE): 0.0989 | Val Loss (MAE): 0.0896
+Epoch 057/100 | Train Loss (MAE): 0.0991 | Val Loss (MAE): 0.0924
+Epoch 058/100 | Train Loss (MAE): 0.0988 | Val Loss (MAE): 0.0885
+Epoch 059/100 | Train Loss (MAE): 0.0984 | Val Loss (MAE): 0.0902
+Epoch 060/100 | Train Loss (MAE): 0.0980 | Val Loss (MAE): 0.0900
+Epoch 061/100 | Train Loss (MAE): 0.0979 | Val Loss (MAE): 0.0891
+Epoch 062/100 | Train Loss (MAE): 0.0983 | Val Loss (MAE): 0.0896
+Epoch 063/100 | Train Loss (MAE): 0.0991 | Val Loss (MAE): 0.0885
+Epoch 064/100 | Train Loss (MAE): 0.0977 | Val Loss (MAE): 0.0898
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead DirectLSTM Metrics (kW) ---
+RMSE: 2.72 | MAE: 1.13 | WAPE: 9.17%
+Graph saved successfully to directlstm_15min_ahead_forecast.png
+
+  [Trial 4 Success] -> RMSE: 2.72 | MAE: 1.13 | WAPE: 9.17%
+
+[Trial 5/5] Executing CommFac/15min_lstm.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead DirectLSTM Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2356 | Val Loss (MAE): 0.1212
+Epoch 002/100 | Train Loss (MAE): 0.1353 | Val Loss (MAE): 0.1107
+Epoch 003/100 | Train Loss (MAE): 0.1251 | Val Loss (MAE): 0.1057
+Epoch 004/100 | Train Loss (MAE): 0.1203 | Val Loss (MAE): 0.1022
+Epoch 005/100 | Train Loss (MAE): 0.1161 | Val Loss (MAE): 0.0991
+Epoch 006/100 | Train Loss (MAE): 0.1131 | Val Loss (MAE): 0.1000
+Epoch 007/100 | Train Loss (MAE): 0.1106 | Val Loss (MAE): 0.0956
+Epoch 008/100 | Train Loss (MAE): 0.1089 | Val Loss (MAE): 0.0973
+Epoch 009/100 | Train Loss (MAE): 0.1077 | Val Loss (MAE): 0.0956
+Epoch 010/100 | Train Loss (MAE): 0.1065 | Val Loss (MAE): 0.0947
+Epoch 011/100 | Train Loss (MAE): 0.1060 | Val Loss (MAE): 0.0930
+Epoch 012/100 | Train Loss (MAE): 0.1054 | Val Loss (MAE): 0.0935
+Epoch 013/100 | Train Loss (MAE): 0.1058 | Val Loss (MAE): 0.0966
+Epoch 014/100 | Train Loss (MAE): 0.1046 | Val Loss (MAE): 0.0936
+Epoch 015/100 | Train Loss (MAE): 0.1056 | Val Loss (MAE): 0.0954
+Epoch 016/100 | Train Loss (MAE): 0.1043 | Val Loss (MAE): 0.0935
+Epoch 017/100 | Train Loss (MAE): 0.1039 | Val Loss (MAE): 0.0925
+Epoch 018/100 | Train Loss (MAE): 0.1036 | Val Loss (MAE): 0.0922
+Epoch 019/100 | Train Loss (MAE): 0.1039 | Val Loss (MAE): 0.0943
+Epoch 020/100 | Train Loss (MAE): 0.1034 | Val Loss (MAE): 0.0938
+Epoch 021/100 | Train Loss (MAE): 0.1030 | Val Loss (MAE): 0.0921
+Epoch 022/100 | Train Loss (MAE): 0.1028 | Val Loss (MAE): 0.0949
+Epoch 023/100 | Train Loss (MAE): 0.1032 | Val Loss (MAE): 0.0910
+Epoch 024/100 | Train Loss (MAE): 0.1027 | Val Loss (MAE): 0.0922
+Epoch 025/100 | Train Loss (MAE): 0.1020 | Val Loss (MAE): 0.0921
+Epoch 026/100 | Train Loss (MAE): 0.1019 | Val Loss (MAE): 0.0979
+Epoch 027/100 | Train Loss (MAE): 0.1023 | Val Loss (MAE): 0.0930
+Epoch 028/100 | Train Loss (MAE): 0.1017 | Val Loss (MAE): 0.0905
+Epoch 029/100 | Train Loss (MAE): 0.1015 | Val Loss (MAE): 0.0934
+Epoch 030/100 | Train Loss (MAE): 0.1015 | Val Loss (MAE): 0.0938
+Epoch 031/100 | Train Loss (MAE): 0.1019 | Val Loss (MAE): 0.0908
+Epoch 032/100 | Train Loss (MAE): 0.1015 | Val Loss (MAE): 0.0902
+Epoch 033/100 | Train Loss (MAE): 0.1011 | Val Loss (MAE): 0.0937
+Epoch 034/100 | Train Loss (MAE): 0.1009 | Val Loss (MAE): 0.0979
+Epoch 035/100 | Train Loss (MAE): 0.1011 | Val Loss (MAE): 0.0904
+Epoch 036/100 | Train Loss (MAE): 0.1010 | Val Loss (MAE): 0.0902
+Epoch 037/100 | Train Loss (MAE): 0.1003 | Val Loss (MAE): 0.0907
+Epoch 038/100 | Train Loss (MAE): 0.1002 | Val Loss (MAE): 0.0926
+Epoch 039/100 | Train Loss (MAE): 0.1000 | Val Loss (MAE): 0.0902
+Epoch 040/100 | Train Loss (MAE): 0.1001 | Val Loss (MAE): 0.0903
+Epoch 041/100 | Train Loss (MAE): 0.1003 | Val Loss (MAE): 0.0894
+Epoch 042/100 | Train Loss (MAE): 0.1003 | Val Loss (MAE): 0.0899
+Epoch 043/100 | Train Loss (MAE): 0.1001 | Val Loss (MAE): 0.0911
+Epoch 044/100 | Train Loss (MAE): 0.0993 | Val Loss (MAE): 0.0902
+Epoch 045/100 | Train Loss (MAE): 0.1001 | Val Loss (MAE): 0.0907
+Epoch 046/100 | Train Loss (MAE): 0.0999 | Val Loss (MAE): 0.0898
+Epoch 047/100 | Train Loss (MAE): 0.1000 | Val Loss (MAE): 0.0909
+Epoch 048/100 | Train Loss (MAE): 0.0993 | Val Loss (MAE): 0.0897
+Epoch 049/100 | Train Loss (MAE): 0.0997 | Val Loss (MAE): 0.0895
+Epoch 050/100 | Train Loss (MAE): 0.0997 | Val Loss (MAE): 0.0890
+Epoch 051/100 | Train Loss (MAE): 0.0986 | Val Loss (MAE): 0.0896
+Epoch 052/100 | Train Loss (MAE): 0.0988 | Val Loss (MAE): 0.0893
+Epoch 053/100 | Train Loss (MAE): 0.0987 | Val Loss (MAE): 0.0903
+Epoch 054/100 | Train Loss (MAE): 0.0993 | Val Loss (MAE): 0.0904
+Epoch 055/100 | Train Loss (MAE): 0.0988 | Val Loss (MAE): 0.0894
+Epoch 056/100 | Train Loss (MAE): 0.0988 | Val Loss (MAE): 0.0888
+Epoch 057/100 | Train Loss (MAE): 0.0978 | Val Loss (MAE): 0.0882
+Epoch 058/100 | Train Loss (MAE): 0.0982 | Val Loss (MAE): 0.0891
+Epoch 059/100 | Train Loss (MAE): 0.0980 | Val Loss (MAE): 0.0883
+Epoch 060/100 | Train Loss (MAE): 0.0981 | Val Loss (MAE): 0.0893
+Epoch 061/100 | Train Loss (MAE): 0.0981 | Val Loss (MAE): 0.0892
+Epoch 062/100 | Train Loss (MAE): 0.0982 | Val Loss (MAE): 0.0878
+Epoch 063/100 | Train Loss (MAE): 0.0981 | Val Loss (MAE): 0.0895
+Epoch 064/100 | Train Loss (MAE): 0.0976 | Val Loss (MAE): 0.0885
+Epoch 065/100 | Train Loss (MAE): 0.0978 | Val Loss (MAE): 0.0886
+Epoch 066/100 | Train Loss (MAE): 0.0971 | Val Loss (MAE): 0.0896
+Epoch 067/100 | Train Loss (MAE): 0.0977 | Val Loss (MAE): 0.0897
+Epoch 068/100 | Train Loss (MAE): 0.0970 | Val Loss (MAE): 0.0886
+Epoch 069/100 | Train Loss (MAE): 0.0969 | Val Loss (MAE): 0.0883
+Epoch 070/100 | Train Loss (MAE): 0.0972 | Val Loss (MAE): 0.0883
+Epoch 071/100 | Train Loss (MAE): 0.0974 | Val Loss (MAE): 0.0890
+Epoch 072/100 | Train Loss (MAE): 0.0967 | Val Loss (MAE): 0.0894
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 15-Minute-Ahead DirectLSTM Metrics (kW) ---
+RMSE: 3.18 | MAE: 1.28 | WAPE: 10.34%
+Graph saved successfully to directlstm_15min_ahead_forecast.png
+
+  [Trial 5 Success] -> RMSE: 3.18 | MAE: 1.28 | WAPE: 10.34%
+
+==================================================
+FINAL STATISTICAL SUMMARY (5 SUCCESSFUL TRIALS)
+Target Script: CommFac/15min_lstm.py
+==================================================
+RMSE: 2.88 ± 0.24
+MAE:  1.18 ± 0.07
+WAPE: 9.58% ± 0.54%
+==================================================
+
+--- SUCCESS: CommFac/15min_lstm.py ---
+
+--- STARTING EVALUATION: CommFac/1hr_tft.py ---
+Timestamp: 2026-10-16 15:30:52
+
+--- Starting 5-Run Evaluation for CommFac/1hr_tft.py ---
+
+[Trial 1/5] Executing CommFac/1hr_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2190 | Val Loss (MAE): 0.2002
+Epoch 002/100 | Train Loss (MAE): 0.1789 | Val Loss (MAE): 0.1642
+Epoch 003/100 | Train Loss (MAE): 0.1680 | Val Loss (MAE): 0.1468
+Epoch 004/100 | Train Loss (MAE): 0.1666 | Val Loss (MAE): 0.1439
+Epoch 005/100 | Train Loss (MAE): 0.1590 | Val Loss (MAE): 0.1583
+Epoch 006/100 | Train Loss (MAE): 0.1568 | Val Loss (MAE): 0.1643
+Epoch 007/100 | Train Loss (MAE): 0.1554 | Val Loss (MAE): 0.1552
+Epoch 008/100 | Train Loss (MAE): 0.1544 | Val Loss (MAE): 0.1606
+Epoch 009/100 | Train Loss (MAE): 0.1516 | Val Loss (MAE): 0.1264
+Epoch 010/100 | Train Loss (MAE): 0.1521 | Val Loss (MAE): 0.1417
+Epoch 011/100 | Train Loss (MAE): 0.1475 | Val Loss (MAE): 0.1465
+Epoch 012/100 | Train Loss (MAE): 0.1480 | Val Loss (MAE): 0.1456
+Epoch 013/100 | Train Loss (MAE): 0.1490 | Val Loss (MAE): 0.1569
+Epoch 014/100 | Train Loss (MAE): 0.1482 | Val Loss (MAE): 0.1353
+Epoch 015/100 | Train Loss (MAE): 0.1467 | Val Loss (MAE): 0.1287
+Epoch 016/100 | Train Loss (MAE): 0.1451 | Val Loss (MAE): 0.1248
+Epoch 017/100 | Train Loss (MAE): 0.1434 | Val Loss (MAE): 0.1345
+Epoch 018/100 | Train Loss (MAE): 0.1413 | Val Loss (MAE): 0.1386
+Epoch 019/100 | Train Loss (MAE): 0.1447 | Val Loss (MAE): 0.1268
+Epoch 020/100 | Train Loss (MAE): 0.1424 | Val Loss (MAE): 0.1274
+Epoch 021/100 | Train Loss (MAE): 0.1393 | Val Loss (MAE): 0.1224
+Epoch 022/100 | Train Loss (MAE): 0.1408 | Val Loss (MAE): 0.1233
+Epoch 023/100 | Train Loss (MAE): 0.1396 | Val Loss (MAE): 0.1295
+Epoch 024/100 | Train Loss (MAE): 0.1393 | Val Loss (MAE): 0.1282
+Epoch 025/100 | Train Loss (MAE): 0.1410 | Val Loss (MAE): 0.1391
+Epoch 026/100 | Train Loss (MAE): 0.1421 | Val Loss (MAE): 0.1266
+Epoch 027/100 | Train Loss (MAE): 0.1392 | Val Loss (MAE): 0.1288
+Epoch 028/100 | Train Loss (MAE): 0.1417 | Val Loss (MAE): 0.1328
+Epoch 029/100 | Train Loss (MAE): 0.1379 | Val Loss (MAE): 0.1232
+Epoch 030/100 | Train Loss (MAE): 0.1379 | Val Loss (MAE): 0.1239
+Epoch 031/100 | Train Loss (MAE): 0.1375 | Val Loss (MAE): 0.1231
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 2.77 | MAE: 1.33 | WAPE: 10.77%
+Graph saved successfully to transformer_1hr_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 2.77 | MAE: 1.33 | WAPE: 10.77%
+
+[Trial 2/5] Executing CommFac/1hr_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2177 | Val Loss (MAE): 0.1919
+Epoch 002/100 | Train Loss (MAE): 0.1760 | Val Loss (MAE): 0.1840
+Epoch 003/100 | Train Loss (MAE): 0.1695 | Val Loss (MAE): 0.1470
+Epoch 004/100 | Train Loss (MAE): 0.1650 | Val Loss (MAE): 0.1423
+Epoch 005/100 | Train Loss (MAE): 0.1610 | Val Loss (MAE): 0.1812
+Epoch 006/100 | Train Loss (MAE): 0.1571 | Val Loss (MAE): 0.1939
+Epoch 007/100 | Train Loss (MAE): 0.1520 | Val Loss (MAE): 0.1507
+Epoch 008/100 | Train Loss (MAE): 0.1528 | Val Loss (MAE): 0.1522
+Epoch 009/100 | Train Loss (MAE): 0.1506 | Val Loss (MAE): 0.1357
+Epoch 010/100 | Train Loss (MAE): 0.1500 | Val Loss (MAE): 0.1654
+Epoch 011/100 | Train Loss (MAE): 0.1493 | Val Loss (MAE): 0.1574
+Epoch 012/100 | Train Loss (MAE): 0.1448 | Val Loss (MAE): 0.1487
+Epoch 013/100 | Train Loss (MAE): 0.1468 | Val Loss (MAE): 0.1767
+Epoch 014/100 | Train Loss (MAE): 0.1454 | Val Loss (MAE): 0.1653
+Epoch 015/100 | Train Loss (MAE): 0.1439 | Val Loss (MAE): 0.1516
+Epoch 016/100 | Train Loss (MAE): 0.1440 | Val Loss (MAE): 0.1565
+Epoch 017/100 | Train Loss (MAE): 0.1439 | Val Loss (MAE): 0.1431
+Epoch 018/100 | Train Loss (MAE): 0.1443 | Val Loss (MAE): 0.1315
+Epoch 019/100 | Train Loss (MAE): 0.1411 | Val Loss (MAE): 0.1547
+Epoch 020/100 | Train Loss (MAE): 0.1393 | Val Loss (MAE): 0.1387
+Epoch 021/100 | Train Loss (MAE): 0.1395 | Val Loss (MAE): 0.1382
+Epoch 022/100 | Train Loss (MAE): 0.1393 | Val Loss (MAE): 0.1453
+Epoch 023/100 | Train Loss (MAE): 0.1414 | Val Loss (MAE): 0.1574
+Epoch 024/100 | Train Loss (MAE): 0.1388 | Val Loss (MAE): 0.1460
+Epoch 025/100 | Train Loss (MAE): 0.1375 | Val Loss (MAE): 0.1444
+Epoch 026/100 | Train Loss (MAE): 0.1392 | Val Loss (MAE): 0.1381
+Epoch 027/100 | Train Loss (MAE): 0.1372 | Val Loss (MAE): 0.1468
+Epoch 028/100 | Train Loss (MAE): 0.1374 | Val Loss (MAE): 0.1512
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 3.08 | MAE: 1.46 | WAPE: 11.80%
+Graph saved successfully to transformer_1hr_ahead_forecast.png
+
+  [Trial 2 Success] -> RMSE: 3.08 | MAE: 1.46 | WAPE: 11.80%
+
+[Trial 3/5] Executing CommFac/1hr_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2231 | Val Loss (MAE): 0.1683
+Epoch 002/100 | Train Loss (MAE): 0.1765 | Val Loss (MAE): 0.1947
+Epoch 003/100 | Train Loss (MAE): 0.1705 | Val Loss (MAE): 0.1807
+Epoch 004/100 | Train Loss (MAE): 0.1665 | Val Loss (MAE): 0.1433
+Epoch 005/100 | Train Loss (MAE): 0.1614 | Val Loss (MAE): 0.1497
+Epoch 006/100 | Train Loss (MAE): 0.1618 | Val Loss (MAE): 0.1806
+Epoch 007/100 | Train Loss (MAE): 0.1587 | Val Loss (MAE): 0.1538
+Epoch 008/100 | Train Loss (MAE): 0.1544 | Val Loss (MAE): 0.1264
+Epoch 009/100 | Train Loss (MAE): 0.1542 | Val Loss (MAE): 0.1611
+Epoch 010/100 | Train Loss (MAE): 0.1500 | Val Loss (MAE): 0.1414
+Epoch 011/100 | Train Loss (MAE): 0.1471 | Val Loss (MAE): 0.1523
+Epoch 012/100 | Train Loss (MAE): 0.1489 | Val Loss (MAE): 0.1712
+Epoch 013/100 | Train Loss (MAE): 0.1459 | Val Loss (MAE): 0.1498
+Epoch 014/100 | Train Loss (MAE): 0.1465 | Val Loss (MAE): 0.1594
+Epoch 015/100 | Train Loss (MAE): 0.1447 | Val Loss (MAE): 0.1506
+Epoch 016/100 | Train Loss (MAE): 0.1446 | Val Loss (MAE): 0.1378
+Epoch 017/100 | Train Loss (MAE): 0.1417 | Val Loss (MAE): 0.1526
+Epoch 018/100 | Train Loss (MAE): 0.1434 | Val Loss (MAE): 0.1308
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 2.98 | MAE: 1.40 | WAPE: 11.31%
+Graph saved successfully to transformer_1hr_ahead_forecast.png
+
+  [Trial 3 Success] -> RMSE: 2.98 | MAE: 1.40 | WAPE: 11.31%
+
+[Trial 4/5] Executing CommFac/1hr_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2161 | Val Loss (MAE): 0.1397
+Epoch 002/100 | Train Loss (MAE): 0.1742 | Val Loss (MAE): 0.1516
+Epoch 003/100 | Train Loss (MAE): 0.1668 | Val Loss (MAE): 0.1532
+Epoch 004/100 | Train Loss (MAE): 0.1623 | Val Loss (MAE): 0.1538
+Epoch 005/100 | Train Loss (MAE): 0.1614 | Val Loss (MAE): 0.1466
+Epoch 006/100 | Train Loss (MAE): 0.1590 | Val Loss (MAE): 0.1297
+Epoch 007/100 | Train Loss (MAE): 0.1548 | Val Loss (MAE): 0.1714
+Epoch 008/100 | Train Loss (MAE): 0.1509 | Val Loss (MAE): 0.1491
+Epoch 009/100 | Train Loss (MAE): 0.1514 | Val Loss (MAE): 0.1375
+Epoch 010/100 | Train Loss (MAE): 0.1505 | Val Loss (MAE): 0.1198
+Epoch 011/100 | Train Loss (MAE): 0.1475 | Val Loss (MAE): 0.1398
+Epoch 012/100 | Train Loss (MAE): 0.1486 | Val Loss (MAE): 0.1614
+Epoch 013/100 | Train Loss (MAE): 0.1488 | Val Loss (MAE): 0.1269
+Epoch 014/100 | Train Loss (MAE): 0.1470 | Val Loss (MAE): 0.1331
+Epoch 015/100 | Train Loss (MAE): 0.1445 | Val Loss (MAE): 0.1489
+Epoch 016/100 | Train Loss (MAE): 0.1438 | Val Loss (MAE): 0.1377
+Epoch 017/100 | Train Loss (MAE): 0.1453 | Val Loss (MAE): 0.1437
+Epoch 018/100 | Train Loss (MAE): 0.1435 | Val Loss (MAE): 0.1580
+Epoch 019/100 | Train Loss (MAE): 0.1414 | Val Loss (MAE): 0.1366
+Epoch 020/100 | Train Loss (MAE): 0.1428 | Val Loss (MAE): 0.1480
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 2.91 | MAE: 1.38 | WAPE: 11.19%
+Graph saved successfully to transformer_1hr_ahead_forecast.png
+
+  [Trial 4 Success] -> RMSE: 2.91 | MAE: 1.38 | WAPE: 11.19%
+
+[Trial 5/5] Executing CommFac/1hr_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2199 | Val Loss (MAE): 0.1677
+Epoch 002/100 | Train Loss (MAE): 0.1720 | Val Loss (MAE): 0.1478
+Epoch 003/100 | Train Loss (MAE): 0.1684 | Val Loss (MAE): 0.1505
+Epoch 004/100 | Train Loss (MAE): 0.1659 | Val Loss (MAE): 0.1901
+Epoch 005/100 | Train Loss (MAE): 0.1604 | Val Loss (MAE): 0.1844
+Epoch 006/100 | Train Loss (MAE): 0.1581 | Val Loss (MAE): 0.1399
+Epoch 007/100 | Train Loss (MAE): 0.1582 | Val Loss (MAE): 0.1559
+Epoch 008/100 | Train Loss (MAE): 0.1557 | Val Loss (MAE): 0.2020
+Epoch 009/100 | Train Loss (MAE): 0.1543 | Val Loss (MAE): 0.1404
+Epoch 010/100 | Train Loss (MAE): 0.1513 | Val Loss (MAE): 0.1627
+Epoch 011/100 | Train Loss (MAE): 0.1528 | Val Loss (MAE): 0.1523
+Epoch 012/100 | Train Loss (MAE): 0.1495 | Val Loss (MAE): 0.1241
+Epoch 013/100 | Train Loss (MAE): 0.1487 | Val Loss (MAE): 0.1552
+Epoch 014/100 | Train Loss (MAE): 0.1475 | Val Loss (MAE): 0.1617
+Epoch 015/100 | Train Loss (MAE): 0.1468 | Val Loss (MAE): 0.1379
+Epoch 016/100 | Train Loss (MAE): 0.1465 | Val Loss (MAE): 0.1426
+Epoch 017/100 | Train Loss (MAE): 0.1455 | Val Loss (MAE): 0.1377
+Epoch 018/100 | Train Loss (MAE): 0.1463 | Val Loss (MAE): 0.1347
+Epoch 019/100 | Train Loss (MAE): 0.1429 | Val Loss (MAE): 0.1382
+Epoch 020/100 | Train Loss (MAE): 0.1428 | Val Loss (MAE): 0.1469
+Epoch 021/100 | Train Loss (MAE): 0.1420 | Val Loss (MAE): 0.1304
+Epoch 022/100 | Train Loss (MAE): 0.1431 | Val Loss (MAE): 0.1241
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 2.98 | MAE: 1.41 | WAPE: 11.39%
+Graph saved successfully to transformer_1hr_ahead_forecast.png
+
+  [Trial 5 Success] -> RMSE: 2.98 | MAE: 1.41 | WAPE: 11.39%
+
+==================================================
+FINAL STATISTICAL SUMMARY (5 SUCCESSFUL TRIALS)
+Target Script: CommFac/1hr_tft.py
+==================================================
+RMSE: 2.94 ± 0.10
+MAE:  1.40 ± 0.04
+WAPE: 11.29% ± 0.33%
+==================================================
+
+--- SUCCESS: CommFac/1hr_tft.py ---
+
+--- STARTING EVALUATION: CommFac/1hr_seq2seq.py ---
+Timestamp: 2026-10-16 15:39:35
+
+--- Starting 5-Run Evaluation for CommFac/1hr_seq2seq.py ---
+
+[Trial 1/5] Executing CommFac/1hr_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3586 | Val Loss (MAE): 0.1435
+Epoch 002/100 | Train Loss (MAE): 0.1732 | Val Loss (MAE): 0.1345
+Epoch 003/100 | Train Loss (MAE): 0.1643 | Val Loss (MAE): 0.1316
+Epoch 004/100 | Train Loss (MAE): 0.1598 | Val Loss (MAE): 0.1311
+Epoch 005/100 | Train Loss (MAE): 0.1564 | Val Loss (MAE): 0.1290
+Epoch 006/100 | Train Loss (MAE): 0.1544 | Val Loss (MAE): 0.1285
+Epoch 007/100 | Train Loss (MAE): 0.1528 | Val Loss (MAE): 0.1286
+Epoch 008/100 | Train Loss (MAE): 0.1508 | Val Loss (MAE): 0.1298
+Epoch 009/100 | Train Loss (MAE): 0.1500 | Val Loss (MAE): 0.1256
+Epoch 010/100 | Train Loss (MAE): 0.1497 | Val Loss (MAE): 0.1260
+Epoch 011/100 | Train Loss (MAE): 0.1472 | Val Loss (MAE): 0.1248
+Epoch 012/100 | Train Loss (MAE): 0.1461 | Val Loss (MAE): 0.1256
+Epoch 013/100 | Train Loss (MAE): 0.1453 | Val Loss (MAE): 0.1246
+Epoch 014/100 | Train Loss (MAE): 0.1434 | Val Loss (MAE): 0.1231
+Epoch 015/100 | Train Loss (MAE): 0.1437 | Val Loss (MAE): 0.1267
+Epoch 016/100 | Train Loss (MAE): 0.1426 | Val Loss (MAE): 0.1241
+Epoch 017/100 | Train Loss (MAE): 0.1408 | Val Loss (MAE): 0.1226
+Epoch 018/100 | Train Loss (MAE): 0.1402 | Val Loss (MAE): 0.1219
+Epoch 019/100 | Train Loss (MAE): 0.1399 | Val Loss (MAE): 0.1230
+Epoch 020/100 | Train Loss (MAE): 0.1382 | Val Loss (MAE): 0.1216
+Epoch 021/100 | Train Loss (MAE): 0.1370 | Val Loss (MAE): 0.1209
+Epoch 022/100 | Train Loss (MAE): 0.1351 | Val Loss (MAE): 0.1199
+Epoch 023/100 | Train Loss (MAE): 0.1345 | Val Loss (MAE): 0.1218
+Epoch 024/100 | Train Loss (MAE): 0.1351 | Val Loss (MAE): 0.1200
+Epoch 025/100 | Train Loss (MAE): 0.1348 | Val Loss (MAE): 0.1197
+Epoch 026/100 | Train Loss (MAE): 0.1327 | Val Loss (MAE): 0.1179
+Epoch 027/100 | Train Loss (MAE): 0.1306 | Val Loss (MAE): 0.1165
+Epoch 028/100 | Train Loss (MAE): 0.1298 | Val Loss (MAE): 0.1157
+Epoch 029/100 | Train Loss (MAE): 0.1291 | Val Loss (MAE): 0.1149
+Epoch 030/100 | Train Loss (MAE): 0.1280 | Val Loss (MAE): 0.1149
+Epoch 031/100 | Train Loss (MAE): 0.1272 | Val Loss (MAE): 0.1142
+Epoch 032/100 | Train Loss (MAE): 0.1263 | Val Loss (MAE): 0.1138
+Epoch 033/100 | Train Loss (MAE): 0.1253 | Val Loss (MAE): 0.1123
+Epoch 034/100 | Train Loss (MAE): 0.1256 | Val Loss (MAE): 0.1128
+Epoch 035/100 | Train Loss (MAE): 0.1241 | Val Loss (MAE): 0.1132
+Epoch 036/100 | Train Loss (MAE): 0.1235 | Val Loss (MAE): 0.1142
+Epoch 037/100 | Train Loss (MAE): 0.1235 | Val Loss (MAE): 0.1121
+Epoch 038/100 | Train Loss (MAE): 0.1221 | Val Loss (MAE): 0.1141
+Epoch 039/100 | Train Loss (MAE): 0.1210 | Val Loss (MAE): 0.1118
+Epoch 040/100 | Train Loss (MAE): 0.1202 | Val Loss (MAE): 0.1137
+Epoch 041/100 | Train Loss (MAE): 0.1189 | Val Loss (MAE): 0.1113
+Epoch 042/100 | Train Loss (MAE): 0.1191 | Val Loss (MAE): 0.1126
+Epoch 043/100 | Train Loss (MAE): 0.1175 | Val Loss (MAE): 0.1123
+Epoch 044/100 | Train Loss (MAE): 0.1177 | Val Loss (MAE): 0.1137
+Epoch 045/100 | Train Loss (MAE): 0.1169 | Val Loss (MAE): 0.1101
+Epoch 046/100 | Train Loss (MAE): 0.1165 | Val Loss (MAE): 0.1145
+Epoch 047/100 | Train Loss (MAE): 0.1159 | Val Loss (MAE): 0.1113
+Epoch 048/100 | Train Loss (MAE): 0.1149 | Val Loss (MAE): 0.1109
+Epoch 049/100 | Train Loss (MAE): 0.1146 | Val Loss (MAE): 0.1089
+Epoch 050/100 | Train Loss (MAE): 0.1127 | Val Loss (MAE): 0.1117
+Epoch 051/100 | Train Loss (MAE): 0.1121 | Val Loss (MAE): 0.1117
+Epoch 052/100 | Train Loss (MAE): 0.1125 | Val Loss (MAE): 0.1101
+Epoch 053/100 | Train Loss (MAE): 0.1113 | Val Loss (MAE): 0.1112
+Epoch 054/100 | Train Loss (MAE): 0.1102 | Val Loss (MAE): 0.1121
+Epoch 055/100 | Train Loss (MAE): 0.1098 | Val Loss (MAE): 0.1124
+Epoch 056/100 | Train Loss (MAE): 0.1094 | Val Loss (MAE): 0.1132
+Epoch 057/100 | Train Loss (MAE): 0.1092 | Val Loss (MAE): 0.1112
+Epoch 058/100 | Train Loss (MAE): 0.1086 | Val Loss (MAE): 0.1102
+Epoch 059/100 | Train Loss (MAE): 0.1078 | Val Loss (MAE): 0.1114
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead Seq2Seq Metrics (kW) ---
+RMSE: 3.00 | MAE: 1.42 | WAPE: 11.52%
+Graph saved successfully to seq2seq_1hr_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 3.00 | MAE: 1.42 | WAPE: 11.52%
+
+[Trial 2/5] Executing CommFac/1hr_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3647 | Val Loss (MAE): 0.1457
+Epoch 002/100 | Train Loss (MAE): 0.1722 | Val Loss (MAE): 0.1369
+Epoch 003/100 | Train Loss (MAE): 0.1647 | Val Loss (MAE): 0.1329
+Epoch 004/100 | Train Loss (MAE): 0.1593 | Val Loss (MAE): 0.1295
+Epoch 005/100 | Train Loss (MAE): 0.1571 | Val Loss (MAE): 0.1346
+Epoch 006/100 | Train Loss (MAE): 0.1548 | Val Loss (MAE): 0.1324
+Epoch 007/100 | Train Loss (MAE): 0.1542 | Val Loss (MAE): 0.1275
+Epoch 008/100 | Train Loss (MAE): 0.1512 | Val Loss (MAE): 0.1272
+Epoch 009/100 | Train Loss (MAE): 0.1496 | Val Loss (MAE): 0.1266
+Epoch 010/100 | Train Loss (MAE): 0.1481 | Val Loss (MAE): 0.1268
+Epoch 011/100 | Train Loss (MAE): 0.1484 | Val Loss (MAE): 0.1268
+Epoch 012/100 | Train Loss (MAE): 0.1465 | Val Loss (MAE): 0.1249
+Epoch 013/100 | Train Loss (MAE): 0.1452 | Val Loss (MAE): 0.1265
+Epoch 014/100 | Train Loss (MAE): 0.1436 | Val Loss (MAE): 0.1233
+Epoch 015/100 | Train Loss (MAE): 0.1435 | Val Loss (MAE): 0.1251
+Epoch 016/100 | Train Loss (MAE): 0.1412 | Val Loss (MAE): 0.1238
+Epoch 017/100 | Train Loss (MAE): 0.1405 | Val Loss (MAE): 0.1256
+Epoch 018/100 | Train Loss (MAE): 0.1395 | Val Loss (MAE): 0.1237
+Epoch 019/100 | Train Loss (MAE): 0.1379 | Val Loss (MAE): 0.1209
+Epoch 020/100 | Train Loss (MAE): 0.1387 | Val Loss (MAE): 0.1210
+Epoch 021/100 | Train Loss (MAE): 0.1359 | Val Loss (MAE): 0.1220
+Epoch 022/100 | Train Loss (MAE): 0.1348 | Val Loss (MAE): 0.1208
+Epoch 023/100 | Train Loss (MAE): 0.1347 | Val Loss (MAE): 0.1200
+Epoch 024/100 | Train Loss (MAE): 0.1343 | Val Loss (MAE): 0.1205
+Epoch 025/100 | Train Loss (MAE): 0.1328 | Val Loss (MAE): 0.1191
+Epoch 026/100 | Train Loss (MAE): 0.1317 | Val Loss (MAE): 0.1170
+Epoch 027/100 | Train Loss (MAE): 0.1308 | Val Loss (MAE): 0.1166
+Epoch 028/100 | Train Loss (MAE): 0.1297 | Val Loss (MAE): 0.1171
+Epoch 029/100 | Train Loss (MAE): 0.1289 | Val Loss (MAE): 0.1139
+Epoch 030/100 | Train Loss (MAE): 0.1283 | Val Loss (MAE): 0.1139
+Epoch 031/100 | Train Loss (MAE): 0.1263 | Val Loss (MAE): 0.1131
+Epoch 032/100 | Train Loss (MAE): 0.1271 | Val Loss (MAE): 0.1165
+Epoch 033/100 | Train Loss (MAE): 0.1255 | Val Loss (MAE): 0.1157
+Epoch 034/100 | Train Loss (MAE): 0.1251 | Val Loss (MAE): 0.1151
+Epoch 035/100 | Train Loss (MAE): 0.1242 | Val Loss (MAE): 0.1140
+Epoch 036/100 | Train Loss (MAE): 0.1236 | Val Loss (MAE): 0.1131
+Epoch 037/100 | Train Loss (MAE): 0.1224 | Val Loss (MAE): 0.1159
+Epoch 038/100 | Train Loss (MAE): 0.1217 | Val Loss (MAE): 0.1122
+Epoch 039/100 | Train Loss (MAE): 0.1219 | Val Loss (MAE): 0.1128
+Epoch 040/100 | Train Loss (MAE): 0.1221 | Val Loss (MAE): 0.1174
+Epoch 041/100 | Train Loss (MAE): 0.1206 | Val Loss (MAE): 0.1119
+Epoch 042/100 | Train Loss (MAE): 0.1200 | Val Loss (MAE): 0.1117
+Epoch 043/100 | Train Loss (MAE): 0.1189 | Val Loss (MAE): 0.1140
+Epoch 044/100 | Train Loss (MAE): 0.1182 | Val Loss (MAE): 0.1124
+Epoch 045/100 | Train Loss (MAE): 0.1172 | Val Loss (MAE): 0.1121
+Epoch 046/100 | Train Loss (MAE): 0.1165 | Val Loss (MAE): 0.1132
+Epoch 047/100 | Train Loss (MAE): 0.1158 | Val Loss (MAE): 0.1132
+Epoch 048/100 | Train Loss (MAE): 0.1156 | Val Loss (MAE): 0.1135
+Epoch 049/100 | Train Loss (MAE): 0.1150 | Val Loss (MAE): 0.1118
+Epoch 050/100 | Train Loss (MAE): 0.1140 | Val Loss (MAE): 0.1118
+Epoch 051/100 | Train Loss (MAE): 0.1136 | Val Loss (MAE): 0.1148
+Epoch 052/100 | Train Loss (MAE): 0.1127 | Val Loss (MAE): 0.1122
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead Seq2Seq Metrics (kW) ---
+RMSE: 3.15 | MAE: 1.50 | WAPE: 12.14%
+Graph saved successfully to seq2seq_1hr_ahead_forecast.png
+
+  [Trial 2 Success] -> RMSE: 3.15 | MAE: 1.50 | WAPE: 12.14%
+
+[Trial 3/5] Executing CommFac/1hr_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3595 | Val Loss (MAE): 0.1494
+Epoch 002/100 | Train Loss (MAE): 0.1721 | Val Loss (MAE): 0.1401
+Epoch 003/100 | Train Loss (MAE): 0.1641 | Val Loss (MAE): 0.1303
+Epoch 004/100 | Train Loss (MAE): 0.1582 | Val Loss (MAE): 0.1316
+Epoch 005/100 | Train Loss (MAE): 0.1551 | Val Loss (MAE): 0.1338
+Epoch 006/100 | Train Loss (MAE): 0.1536 | Val Loss (MAE): 0.1275
+Epoch 007/100 | Train Loss (MAE): 0.1518 | Val Loss (MAE): 0.1275
+Epoch 008/100 | Train Loss (MAE): 0.1507 | Val Loss (MAE): 0.1266
+Epoch 009/100 | Train Loss (MAE): 0.1482 | Val Loss (MAE): 0.1261
+Epoch 010/100 | Train Loss (MAE): 0.1467 | Val Loss (MAE): 0.1258
+Epoch 011/100 | Train Loss (MAE): 0.1457 | Val Loss (MAE): 0.1258
+Epoch 012/100 | Train Loss (MAE): 0.1452 | Val Loss (MAE): 0.1254
+Epoch 013/100 | Train Loss (MAE): 0.1422 | Val Loss (MAE): 0.1255
+Epoch 014/100 | Train Loss (MAE): 0.1412 | Val Loss (MAE): 0.1225
+Epoch 015/100 | Train Loss (MAE): 0.1410 | Val Loss (MAE): 0.1220
+Epoch 016/100 | Train Loss (MAE): 0.1396 | Val Loss (MAE): 0.1223
+Epoch 017/100 | Train Loss (MAE): 0.1377 | Val Loss (MAE): 0.1228
+Epoch 018/100 | Train Loss (MAE): 0.1373 | Val Loss (MAE): 0.1212
+Epoch 019/100 | Train Loss (MAE): 0.1360 | Val Loss (MAE): 0.1225
+Epoch 020/100 | Train Loss (MAE): 0.1351 | Val Loss (MAE): 0.1202
+Epoch 021/100 | Train Loss (MAE): 0.1342 | Val Loss (MAE): 0.1191
+Epoch 022/100 | Train Loss (MAE): 0.1343 | Val Loss (MAE): 0.1191
+Epoch 023/100 | Train Loss (MAE): 0.1327 | Val Loss (MAE): 0.1168
+Epoch 024/100 | Train Loss (MAE): 0.1321 | Val Loss (MAE): 0.1171
+Epoch 025/100 | Train Loss (MAE): 0.1316 | Val Loss (MAE): 0.1154
+Epoch 026/100 | Train Loss (MAE): 0.1299 | Val Loss (MAE): 0.1168
+Epoch 027/100 | Train Loss (MAE): 0.1288 | Val Loss (MAE): 0.1135
+Epoch 028/100 | Train Loss (MAE): 0.1282 | Val Loss (MAE): 0.1146
+Epoch 029/100 | Train Loss (MAE): 0.1274 | Val Loss (MAE): 0.1161
+Epoch 030/100 | Train Loss (MAE): 0.1261 | Val Loss (MAE): 0.1127
+Epoch 031/100 | Train Loss (MAE): 0.1257 | Val Loss (MAE): 0.1118
+Epoch 032/100 | Train Loss (MAE): 0.1254 | Val Loss (MAE): 0.1130
+Epoch 033/100 | Train Loss (MAE): 0.1234 | Val Loss (MAE): 0.1133
+Epoch 034/100 | Train Loss (MAE): 0.1231 | Val Loss (MAE): 0.1108
+Epoch 035/100 | Train Loss (MAE): 0.1233 | Val Loss (MAE): 0.1120
+Epoch 036/100 | Train Loss (MAE): 0.1220 | Val Loss (MAE): 0.1140
+Epoch 037/100 | Train Loss (MAE): 0.1210 | Val Loss (MAE): 0.1103
+Epoch 038/100 | Train Loss (MAE): 0.1206 | Val Loss (MAE): 0.1106
+Epoch 039/100 | Train Loss (MAE): 0.1197 | Val Loss (MAE): 0.1154
+Epoch 040/100 | Train Loss (MAE): 0.1203 | Val Loss (MAE): 0.1129
+Epoch 041/100 | Train Loss (MAE): 0.1187 | Val Loss (MAE): 0.1119
+Epoch 042/100 | Train Loss (MAE): 0.1183 | Val Loss (MAE): 0.1156
+Epoch 043/100 | Train Loss (MAE): 0.1164 | Val Loss (MAE): 0.1109
+Epoch 044/100 | Train Loss (MAE): 0.1160 | Val Loss (MAE): 0.1118
+Epoch 045/100 | Train Loss (MAE): 0.1163 | Val Loss (MAE): 0.1095
+Epoch 046/100 | Train Loss (MAE): 0.1149 | Val Loss (MAE): 0.1119
+Epoch 047/100 | Train Loss (MAE): 0.1154 | Val Loss (MAE): 0.1093
+Epoch 048/100 | Train Loss (MAE): 0.1138 | Val Loss (MAE): 0.1115
+Epoch 049/100 | Train Loss (MAE): 0.1141 | Val Loss (MAE): 0.1128
+Epoch 050/100 | Train Loss (MAE): 0.1121 | Val Loss (MAE): 0.1107
+Epoch 051/100 | Train Loss (MAE): 0.1124 | Val Loss (MAE): 0.1117
+Epoch 052/100 | Train Loss (MAE): 0.1114 | Val Loss (MAE): 0.1112
+Epoch 053/100 | Train Loss (MAE): 0.1105 | Val Loss (MAE): 0.1092
+Epoch 054/100 | Train Loss (MAE): 0.1103 | Val Loss (MAE): 0.1088
+Epoch 055/100 | Train Loss (MAE): 0.1093 | Val Loss (MAE): 0.1073
+Epoch 056/100 | Train Loss (MAE): 0.1089 | Val Loss (MAE): 0.1116
+Epoch 057/100 | Train Loss (MAE): 0.1081 | Val Loss (MAE): 0.1133
+Epoch 058/100 | Train Loss (MAE): 0.1079 | Val Loss (MAE): 0.1114
+Epoch 059/100 | Train Loss (MAE): 0.1081 | Val Loss (MAE): 0.1125
+Epoch 060/100 | Train Loss (MAE): 0.1062 | Val Loss (MAE): 0.1105
+Epoch 061/100 | Train Loss (MAE): 0.1070 | Val Loss (MAE): 0.1075
+Epoch 062/100 | Train Loss (MAE): 0.1055 | Val Loss (MAE): 0.1098
+Epoch 063/100 | Train Loss (MAE): 0.1053 | Val Loss (MAE): 0.1093
+Epoch 064/100 | Train Loss (MAE): 0.1042 | Val Loss (MAE): 0.1089
+Epoch 065/100 | Train Loss (MAE): 0.1049 | Val Loss (MAE): 0.1105
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead Seq2Seq Metrics (kW) ---
+RMSE: 3.12 | MAE: 1.45 | WAPE: 11.75%
+Graph saved successfully to seq2seq_1hr_ahead_forecast.png
+
+  [Trial 3 Success] -> RMSE: 3.12 | MAE: 1.45 | WAPE: 11.75%
+
+[Trial 4/5] Executing CommFac/1hr_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3503 | Val Loss (MAE): 0.1425
+Epoch 002/100 | Train Loss (MAE): 0.1735 | Val Loss (MAE): 0.1356
+Epoch 003/100 | Train Loss (MAE): 0.1643 | Val Loss (MAE): 0.1304
+Epoch 004/100 | Train Loss (MAE): 0.1597 | Val Loss (MAE): 0.1321
+Epoch 005/100 | Train Loss (MAE): 0.1557 | Val Loss (MAE): 0.1296
+Epoch 006/100 | Train Loss (MAE): 0.1547 | Val Loss (MAE): 0.1276
+Epoch 007/100 | Train Loss (MAE): 0.1527 | Val Loss (MAE): 0.1278
+Epoch 008/100 | Train Loss (MAE): 0.1516 | Val Loss (MAE): 0.1261
+Epoch 009/100 | Train Loss (MAE): 0.1500 | Val Loss (MAE): 0.1308
+Epoch 010/100 | Train Loss (MAE): 0.1499 | Val Loss (MAE): 0.1253
+Epoch 011/100 | Train Loss (MAE): 0.1466 | Val Loss (MAE): 0.1265
+Epoch 012/100 | Train Loss (MAE): 0.1460 | Val Loss (MAE): 0.1252
+Epoch 013/100 | Train Loss (MAE): 0.1462 | Val Loss (MAE): 0.1254
+Epoch 014/100 | Train Loss (MAE): 0.1431 | Val Loss (MAE): 0.1239
+Epoch 015/100 | Train Loss (MAE): 0.1420 | Val Loss (MAE): 0.1248
+Epoch 016/100 | Train Loss (MAE): 0.1417 | Val Loss (MAE): 0.1251
+Epoch 017/100 | Train Loss (MAE): 0.1394 | Val Loss (MAE): 0.1236
+Epoch 018/100 | Train Loss (MAE): 0.1392 | Val Loss (MAE): 0.1242
+Epoch 019/100 | Train Loss (MAE): 0.1385 | Val Loss (MAE): 0.1223
+Epoch 020/100 | Train Loss (MAE): 0.1373 | Val Loss (MAE): 0.1218
+Epoch 021/100 | Train Loss (MAE): 0.1364 | Val Loss (MAE): 0.1221
+Epoch 022/100 | Train Loss (MAE): 0.1349 | Val Loss (MAE): 0.1195
+Epoch 023/100 | Train Loss (MAE): 0.1339 | Val Loss (MAE): 0.1224
+Epoch 024/100 | Train Loss (MAE): 0.1344 | Val Loss (MAE): 0.1206
+Epoch 025/100 | Train Loss (MAE): 0.1325 | Val Loss (MAE): 0.1188
+Epoch 026/100 | Train Loss (MAE): 0.1320 | Val Loss (MAE): 0.1191
+Epoch 027/100 | Train Loss (MAE): 0.1315 | Val Loss (MAE): 0.1190
+Epoch 028/100 | Train Loss (MAE): 0.1306 | Val Loss (MAE): 0.1175
+Epoch 029/100 | Train Loss (MAE): 0.1292 | Val Loss (MAE): 0.1205
+Epoch 030/100 | Train Loss (MAE): 0.1292 | Val Loss (MAE): 0.1175
+Epoch 031/100 | Train Loss (MAE): 0.1276 | Val Loss (MAE): 0.1196
+Epoch 032/100 | Train Loss (MAE): 0.1259 | Val Loss (MAE): 0.1193
+Epoch 033/100 | Train Loss (MAE): 0.1255 | Val Loss (MAE): 0.1182
+Epoch 034/100 | Train Loss (MAE): 0.1259 | Val Loss (MAE): 0.1148
+Epoch 035/100 | Train Loss (MAE): 0.1235 | Val Loss (MAE): 0.1162
+Epoch 036/100 | Train Loss (MAE): 0.1231 | Val Loss (MAE): 0.1149
+Epoch 037/100 | Train Loss (MAE): 0.1224 | Val Loss (MAE): 0.1146
+Epoch 038/100 | Train Loss (MAE): 0.1213 | Val Loss (MAE): 0.1125
+Epoch 039/100 | Train Loss (MAE): 0.1206 | Val Loss (MAE): 0.1143
+Epoch 040/100 | Train Loss (MAE): 0.1192 | Val Loss (MAE): 0.1129
+Epoch 041/100 | Train Loss (MAE): 0.1185 | Val Loss (MAE): 0.1131
+Epoch 042/100 | Train Loss (MAE): 0.1182 | Val Loss (MAE): 0.1134
+Epoch 043/100 | Train Loss (MAE): 0.1172 | Val Loss (MAE): 0.1126
+Epoch 044/100 | Train Loss (MAE): 0.1166 | Val Loss (MAE): 0.1137
+Epoch 045/100 | Train Loss (MAE): 0.1158 | Val Loss (MAE): 0.1144
+Epoch 046/100 | Train Loss (MAE): 0.1157 | Val Loss (MAE): 0.1097
+Epoch 047/100 | Train Loss (MAE): 0.1148 | Val Loss (MAE): 0.1128
+Epoch 048/100 | Train Loss (MAE): 0.1134 | Val Loss (MAE): 0.1138
+Epoch 049/100 | Train Loss (MAE): 0.1126 | Val Loss (MAE): 0.1109
+Epoch 050/100 | Train Loss (MAE): 0.1123 | Val Loss (MAE): 0.1138
+Epoch 051/100 | Train Loss (MAE): 0.1112 | Val Loss (MAE): 0.1115
+Epoch 052/100 | Train Loss (MAE): 0.1108 | Val Loss (MAE): 0.1149
+Epoch 053/100 | Train Loss (MAE): 0.1108 | Val Loss (MAE): 0.1120
+Epoch 054/100 | Train Loss (MAE): 0.1102 | Val Loss (MAE): 0.1113
+Epoch 055/100 | Train Loss (MAE): 0.1096 | Val Loss (MAE): 0.1102
+Epoch 056/100 | Train Loss (MAE): 0.1085 | Val Loss (MAE): 0.1090
+Epoch 057/100 | Train Loss (MAE): 0.1089 | Val Loss (MAE): 0.1107
+Epoch 058/100 | Train Loss (MAE): 0.1075 | Val Loss (MAE): 0.1122
+Epoch 059/100 | Train Loss (MAE): 0.1066 | Val Loss (MAE): 0.1109
+Epoch 060/100 | Train Loss (MAE): 0.1060 | Val Loss (MAE): 0.1122
+Epoch 061/100 | Train Loss (MAE): 0.1064 | Val Loss (MAE): 0.1114
+Epoch 062/100 | Train Loss (MAE): 0.1054 | Val Loss (MAE): 0.1125
+Epoch 063/100 | Train Loss (MAE): 0.1057 | Val Loss (MAE): 0.1117
+Epoch 064/100 | Train Loss (MAE): 0.1048 | Val Loss (MAE): 0.1148
+Epoch 065/100 | Train Loss (MAE): 0.1047 | Val Loss (MAE): 0.1117
+Epoch 066/100 | Train Loss (MAE): 0.1032 | Val Loss (MAE): 0.1105
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead Seq2Seq Metrics (kW) ---
+RMSE: 3.04 | MAE: 1.47 | WAPE: 11.87%
+Graph saved successfully to seq2seq_1hr_ahead_forecast.png
+
+  [Trial 4 Success] -> RMSE: 3.04 | MAE: 1.47 | WAPE: 11.87%
+
+[Trial 5/5] Executing CommFac/1hr_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3444 | Val Loss (MAE): 0.1416
+Epoch 002/100 | Train Loss (MAE): 0.1717 | Val Loss (MAE): 0.1338
+Epoch 003/100 | Train Loss (MAE): 0.1646 | Val Loss (MAE): 0.1299
+Epoch 004/100 | Train Loss (MAE): 0.1595 | Val Loss (MAE): 0.1296
+Epoch 005/100 | Train Loss (MAE): 0.1568 | Val Loss (MAE): 0.1305
+Epoch 006/100 | Train Loss (MAE): 0.1544 | Val Loss (MAE): 0.1286
+Epoch 007/100 | Train Loss (MAE): 0.1528 | Val Loss (MAE): 0.1262
+Epoch 008/100 | Train Loss (MAE): 0.1511 | Val Loss (MAE): 0.1267
+Epoch 009/100 | Train Loss (MAE): 0.1507 | Val Loss (MAE): 0.1263
+Epoch 010/100 | Train Loss (MAE): 0.1486 | Val Loss (MAE): 0.1267
+Epoch 011/100 | Train Loss (MAE): 0.1475 | Val Loss (MAE): 0.1277
+Epoch 012/100 | Train Loss (MAE): 0.1464 | Val Loss (MAE): 0.1243
+Epoch 013/100 | Train Loss (MAE): 0.1437 | Val Loss (MAE): 0.1239
+Epoch 014/100 | Train Loss (MAE): 0.1431 | Val Loss (MAE): 0.1241
+Epoch 015/100 | Train Loss (MAE): 0.1409 | Val Loss (MAE): 0.1216
+Epoch 016/100 | Train Loss (MAE): 0.1398 | Val Loss (MAE): 0.1208
+Epoch 017/100 | Train Loss (MAE): 0.1389 | Val Loss (MAE): 0.1187
+Epoch 018/100 | Train Loss (MAE): 0.1377 | Val Loss (MAE): 0.1203
+Epoch 019/100 | Train Loss (MAE): 0.1389 | Val Loss (MAE): 0.1216
+Epoch 020/100 | Train Loss (MAE): 0.1354 | Val Loss (MAE): 0.1218
+Epoch 021/100 | Train Loss (MAE): 0.1371 | Val Loss (MAE): 0.1206
+Epoch 022/100 | Train Loss (MAE): 0.1342 | Val Loss (MAE): 0.1161
+Epoch 023/100 | Train Loss (MAE): 0.1335 | Val Loss (MAE): 0.1175
+Epoch 024/100 | Train Loss (MAE): 0.1327 | Val Loss (MAE): 0.1163
+Epoch 025/100 | Train Loss (MAE): 0.1303 | Val Loss (MAE): 0.1134
+Epoch 026/100 | Train Loss (MAE): 0.1303 | Val Loss (MAE): 0.1133
+Epoch 027/100 | Train Loss (MAE): 0.1289 | Val Loss (MAE): 0.1128
+Epoch 028/100 | Train Loss (MAE): 0.1272 | Val Loss (MAE): 0.1150
+Epoch 029/100 | Train Loss (MAE): 0.1268 | Val Loss (MAE): 0.1124
+Epoch 030/100 | Train Loss (MAE): 0.1271 | Val Loss (MAE): 0.1165
+Epoch 031/100 | Train Loss (MAE): 0.1251 | Val Loss (MAE): 0.1137
+Epoch 032/100 | Train Loss (MAE): 0.1241 | Val Loss (MAE): 0.1150
+Epoch 033/100 | Train Loss (MAE): 0.1232 | Val Loss (MAE): 0.1174
+Epoch 034/100 | Train Loss (MAE): 0.1233 | Val Loss (MAE): 0.1115
+Epoch 035/100 | Train Loss (MAE): 0.1216 | Val Loss (MAE): 0.1123
+Epoch 036/100 | Train Loss (MAE): 0.1212 | Val Loss (MAE): 0.1121
+Epoch 037/100 | Train Loss (MAE): 0.1203 | Val Loss (MAE): 0.1104
+Epoch 038/100 | Train Loss (MAE): 0.1190 | Val Loss (MAE): 0.1152
+Epoch 039/100 | Train Loss (MAE): 0.1192 | Val Loss (MAE): 0.1110
+Epoch 040/100 | Train Loss (MAE): 0.1196 | Val Loss (MAE): 0.1125
+Epoch 041/100 | Train Loss (MAE): 0.1184 | Val Loss (MAE): 0.1112
+Epoch 042/100 | Train Loss (MAE): 0.1179 | Val Loss (MAE): 0.1126
+Epoch 043/100 | Train Loss (MAE): 0.1160 | Val Loss (MAE): 0.1116
+Epoch 044/100 | Train Loss (MAE): 0.1167 | Val Loss (MAE): 0.1133
+Epoch 045/100 | Train Loss (MAE): 0.1151 | Val Loss (MAE): 0.1107
+Epoch 046/100 | Train Loss (MAE): 0.1147 | Val Loss (MAE): 0.1114
+Epoch 047/100 | Train Loss (MAE): 0.1142 | Val Loss (MAE): 0.1121
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead Seq2Seq Metrics (kW) ---
+RMSE: 3.19 | MAE: 1.51 | WAPE: 12.25%
+Graph saved successfully to seq2seq_1hr_ahead_forecast.png
+
+  [Trial 5 Success] -> RMSE: 3.19 | MAE: 1.51 | WAPE: 12.25%
+
+==================================================
+FINAL STATISTICAL SUMMARY (5 SUCCESSFUL TRIALS)
+Target Script: CommFac/1hr_seq2seq.py
+==================================================
+RMSE: 3.10 ± 0.07
+MAE:  1.47 ± 0.03
+WAPE: 11.91% ± 0.26%
+==================================================
+
+--- SUCCESS: CommFac/1hr_seq2seq.py ---
+
+--- STARTING EVALUATION: CommFac/1hr_patchtst.py ---
+Timestamp: 2026-10-16 16:07:58
+
+--- Starting 5-Run Evaluation for CommFac/1hr_patchtst.py ---
+
+[Trial 1/5] Executing CommFac/1hr_patchtst.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead PatchTST Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.4747 | Val Loss (MAE): 0.1446
+Epoch 002/100 | Train Loss (MAE): 0.1852 | Val Loss (MAE): 0.1449
+Epoch 003/100 | Train Loss (MAE): 0.1653 | Val Loss (MAE): 0.1326
+Epoch 004/100 | Train Loss (MAE): 0.1569 | Val Loss (MAE): 0.1419
+Epoch 005/100 | Train Loss (MAE): 0.1536 | Val Loss (MAE): 0.1324
+Epoch 006/100 | Train Loss (MAE): 0.1523 | Val Loss (MAE): 0.1276
+Epoch 007/100 | Train Loss (MAE): 0.1534 | Val Loss (MAE): 0.1278
+Epoch 008/100 | Train Loss (MAE): 0.1511 | Val Loss (MAE): 0.1262
+Epoch 009/100 | Train Loss (MAE): 0.1492 | Val Loss (MAE): 0.1234
+Epoch 010/100 | Train Loss (MAE): 0.1478 | Val Loss (MAE): 0.1352
+Epoch 011/100 | Train Loss (MAE): 0.1473 | Val Loss (MAE): 0.1199
+Epoch 012/100 | Train Loss (MAE): 0.1470 | Val Loss (MAE): 0.1247
+Epoch 013/100 | Train Loss (MAE): 0.1461 | Val Loss (MAE): 0.1268
+Epoch 014/100 | Train Loss (MAE): 0.1453 | Val Loss (MAE): 0.1221
+Epoch 015/100 | Train Loss (MAE): 0.1473 | Val Loss (MAE): 0.1404
+Epoch 016/100 | Train Loss (MAE): 0.1457 | Val Loss (MAE): 0.1229
+Epoch 017/100 | Train Loss (MAE): 0.1447 | Val Loss (MAE): 0.1263
+Epoch 018/100 | Train Loss (MAE): 0.1447 | Val Loss (MAE): 0.1226
+Epoch 019/100 | Train Loss (MAE): 0.1432 | Val Loss (MAE): 0.1255
+Epoch 020/100 | Train Loss (MAE): 0.1441 | Val Loss (MAE): 0.1227
+Epoch 021/100 | Train Loss (MAE): 0.1429 | Val Loss (MAE): 0.1250
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead PatchTST Metrics (kW) ---
+RMSE: 2.96 | MAE: 1.41 | WAPE: 11.42%
+Graph saved successfully to patchtst_1hr_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 2.96 | MAE: 1.41 | WAPE: 11.42%
+
+[Trial 2/5] Executing CommFac/1hr_patchtst.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead PatchTST Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.4148 | Val Loss (MAE): 0.1424
+Epoch 002/100 | Train Loss (MAE): 0.1868 | Val Loss (MAE): 0.1450
+Epoch 003/100 | Train Loss (MAE): 0.1626 | Val Loss (MAE): 0.1310
+Epoch 004/100 | Train Loss (MAE): 0.1504 | Val Loss (MAE): 0.1395
+Epoch 005/100 | Train Loss (MAE): 0.1513 | Val Loss (MAE): 0.1229
+Epoch 006/100 | Train Loss (MAE): 0.1496 | Val Loss (MAE): 0.1300
+Epoch 007/100 | Train Loss (MAE): 0.1487 | Val Loss (MAE): 0.1244
+Epoch 008/100 | Train Loss (MAE): 0.1492 | Val Loss (MAE): 0.1245
+Epoch 009/100 | Train Loss (MAE): 0.1469 | Val Loss (MAE): 0.1244
+Epoch 010/100 | Train Loss (MAE): 0.1492 | Val Loss (MAE): 0.1352
+Epoch 011/100 | Train Loss (MAE): 0.1463 | Val Loss (MAE): 0.1231
+Epoch 012/100 | Train Loss (MAE): 0.1450 | Val Loss (MAE): 0.1340
+Epoch 013/100 | Train Loss (MAE): 0.1451 | Val Loss (MAE): 0.1330
+Epoch 014/100 | Train Loss (MAE): 0.1456 | Val Loss (MAE): 0.1281
+Epoch 015/100 | Train Loss (MAE): 0.1455 | Val Loss (MAE): 0.1262
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead PatchTST Metrics (kW) ---
+RMSE: 2.89 | MAE: 1.40 | WAPE: 11.33%
+Graph saved successfully to patchtst_1hr_ahead_forecast.png
+
+  [Trial 2 Success] -> RMSE: 2.89 | MAE: 1.40 | WAPE: 11.33%
+
+[Trial 3/5] Executing CommFac/1hr_patchtst.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead PatchTST Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3877 | Val Loss (MAE): 0.1424
+Epoch 002/100 | Train Loss (MAE): 0.1789 | Val Loss (MAE): 0.1311
+Epoch 003/100 | Train Loss (MAE): 0.1593 | Val Loss (MAE): 0.1286
+Epoch 004/100 | Train Loss (MAE): 0.1533 | Val Loss (MAE): 0.1250
+Epoch 005/100 | Train Loss (MAE): 0.1536 | Val Loss (MAE): 0.1316
+Epoch 006/100 | Train Loss (MAE): 0.1489 | Val Loss (MAE): 0.1399
+Epoch 007/100 | Train Loss (MAE): 0.1477 | Val Loss (MAE): 0.1226
+Epoch 008/100 | Train Loss (MAE): 0.1466 | Val Loss (MAE): 0.1234
+Epoch 009/100 | Train Loss (MAE): 0.1458 | Val Loss (MAE): 0.1240
+Epoch 010/100 | Train Loss (MAE): 0.1460 | Val Loss (MAE): 0.1291
+Epoch 011/100 | Train Loss (MAE): 0.1436 | Val Loss (MAE): 0.1392
+Epoch 012/100 | Train Loss (MAE): 0.1436 | Val Loss (MAE): 0.1262
+Epoch 013/100 | Train Loss (MAE): 0.1445 | Val Loss (MAE): 0.1272
+Epoch 014/100 | Train Loss (MAE): 0.1430 | Val Loss (MAE): 0.1186
+Epoch 015/100 | Train Loss (MAE): 0.1409 | Val Loss (MAE): 0.1321
+Epoch 016/100 | Train Loss (MAE): 0.1449 | Val Loss (MAE): 0.1372
+Epoch 017/100 | Train Loss (MAE): 0.1451 | Val Loss (MAE): 0.1230
+Epoch 018/100 | Train Loss (MAE): 0.1422 | Val Loss (MAE): 0.1249
+Epoch 019/100 | Train Loss (MAE): 0.1428 | Val Loss (MAE): 0.1229
+Epoch 020/100 | Train Loss (MAE): 0.1418 | Val Loss (MAE): 0.1239
+Epoch 021/100 | Train Loss (MAE): 0.1429 | Val Loss (MAE): 0.1279
+Epoch 022/100 | Train Loss (MAE): 0.1428 | Val Loss (MAE): 0.1232
+Epoch 023/100 | Train Loss (MAE): 0.1417 | Val Loss (MAE): 0.1244
+Epoch 024/100 | Train Loss (MAE): 0.1420 | Val Loss (MAE): 0.1209
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead PatchTST Metrics (kW) ---
+RMSE: 2.84 | MAE: 1.35 | WAPE: 10.91%
+Graph saved successfully to patchtst_1hr_ahead_forecast.png
+
+  [Trial 3 Success] -> RMSE: 2.84 | MAE: 1.35 | WAPE: 10.91%
+
+[Trial 4/5] Executing CommFac/1hr_patchtst.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead PatchTST Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3378 | Val Loss (MAE): 0.2064
+Epoch 002/100 | Train Loss (MAE): 0.1731 | Val Loss (MAE): 0.1530
+Epoch 003/100 | Train Loss (MAE): 0.1631 | Val Loss (MAE): 0.1410
+Epoch 004/100 | Train Loss (MAE): 0.1598 | Val Loss (MAE): 0.1319
+Epoch 005/100 | Train Loss (MAE): 0.1516 | Val Loss (MAE): 0.1271
+Epoch 006/100 | Train Loss (MAE): 0.1525 | Val Loss (MAE): 0.1250
+Epoch 007/100 | Train Loss (MAE): 0.1508 | Val Loss (MAE): 0.1241
+Epoch 008/100 | Train Loss (MAE): 0.1504 | Val Loss (MAE): 0.1317
+Epoch 009/100 | Train Loss (MAE): 0.1496 | Val Loss (MAE): 0.1262
+Epoch 010/100 | Train Loss (MAE): 0.1466 | Val Loss (MAE): 0.1312
+Epoch 011/100 | Train Loss (MAE): 0.1465 | Val Loss (MAE): 0.1390
+Epoch 012/100 | Train Loss (MAE): 0.1462 | Val Loss (MAE): 0.1265
+Epoch 013/100 | Train Loss (MAE): 0.1472 | Val Loss (MAE): 0.1360
+Epoch 014/100 | Train Loss (MAE): 0.1454 | Val Loss (MAE): 0.1260
+Epoch 015/100 | Train Loss (MAE): 0.1453 | Val Loss (MAE): 0.1243
+Epoch 016/100 | Train Loss (MAE): 0.1442 | Val Loss (MAE): 0.1266
+Epoch 017/100 | Train Loss (MAE): 0.1441 | Val Loss (MAE): 0.1286
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead PatchTST Metrics (kW) ---
+RMSE: 2.83 | MAE: 1.36 | WAPE: 11.03%
+Graph saved successfully to patchtst_1hr_ahead_forecast.png
+
+  [Trial 4 Success] -> RMSE: 2.83 | MAE: 1.36 | WAPE: 11.03%
+
+[Trial 5/5] Executing CommFac/1hr_patchtst.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead PatchTST Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.4095 | Val Loss (MAE): 0.2078
+Epoch 002/100 | Train Loss (MAE): 0.1788 | Val Loss (MAE): 0.1500
+Epoch 003/100 | Train Loss (MAE): 0.1656 | Val Loss (MAE): 0.1311
+Epoch 004/100 | Train Loss (MAE): 0.1575 | Val Loss (MAE): 0.1393
+Epoch 005/100 | Train Loss (MAE): 0.1538 | Val Loss (MAE): 0.1400
+Epoch 006/100 | Train Loss (MAE): 0.1516 | Val Loss (MAE): 0.1279
+Epoch 007/100 | Train Loss (MAE): 0.1522 | Val Loss (MAE): 0.1329
+Epoch 008/100 | Train Loss (MAE): 0.1495 | Val Loss (MAE): 0.1269
+Epoch 009/100 | Train Loss (MAE): 0.1504 | Val Loss (MAE): 0.1243
+Epoch 010/100 | Train Loss (MAE): 0.1488 | Val Loss (MAE): 0.1299
+Epoch 011/100 | Train Loss (MAE): 0.1474 | Val Loss (MAE): 0.1313
+Epoch 012/100 | Train Loss (MAE): 0.1467 | Val Loss (MAE): 0.1474
+Epoch 013/100 | Train Loss (MAE): 0.1474 | Val Loss (MAE): 0.1321
+Epoch 014/100 | Train Loss (MAE): 0.1461 | Val Loss (MAE): 0.1236
+Epoch 015/100 | Train Loss (MAE): 0.1450 | Val Loss (MAE): 0.1227
+Epoch 016/100 | Train Loss (MAE): 0.1437 | Val Loss (MAE): 0.1217
+Epoch 017/100 | Train Loss (MAE): 0.1459 | Val Loss (MAE): 0.1227
+Epoch 018/100 | Train Loss (MAE): 0.1455 | Val Loss (MAE): 0.1223
+Epoch 019/100 | Train Loss (MAE): 0.1443 | Val Loss (MAE): 0.1217
+Epoch 020/100 | Train Loss (MAE): 0.1441 | Val Loss (MAE): 0.1235
+Epoch 021/100 | Train Loss (MAE): 0.1436 | Val Loss (MAE): 0.1225
+Epoch 022/100 | Train Loss (MAE): 0.1433 | Val Loss (MAE): 0.1214
+Epoch 023/100 | Train Loss (MAE): 0.1429 | Val Loss (MAE): 0.1242
+Epoch 024/100 | Train Loss (MAE): 0.1434 | Val Loss (MAE): 0.1229
+Epoch 025/100 | Train Loss (MAE): 0.1422 | Val Loss (MAE): 0.1257
+Epoch 026/100 | Train Loss (MAE): 0.1421 | Val Loss (MAE): 0.1212
+Epoch 027/100 | Train Loss (MAE): 0.1424 | Val Loss (MAE): 0.1204
+Epoch 028/100 | Train Loss (MAE): 0.1416 | Val Loss (MAE): 0.1225
+Epoch 029/100 | Train Loss (MAE): 0.1412 | Val Loss (MAE): 0.1247
+Epoch 030/100 | Train Loss (MAE): 0.1416 | Val Loss (MAE): 0.1232
+Epoch 031/100 | Train Loss (MAE): 0.1413 | Val Loss (MAE): 0.1240
+Epoch 032/100 | Train Loss (MAE): 0.1405 | Val Loss (MAE): 0.1231
+Epoch 033/100 | Train Loss (MAE): 0.1404 | Val Loss (MAE): 0.1240
+Epoch 034/100 | Train Loss (MAE): 0.1405 | Val Loss (MAE): 0.1262
+Epoch 035/100 | Train Loss (MAE): 0.1418 | Val Loss (MAE): 0.1269
+Epoch 036/100 | Train Loss (MAE): 0.1403 | Val Loss (MAE): 0.1220
+Epoch 037/100 | Train Loss (MAE): 0.1416 | Val Loss (MAE): 0.1263
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead PatchTST Metrics (kW) ---
+RMSE: 2.79 | MAE: 1.33 | WAPE: 10.75%
+Graph saved successfully to patchtst_1hr_ahead_forecast.png
+
+  [Trial 5 Success] -> RMSE: 2.79 | MAE: 1.33 | WAPE: 10.75%
+
+==================================================
+FINAL STATISTICAL SUMMARY (5 SUCCESSFUL TRIALS)
+Target Script: CommFac/1hr_patchtst.py
+==================================================
+RMSE: 2.86 ± 0.06
+MAE:  1.37 ± 0.03
+WAPE: 11.09% ± 0.25%
+==================================================
+
+--- SUCCESS: CommFac/1hr_patchtst.py ---
+
+--- STARTING EVALUATION: CommFac/1hr_lstm.py ---
+Timestamp: 2026-10-16 16:23:07
+
+--- Starting 5-Run Evaluation for CommFac/1hr_lstm.py ---
+
+[Trial 1/5] Executing CommFac/1hr_lstm.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead DirectLSTM Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2192 | Val Loss (MAE): 0.1358
+Epoch 002/100 | Train Loss (MAE): 0.1615 | Val Loss (MAE): 0.1330
+Epoch 003/100 | Train Loss (MAE): 0.1561 | Val Loss (MAE): 0.1309
+Epoch 004/100 | Train Loss (MAE): 0.1515 | Val Loss (MAE): 0.1302
+Epoch 005/100 | Train Loss (MAE): 0.1489 | Val Loss (MAE): 0.1315
+Epoch 006/100 | Train Loss (MAE): 0.1454 | Val Loss (MAE): 0.1257
+Epoch 007/100 | Train Loss (MAE): 0.1436 | Val Loss (MAE): 0.1254
+Epoch 008/100 | Train Loss (MAE): 0.1428 | Val Loss (MAE): 0.1238
+Epoch 009/100 | Train Loss (MAE): 0.1428 | Val Loss (MAE): 0.1225
+Epoch 010/100 | Train Loss (MAE): 0.1390 | Val Loss (MAE): 0.1222
+Epoch 011/100 | Train Loss (MAE): 0.1370 | Val Loss (MAE): 0.1213
+Epoch 012/100 | Train Loss (MAE): 0.1369 | Val Loss (MAE): 0.1223
+Epoch 013/100 | Train Loss (MAE): 0.1335 | Val Loss (MAE): 0.1214
+Epoch 014/100 | Train Loss (MAE): 0.1317 | Val Loss (MAE): 0.1216
+Epoch 015/100 | Train Loss (MAE): 0.1301 | Val Loss (MAE): 0.1193
+Epoch 016/100 | Train Loss (MAE): 0.1299 | Val Loss (MAE): 0.1190
+Epoch 017/100 | Train Loss (MAE): 0.1275 | Val Loss (MAE): 0.1190
+Epoch 018/100 | Train Loss (MAE): 0.1262 | Val Loss (MAE): 0.1157
+Epoch 019/100 | Train Loss (MAE): 0.1256 | Val Loss (MAE): 0.1147
+Epoch 020/100 | Train Loss (MAE): 0.1237 | Val Loss (MAE): 0.1131
+Epoch 021/100 | Train Loss (MAE): 0.1220 | Val Loss (MAE): 0.1137
+Epoch 022/100 | Train Loss (MAE): 0.1210 | Val Loss (MAE): 0.1138
+Epoch 023/100 | Train Loss (MAE): 0.1204 | Val Loss (MAE): 0.1169
+Epoch 024/100 | Train Loss (MAE): 0.1196 | Val Loss (MAE): 0.1135
+Epoch 025/100 | Train Loss (MAE): 0.1182 | Val Loss (MAE): 0.1155
+Epoch 026/100 | Train Loss (MAE): 0.1188 | Val Loss (MAE): 0.1126
+Epoch 027/100 | Train Loss (MAE): 0.1170 | Val Loss (MAE): 0.1129
+Epoch 028/100 | Train Loss (MAE): 0.1164 | Val Loss (MAE): 0.1151
+Epoch 029/100 | Train Loss (MAE): 0.1156 | Val Loss (MAE): 0.1132
+Epoch 030/100 | Train Loss (MAE): 0.1149 | Val Loss (MAE): 0.1121
+Epoch 031/100 | Train Loss (MAE): 0.1139 | Val Loss (MAE): 0.1111
+Epoch 032/100 | Train Loss (MAE): 0.1134 | Val Loss (MAE): 0.1112
+Epoch 033/100 | Train Loss (MAE): 0.1138 | Val Loss (MAE): 0.1139
+Epoch 034/100 | Train Loss (MAE): 0.1123 | Val Loss (MAE): 0.1142
+Epoch 035/100 | Train Loss (MAE): 0.1111 | Val Loss (MAE): 0.1165
+Epoch 036/100 | Train Loss (MAE): 0.1115 | Val Loss (MAE): 0.1154
+Epoch 037/100 | Train Loss (MAE): 0.1091 | Val Loss (MAE): 0.1150
+Epoch 038/100 | Train Loss (MAE): 0.1093 | Val Loss (MAE): 0.1150
+Epoch 039/100 | Train Loss (MAE): 0.1091 | Val Loss (MAE): 0.1138
+Epoch 040/100 | Train Loss (MAE): 0.1075 | Val Loss (MAE): 0.1151
+Epoch 041/100 | Train Loss (MAE): 0.1074 | Val Loss (MAE): 0.1148
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead DirectLSTM Metrics (kW) ---
+RMSE: 3.56 | MAE: 1.63 | WAPE: 13.23%
+Graph saved successfully to directlstm_1hr_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 3.56 | MAE: 1.63 | WAPE: 13.23%
+
+[Trial 2/5] Executing CommFac/1hr_lstm.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead DirectLSTM Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2070 | Val Loss (MAE): 0.1428
+Epoch 002/100 | Train Loss (MAE): 0.1618 | Val Loss (MAE): 0.1388
+Epoch 003/100 | Train Loss (MAE): 0.1555 | Val Loss (MAE): 0.1287
+Epoch 004/100 | Train Loss (MAE): 0.1510 | Val Loss (MAE): 0.1291
+Epoch 005/100 | Train Loss (MAE): 0.1484 | Val Loss (MAE): 0.1272
+Epoch 006/100 | Train Loss (MAE): 0.1458 | Val Loss (MAE): 0.1279
+Epoch 007/100 | Train Loss (MAE): 0.1451 | Val Loss (MAE): 0.1239
+Epoch 008/100 | Train Loss (MAE): 0.1433 | Val Loss (MAE): 0.1246
+Epoch 009/100 | Train Loss (MAE): 0.1407 | Val Loss (MAE): 0.1225
+Epoch 010/100 | Train Loss (MAE): 0.1399 | Val Loss (MAE): 0.1215
+Epoch 011/100 | Train Loss (MAE): 0.1364 | Val Loss (MAE): 0.1191
+Epoch 012/100 | Train Loss (MAE): 0.1357 | Val Loss (MAE): 0.1204
+Epoch 013/100 | Train Loss (MAE): 0.1337 | Val Loss (MAE): 0.1185
+Epoch 014/100 | Train Loss (MAE): 0.1337 | Val Loss (MAE): 0.1194
+Epoch 015/100 | Train Loss (MAE): 0.1311 | Val Loss (MAE): 0.1189
+Epoch 016/100 | Train Loss (MAE): 0.1297 | Val Loss (MAE): 0.1178
+Epoch 017/100 | Train Loss (MAE): 0.1288 | Val Loss (MAE): 0.1161
+Epoch 018/100 | Train Loss (MAE): 0.1274 | Val Loss (MAE): 0.1155
+Epoch 019/100 | Train Loss (MAE): 0.1261 | Val Loss (MAE): 0.1165
+Epoch 020/100 | Train Loss (MAE): 0.1246 | Val Loss (MAE): 0.1155
+Epoch 021/100 | Train Loss (MAE): 0.1247 | Val Loss (MAE): 0.1122
+Epoch 022/100 | Train Loss (MAE): 0.1228 | Val Loss (MAE): 0.1170
+Epoch 023/100 | Train Loss (MAE): 0.1218 | Val Loss (MAE): 0.1163
+Epoch 024/100 | Train Loss (MAE): 0.1201 | Val Loss (MAE): 0.1152
+Epoch 025/100 | Train Loss (MAE): 0.1193 | Val Loss (MAE): 0.1134
+Epoch 026/100 | Train Loss (MAE): 0.1186 | Val Loss (MAE): 0.1122
+Epoch 027/100 | Train Loss (MAE): 0.1183 | Val Loss (MAE): 0.1159
+Epoch 028/100 | Train Loss (MAE): 0.1171 | Val Loss (MAE): 0.1145
+Epoch 029/100 | Train Loss (MAE): 0.1161 | Val Loss (MAE): 0.1156
+Epoch 030/100 | Train Loss (MAE): 0.1162 | Val Loss (MAE): 0.1132
+Epoch 031/100 | Train Loss (MAE): 0.1155 | Val Loss (MAE): 0.1132
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead DirectLSTM Metrics (kW) ---
+RMSE: 2.94 | MAE: 1.42 | WAPE: 11.53%
+Graph saved successfully to directlstm_1hr_ahead_forecast.png
+
+  [Trial 2 Success] -> RMSE: 2.94 | MAE: 1.42 | WAPE: 11.53%
+
+[Trial 3/5] Executing CommFac/1hr_lstm.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead DirectLSTM Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2119 | Val Loss (MAE): 0.1337
+Epoch 002/100 | Train Loss (MAE): 0.1622 | Val Loss (MAE): 0.1324
+Epoch 003/100 | Train Loss (MAE): 0.1547 | Val Loss (MAE): 0.1265
+Epoch 004/100 | Train Loss (MAE): 0.1513 | Val Loss (MAE): 0.1376
+Epoch 005/100 | Train Loss (MAE): 0.1500 | Val Loss (MAE): 0.1259
+Epoch 006/100 | Train Loss (MAE): 0.1471 | Val Loss (MAE): 0.1309
+Epoch 007/100 | Train Loss (MAE): 0.1447 | Val Loss (MAE): 0.1236
+Epoch 008/100 | Train Loss (MAE): 0.1427 | Val Loss (MAE): 0.1218
+Epoch 009/100 | Train Loss (MAE): 0.1421 | Val Loss (MAE): 0.1235
+Epoch 010/100 | Train Loss (MAE): 0.1412 | Val Loss (MAE): 0.1236
+Epoch 011/100 | Train Loss (MAE): 0.1387 | Val Loss (MAE): 0.1195
+Epoch 012/100 | Train Loss (MAE): 0.1368 | Val Loss (MAE): 0.1208
+Epoch 013/100 | Train Loss (MAE): 0.1336 | Val Loss (MAE): 0.1250
+Epoch 014/100 | Train Loss (MAE): 0.1339 | Val Loss (MAE): 0.1181
+Epoch 015/100 | Train Loss (MAE): 0.1332 | Val Loss (MAE): 0.1202
+Epoch 016/100 | Train Loss (MAE): 0.1304 | Val Loss (MAE): 0.1196
+Epoch 017/100 | Train Loss (MAE): 0.1289 | Val Loss (MAE): 0.1159
+Epoch 018/100 | Train Loss (MAE): 0.1264 | Val Loss (MAE): 0.1141
+Epoch 019/100 | Train Loss (MAE): 0.1256 | Val Loss (MAE): 0.1173
+Epoch 020/100 | Train Loss (MAE): 0.1252 | Val Loss (MAE): 0.1148
+Epoch 021/100 | Train Loss (MAE): 0.1245 | Val Loss (MAE): 0.1181
+Epoch 022/100 | Train Loss (MAE): 0.1237 | Val Loss (MAE): 0.1167
+Epoch 023/100 | Train Loss (MAE): 0.1224 | Val Loss (MAE): 0.1138
+Epoch 024/100 | Train Loss (MAE): 0.1215 | Val Loss (MAE): 0.1147
+Epoch 025/100 | Train Loss (MAE): 0.1232 | Val Loss (MAE): 0.1146
+Epoch 026/100 | Train Loss (MAE): 0.1202 | Val Loss (MAE): 0.1133
+Epoch 027/100 | Train Loss (MAE): 0.1192 | Val Loss (MAE): 0.1151
+Epoch 028/100 | Train Loss (MAE): 0.1189 | Val Loss (MAE): 0.1151
+Epoch 029/100 | Train Loss (MAE): 0.1172 | Val Loss (MAE): 0.1140
+Epoch 030/100 | Train Loss (MAE): 0.1166 | Val Loss (MAE): 0.1118
+Epoch 031/100 | Train Loss (MAE): 0.1190 | Val Loss (MAE): 0.1113
+Epoch 032/100 | Train Loss (MAE): 0.1162 | Val Loss (MAE): 0.1147
+Epoch 033/100 | Train Loss (MAE): 0.1155 | Val Loss (MAE): 0.1142
+Epoch 034/100 | Train Loss (MAE): 0.1138 | Val Loss (MAE): 0.1102
+Epoch 035/100 | Train Loss (MAE): 0.1136 | Val Loss (MAE): 0.1117
+Epoch 036/100 | Train Loss (MAE): 0.1128 | Val Loss (MAE): 0.1122
+Epoch 037/100 | Train Loss (MAE): 0.1126 | Val Loss (MAE): 0.1127
+Epoch 038/100 | Train Loss (MAE): 0.1112 | Val Loss (MAE): 0.1124
+Epoch 039/100 | Train Loss (MAE): 0.1107 | Val Loss (MAE): 0.1193
+Epoch 040/100 | Train Loss (MAE): 0.1107 | Val Loss (MAE): 0.1121
+Epoch 041/100 | Train Loss (MAE): 0.1100 | Val Loss (MAE): 0.1128
+Epoch 042/100 | Train Loss (MAE): 0.1090 | Val Loss (MAE): 0.1148
+Epoch 043/100 | Train Loss (MAE): 0.1084 | Val Loss (MAE): 0.1163
+Epoch 044/100 | Train Loss (MAE): 0.1070 | Val Loss (MAE): 0.1133
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead DirectLSTM Metrics (kW) ---
+RMSE: 3.16 | MAE: 1.52 | WAPE: 12.34%
+Graph saved successfully to directlstm_1hr_ahead_forecast.png
+
+  [Trial 3 Success] -> RMSE: 3.16 | MAE: 1.52 | WAPE: 12.34%
+
+[Trial 4/5] Executing CommFac/1hr_lstm.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead DirectLSTM Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2084 | Val Loss (MAE): 0.1392
+Epoch 002/100 | Train Loss (MAE): 0.1611 | Val Loss (MAE): 0.1299
+Epoch 003/100 | Train Loss (MAE): 0.1547 | Val Loss (MAE): 0.1303
+Epoch 004/100 | Train Loss (MAE): 0.1504 | Val Loss (MAE): 0.1258
+Epoch 005/100 | Train Loss (MAE): 0.1484 | Val Loss (MAE): 0.1271
+Epoch 006/100 | Train Loss (MAE): 0.1462 | Val Loss (MAE): 0.1256
+Epoch 007/100 | Train Loss (MAE): 0.1440 | Val Loss (MAE): 0.1264
+Epoch 008/100 | Train Loss (MAE): 0.1433 | Val Loss (MAE): 0.1251
+Epoch 009/100 | Train Loss (MAE): 0.1416 | Val Loss (MAE): 0.1226
+Epoch 010/100 | Train Loss (MAE): 0.1387 | Val Loss (MAE): 0.1208
+Epoch 011/100 | Train Loss (MAE): 0.1374 | Val Loss (MAE): 0.1212
+Epoch 012/100 | Train Loss (MAE): 0.1353 | Val Loss (MAE): 0.1208
+Epoch 013/100 | Train Loss (MAE): 0.1337 | Val Loss (MAE): 0.1204
+Epoch 014/100 | Train Loss (MAE): 0.1326 | Val Loss (MAE): 0.1184
+Epoch 015/100 | Train Loss (MAE): 0.1300 | Val Loss (MAE): 0.1137
+Epoch 016/100 | Train Loss (MAE): 0.1288 | Val Loss (MAE): 0.1169
+Epoch 017/100 | Train Loss (MAE): 0.1277 | Val Loss (MAE): 0.1173
+Epoch 018/100 | Train Loss (MAE): 0.1265 | Val Loss (MAE): 0.1155
+Epoch 019/100 | Train Loss (MAE): 0.1259 | Val Loss (MAE): 0.1175
+Epoch 020/100 | Train Loss (MAE): 0.1246 | Val Loss (MAE): 0.1201
+Epoch 021/100 | Train Loss (MAE): 0.1241 | Val Loss (MAE): 0.1154
+Epoch 022/100 | Train Loss (MAE): 0.1237 | Val Loss (MAE): 0.1184
+Epoch 023/100 | Train Loss (MAE): 0.1211 | Val Loss (MAE): 0.1133
+Epoch 024/100 | Train Loss (MAE): 0.1211 | Val Loss (MAE): 0.1132
+Epoch 025/100 | Train Loss (MAE): 0.1204 | Val Loss (MAE): 0.1151
+Epoch 026/100 | Train Loss (MAE): 0.1194 | Val Loss (MAE): 0.1133
+Epoch 027/100 | Train Loss (MAE): 0.1185 | Val Loss (MAE): 0.1122
+Epoch 028/100 | Train Loss (MAE): 0.1172 | Val Loss (MAE): 0.1128
+Epoch 029/100 | Train Loss (MAE): 0.1176 | Val Loss (MAE): 0.1133
+Epoch 030/100 | Train Loss (MAE): 0.1163 | Val Loss (MAE): 0.1118
+Epoch 031/100 | Train Loss (MAE): 0.1162 | Val Loss (MAE): 0.1136
+Epoch 032/100 | Train Loss (MAE): 0.1148 | Val Loss (MAE): 0.1128
+Epoch 033/100 | Train Loss (MAE): 0.1141 | Val Loss (MAE): 0.1131
+Epoch 034/100 | Train Loss (MAE): 0.1143 | Val Loss (MAE): 0.1123
+Epoch 035/100 | Train Loss (MAE): 0.1132 | Val Loss (MAE): 0.1133
+Epoch 036/100 | Train Loss (MAE): 0.1129 | Val Loss (MAE): 0.1147
+Epoch 037/100 | Train Loss (MAE): 0.1119 | Val Loss (MAE): 0.1167
+Epoch 038/100 | Train Loss (MAE): 0.1114 | Val Loss (MAE): 0.1151
+Epoch 039/100 | Train Loss (MAE): 0.1112 | Val Loss (MAE): 0.1135
+Epoch 040/100 | Train Loss (MAE): 0.1095 | Val Loss (MAE): 0.1148
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead DirectLSTM Metrics (kW) ---
+RMSE: 3.29 | MAE: 1.57 | WAPE: 12.72%
+Graph saved successfully to directlstm_1hr_ahead_forecast.png
+
+  [Trial 4 Success] -> RMSE: 3.29 | MAE: 1.57 | WAPE: 12.72%
+
+[Trial 5/5] Executing CommFac/1hr_lstm.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 1-Hour-Ahead DirectLSTM Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.2100 | Val Loss (MAE): 0.1394
+Epoch 002/100 | Train Loss (MAE): 0.1622 | Val Loss (MAE): 0.1305
+Epoch 003/100 | Train Loss (MAE): 0.1544 | Val Loss (MAE): 0.1265
+Epoch 004/100 | Train Loss (MAE): 0.1504 | Val Loss (MAE): 0.1297
+Epoch 005/100 | Train Loss (MAE): 0.1486 | Val Loss (MAE): 0.1267
+Epoch 006/100 | Train Loss (MAE): 0.1460 | Val Loss (MAE): 0.1310
+Epoch 007/100 | Train Loss (MAE): 0.1451 | Val Loss (MAE): 0.1257
+Epoch 008/100 | Train Loss (MAE): 0.1425 | Val Loss (MAE): 0.1244
+Epoch 009/100 | Train Loss (MAE): 0.1409 | Val Loss (MAE): 0.1271
+Epoch 010/100 | Train Loss (MAE): 0.1398 | Val Loss (MAE): 0.1214
+Epoch 011/100 | Train Loss (MAE): 0.1392 | Val Loss (MAE): 0.1228
+Epoch 012/100 | Train Loss (MAE): 0.1368 | Val Loss (MAE): 0.1185
+Epoch 013/100 | Train Loss (MAE): 0.1352 | Val Loss (MAE): 0.1194
+Epoch 014/100 | Train Loss (MAE): 0.1343 | Val Loss (MAE): 0.1197
+Epoch 015/100 | Train Loss (MAE): 0.1326 | Val Loss (MAE): 0.1183
+Epoch 016/100 | Train Loss (MAE): 0.1311 | Val Loss (MAE): 0.1163
+Epoch 017/100 | Train Loss (MAE): 0.1291 | Val Loss (MAE): 0.1188
+Epoch 018/100 | Train Loss (MAE): 0.1276 | Val Loss (MAE): 0.1179
+Epoch 019/100 | Train Loss (MAE): 0.1257 | Val Loss (MAE): 0.1195
+Epoch 020/100 | Train Loss (MAE): 0.1264 | Val Loss (MAE): 0.1144
+Epoch 021/100 | Train Loss (MAE): 0.1240 | Val Loss (MAE): 0.1159
+Epoch 022/100 | Train Loss (MAE): 0.1227 | Val Loss (MAE): 0.1150
+Epoch 023/100 | Train Loss (MAE): 0.1216 | Val Loss (MAE): 0.1184
+Epoch 024/100 | Train Loss (MAE): 0.1209 | Val Loss (MAE): 0.1129
+Epoch 025/100 | Train Loss (MAE): 0.1207 | Val Loss (MAE): 0.1169
+Epoch 026/100 | Train Loss (MAE): 0.1193 | Val Loss (MAE): 0.1176
+Epoch 027/100 | Train Loss (MAE): 0.1179 | Val Loss (MAE): 0.1152
+Epoch 028/100 | Train Loss (MAE): 0.1177 | Val Loss (MAE): 0.1148
+Epoch 029/100 | Train Loss (MAE): 0.1169 | Val Loss (MAE): 0.1144
+Epoch 030/100 | Train Loss (MAE): 0.1164 | Val Loss (MAE): 0.1129
+Epoch 031/100 | Train Loss (MAE): 0.1150 | Val Loss (MAE): 0.1130
+Epoch 032/100 | Train Loss (MAE): 0.1153 | Val Loss (MAE): 0.1147
+Epoch 033/100 | Train Loss (MAE): 0.1142 | Val Loss (MAE): 0.1157
+Epoch 034/100 | Train Loss (MAE): 0.1132 | Val Loss (MAE): 0.1136
+Epoch 035/100 | Train Loss (MAE): 0.1120 | Val Loss (MAE): 0.1155
+Epoch 036/100 | Train Loss (MAE): 0.1114 | Val Loss (MAE): 0.1138
+Epoch 037/100 | Train Loss (MAE): 0.1111 | Val Loss (MAE): 0.1158
+Epoch 038/100 | Train Loss (MAE): 0.1101 | Val Loss (MAE): 0.1145
+Epoch 039/100 | Train Loss (MAE): 0.1093 | Val Loss (MAE): 0.1208
+Epoch 040/100 | Train Loss (MAE): 0.1089 | Val Loss (MAE): 0.1155
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 1-Hour-Ahead DirectLSTM Metrics (kW) ---
+RMSE: 2.93 | MAE: 1.42 | WAPE: 11.53%
+Graph saved successfully to directlstm_1hr_ahead_forecast.png
+
+  [Trial 5 Success] -> RMSE: 2.93 | MAE: 1.42 | WAPE: 11.53%
+
+==================================================
+FINAL STATISTICAL SUMMARY (5 SUCCESSFUL TRIALS)
+Target Script: CommFac/1hr_lstm.py
+==================================================
+RMSE: 3.18 ± 0.24
+MAE:  1.51 ± 0.08
+WAPE: 12.27% ± 0.67%
+==================================================
+
+--- SUCCESS: CommFac/1hr_lstm.py ---
+
+--- STARTING EVALUATION: CommFac/24hr_tft.py ---
+Timestamp: 2026-10-16 16:59:00
+
+--- Starting 5-Run Evaluation for CommFac/24hr_tft.py ---
+
+[Trial 1/5] Executing CommFac/24hr_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 24-Hour-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.5497 | Val Loss (MAE): 0.3690
+Epoch 002/100 | Train Loss (MAE): 0.4939 | Val Loss (MAE): 0.3434
+Epoch 003/100 | Train Loss (MAE): 0.4779 | Val Loss (MAE): 0.3465
+Epoch 004/100 | Train Loss (MAE): 0.4710 | Val Loss (MAE): 0.3441
+Epoch 005/100 | Train Loss (MAE): 0.4682 | Val Loss (MAE): 0.3464
+Epoch 006/100 | Train Loss (MAE): 0.4658 | Val Loss (MAE): 0.3445
+Epoch 007/100 | Train Loss (MAE): 0.4639 | Val Loss (MAE): 0.3435
+Epoch 008/100 | Train Loss (MAE): 0.4623 | Val Loss (MAE): 0.3525
+Epoch 009/100 | Train Loss (MAE): 0.4611 | Val Loss (MAE): 0.3473
+Epoch 010/100 | Train Loss (MAE): 0.4600 | Val Loss (MAE): 0.3460
+Epoch 011/100 | Train Loss (MAE): 0.4593 | Val Loss (MAE): 0.3487
+Epoch 012/100 | Train Loss (MAE): 0.4584 | Val Loss (MAE): 0.3523
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 24-Hour-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 5.16 | MAE: 3.36 | WAPE: 27.79%
+Graph saved successfully to transformer_24hr_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 5.16 | MAE: 3.36 | WAPE: 27.79%
+
+[Trial 2/5] Executing CommFac/24hr_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 24-Hour-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.5674 | Val Loss (MAE): 0.3752
+Epoch 002/100 | Train Loss (MAE): 0.5044 | Val Loss (MAE): 0.3574
+Epoch 003/100 | Train Loss (MAE): 0.4827 | Val Loss (MAE): 0.3451
+Epoch 004/100 | Train Loss (MAE): 0.4731 | Val Loss (MAE): 0.3433
+Epoch 005/100 | Train Loss (MAE): 0.4687 | Val Loss (MAE): 0.3483
+Epoch 006/100 | Train Loss (MAE): 0.4659 | Val Loss (MAE): 0.3441
+Epoch 007/100 | Train Loss (MAE): 0.4641 | Val Loss (MAE): 0.3502
+Epoch 008/100 | Train Loss (MAE): 0.4625 | Val Loss (MAE): 0.3452
+Epoch 009/100 | Train Loss (MAE): 0.4614 | Val Loss (MAE): 0.3487
+Epoch 010/100 | Train Loss (MAE): 0.4604 | Val Loss (MAE): 0.3485
+Epoch 011/100 | Train Loss (MAE): 0.4597 | Val Loss (MAE): 0.3501
+Epoch 012/100 | Train Loss (MAE): 0.4594 | Val Loss (MAE): 0.3527
+Epoch 013/100 | Train Loss (MAE): 0.4587 | Val Loss (MAE): 0.3595
+Epoch 014/100 | Train Loss (MAE): 0.4579 | Val Loss (MAE): 0.3490
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 24-Hour-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 4.96 | MAE: 3.37 | WAPE: 27.81%
+Graph saved successfully to transformer_24hr_ahead_forecast.png
+
+  [Trial 2 Success] -> RMSE: 4.96 | MAE: 3.37 | WAPE: 27.81%
+
+[Trial 3/5] Executing CommFac/24hr_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 24-Hour-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.5648 | Val Loss (MAE): 0.3759
+Epoch 002/100 | Train Loss (MAE): 0.5028 | Val Loss (MAE): 0.3517
+Epoch 003/100 | Train Loss (MAE): 0.4827 | Val Loss (MAE): 0.3421
+Epoch 004/100 | Train Loss (MAE): 0.4743 | Val Loss (MAE): 0.3467
+Epoch 005/100 | Train Loss (MAE): 0.4696 | Val Loss (MAE): 0.3402
+Epoch 006/100 | Train Loss (MAE): 0.4671 | Val Loss (MAE): 0.3422
+Epoch 007/100 | Train Loss (MAE): 0.4648 | Val Loss (MAE): 0.3446
+Epoch 008/100 | Train Loss (MAE): 0.4627 | Val Loss (MAE): 0.3452
+Epoch 009/100 | Train Loss (MAE): 0.4612 | Val Loss (MAE): 0.3420
+Epoch 010/100 | Train Loss (MAE): 0.4597 | Val Loss (MAE): 0.3445
+Epoch 011/100 | Train Loss (MAE): 0.4591 | Val Loss (MAE): 0.3413
+Epoch 012/100 | Train Loss (MAE): 0.4578 | Val Loss (MAE): 0.3453
+Epoch 013/100 | Train Loss (MAE): 0.4570 | Val Loss (MAE): 0.3454
+Epoch 014/100 | Train Loss (MAE): 0.4563 | Val Loss (MAE): 0.3500
+Epoch 015/100 | Train Loss (MAE): 0.4558 | Val Loss (MAE): 0.3532
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 24-Hour-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 4.92 | MAE: 3.34 | WAPE: 27.57%
+Graph saved successfully to transformer_24hr_ahead_forecast.png
+
+  [Trial 3 Success] -> RMSE: 4.92 | MAE: 3.34 | WAPE: 27.57%
+
+[Trial 4/5] Executing CommFac/24hr_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 24-Hour-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.5635 | Val Loss (MAE): 0.3702
+Epoch 002/100 | Train Loss (MAE): 0.5003 | Val Loss (MAE): 0.3480
+Epoch 003/100 | Train Loss (MAE): 0.4794 | Val Loss (MAE): 0.3367
+Epoch 004/100 | Train Loss (MAE): 0.4711 | Val Loss (MAE): 0.3361
+Epoch 005/100 | Train Loss (MAE): 0.4669 | Val Loss (MAE): 0.3369
+Epoch 006/100 | Train Loss (MAE): 0.4650 | Val Loss (MAE): 0.3388
+Epoch 007/100 | Train Loss (MAE): 0.4624 | Val Loss (MAE): 0.3389
+Epoch 008/100 | Train Loss (MAE): 0.4617 | Val Loss (MAE): 0.3453
+Epoch 009/100 | Train Loss (MAE): 0.4604 | Val Loss (MAE): 0.3412
+Epoch 010/100 | Train Loss (MAE): 0.4591 | Val Loss (MAE): 0.3429
+Epoch 011/100 | Train Loss (MAE): 0.4587 | Val Loss (MAE): 0.3450
+Epoch 012/100 | Train Loss (MAE): 0.4581 | Val Loss (MAE): 0.3428
+Epoch 013/100 | Train Loss (MAE): 0.4571 | Val Loss (MAE): 0.3443
+Epoch 014/100 | Train Loss (MAE): 0.4567 | Val Loss (MAE): 0.3459
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 24-Hour-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 4.97 | MAE: 3.35 | WAPE: 27.66%
+Graph saved successfully to transformer_24hr_ahead_forecast.png
+
+  [Trial 4 Success] -> RMSE: 4.97 | MAE: 3.35 | WAPE: 27.66%
+
+[Trial 5/5] Executing CommFac/24hr_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 24-Hour-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.5934 | Val Loss (MAE): 0.3942
+Epoch 002/100 | Train Loss (MAE): 0.5160 | Val Loss (MAE): 0.3599
+Epoch 003/100 | Train Loss (MAE): 0.4871 | Val Loss (MAE): 0.3471
+Epoch 004/100 | Train Loss (MAE): 0.4747 | Val Loss (MAE): 0.3410
+Epoch 005/100 | Train Loss (MAE): 0.4686 | Val Loss (MAE): 0.3449
+Epoch 006/100 | Train Loss (MAE): 0.4661 | Val Loss (MAE): 0.3389
+Epoch 007/100 | Train Loss (MAE): 0.4639 | Val Loss (MAE): 0.3488
+Epoch 008/100 | Train Loss (MAE): 0.4627 | Val Loss (MAE): 0.3565
+Epoch 009/100 | Train Loss (MAE): 0.4607 | Val Loss (MAE): 0.3453
+Epoch 010/100 | Train Loss (MAE): 0.4598 | Val Loss (MAE): 0.3455
+Epoch 011/100 | Train Loss (MAE): 0.4583 | Val Loss (MAE): 0.3507
+Epoch 012/100 | Train Loss (MAE): 0.4575 | Val Loss (MAE): 0.3477
+Epoch 013/100 | Train Loss (MAE): 0.4568 | Val Loss (MAE): 0.3504
+Epoch 014/100 | Train Loss (MAE): 0.4563 | Val Loss (MAE): 0.3513
+Epoch 015/100 | Train Loss (MAE): 0.4561 | Val Loss (MAE): 0.3514
+Epoch 016/100 | Train Loss (MAE): 0.4555 | Val Loss (MAE): 0.3589
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 24-Hour-Ahead Grid Transformer Metrics (kW) ---
+RMSE: 5.03 | MAE: 3.41 | WAPE: 28.20%
+Graph saved successfully to transformer_24hr_ahead_forecast.png
+
+  [Trial 5 Success] -> RMSE: 5.03 | MAE: 3.41 | WAPE: 28.20%
+
+==================================================
+FINAL STATISTICAL SUMMARY (5 SUCCESSFUL TRIALS)
+Target Script: CommFac/24hr_tft.py
+==================================================
+RMSE: 5.01 ± 0.08
+MAE:  3.37 ± 0.02
+WAPE: 27.81% ± 0.22%
+==================================================
+
+--- SUCCESS: CommFac/24hr_tft.py ---
+
+--- STARTING EVALUATION: CommFac/24hr_seq2seq.py ---
+Timestamp: 2026-10-16 17:04:30
+
+--- Starting 5-Run Evaluation for CommFac/24hr_seq2seq.py ---
+
+[Trial 1/5] Executing CommFac/24hr_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 24-Hour-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3321 | Val Loss (MAE): 0.2013
+Epoch 002/100 | Train Loss (MAE): 0.2555 | Val Loss (MAE): 0.2172
+Epoch 003/100 | Train Loss (MAE): 0.2422 | Val Loss (MAE): 0.1899
+Epoch 004/100 | Train Loss (MAE): 0.2268 | Val Loss (MAE): 0.1941
+Epoch 005/100 | Train Loss (MAE): 0.2303 | Val Loss (MAE): 0.1918
+Epoch 006/100 | Train Loss (MAE): 0.2127 | Val Loss (MAE): 0.1873
+Epoch 007/100 | Train Loss (MAE): 0.2107 | Val Loss (MAE): 0.1842
+Epoch 008/100 | Train Loss (MAE): 0.1905 | Val Loss (MAE): 0.1840
+Epoch 009/100 | Train Loss (MAE): 0.1979 | Val Loss (MAE): 0.1991
+Epoch 010/100 | Train Loss (MAE): 0.1837 | Val Loss (MAE): 0.1714
+Epoch 011/100 | Train Loss (MAE): 0.1891 | Val Loss (MAE): 0.1799
+Epoch 012/100 | Train Loss (MAE): 0.1788 | Val Loss (MAE): 0.1659
+Epoch 013/100 | Train Loss (MAE): 0.1717 | Val Loss (MAE): 0.1649
+Epoch 014/100 | Train Loss (MAE): 0.1598 | Val Loss (MAE): 0.1716
+Epoch 015/100 | Train Loss (MAE): 0.1615 | Val Loss (MAE): 0.1721
+Epoch 016/100 | Train Loss (MAE): 0.1529 | Val Loss (MAE): 0.1777
+Epoch 017/100 | Train Loss (MAE): 0.1873 | Val Loss (MAE): 0.1737
+Epoch 018/100 | Train Loss (MAE): 0.1630 | Val Loss (MAE): 0.1782
+Epoch 019/100 | Train Loss (MAE): 0.1656 | Val Loss (MAE): 0.1701
+Epoch 020/100 | Train Loss (MAE): 0.1561 | Val Loss (MAE): 0.1765
+Epoch 021/100 | Train Loss (MAE): 0.1536 | Val Loss (MAE): 0.1718
+Epoch 022/100 | Train Loss (MAE): 0.1594 | Val Loss (MAE): 0.1737
+Epoch 023/100 | Train Loss (MAE): 0.1467 | Val Loss (MAE): 0.1797
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 24-Hour-Ahead Seq2Seq Metrics (kW) ---
+RMSE: 4.08 | MAE: 2.10 | WAPE: 17.32%
+Graph saved successfully to seq2seq_24hr_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 4.08 | MAE: 2.10 | WAPE: 17.32%
+
+[Trial 2/5] Executing CommFac/24hr_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 24-Hour-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3296 | Val Loss (MAE): 0.2154
+Epoch 002/100 | Train Loss (MAE): 0.2502 | Val Loss (MAE): 0.1911
+Epoch 003/100 | Train Loss (MAE): 0.2203 | Val Loss (MAE): 0.1861
+Epoch 004/100 | Train Loss (MAE): 0.2064 | Val Loss (MAE): 0.1760
+Epoch 005/100 | Train Loss (MAE): 0.1936 | Val Loss (MAE): 0.1715
+Epoch 006/100 | Train Loss (MAE): 0.2011 | Val Loss (MAE): 0.1777
+Epoch 007/100 | Train Loss (MAE): 0.1957 | Val Loss (MAE): 0.1667
+Epoch 008/100 | Train Loss (MAE): 0.1773 | Val Loss (MAE): 0.1766
+Epoch 009/100 | Train Loss (MAE): 0.1690 | Val Loss (MAE): 0.1599
+Epoch 010/100 | Train Loss (MAE): 0.1609 | Val Loss (MAE): 0.1718
+Epoch 011/100 | Train Loss (MAE): 0.1664 | Val Loss (MAE): 0.2526
+Epoch 012/100 | Train Loss (MAE): 0.1940 | Val Loss (MAE): 0.1611
+Epoch 013/100 | Train Loss (MAE): 0.1573 | Val Loss (MAE): 0.1586
+Epoch 014/100 | Train Loss (MAE): 0.1501 | Val Loss (MAE): 0.1635
+Epoch 015/100 | Train Loss (MAE): 0.1441 | Val Loss (MAE): 0.1697
+Epoch 016/100 | Train Loss (MAE): 0.1421 | Val Loss (MAE): 0.1646
+Epoch 017/100 | Train Loss (MAE): 0.1363 | Val Loss (MAE): 0.1587
+Epoch 018/100 | Train Loss (MAE): 0.1349 | Val Loss (MAE): 0.1628
+Epoch 019/100 | Train Loss (MAE): 0.1658 | Val Loss (MAE): 0.1720
+Epoch 020/100 | Train Loss (MAE): 0.1387 | Val Loss (MAE): 0.1828
+Epoch 021/100 | Train Loss (MAE): 0.1363 | Val Loss (MAE): 0.1659
+Epoch 022/100 | Train Loss (MAE): 0.1316 | Val Loss (MAE): 0.1647
+Epoch 023/100 | Train Loss (MAE): 0.1226 | Val Loss (MAE): 0.1641
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 24-Hour-Ahead Seq2Seq Metrics (kW) ---
+RMSE: 4.27 | MAE: 2.25 | WAPE: 18.57%
+Graph saved successfully to seq2seq_24hr_ahead_forecast.png
+
+  [Trial 2 Success] -> RMSE: 4.27 | MAE: 2.25 | WAPE: 18.57%
+
+[Trial 3/5] Executing CommFac/24hr_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 24-Hour-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3276 | Val Loss (MAE): 0.1941
+Epoch 002/100 | Train Loss (MAE): 0.2482 | Val Loss (MAE): 0.1978
+Epoch 003/100 | Train Loss (MAE): 0.2310 | Val Loss (MAE): 0.1820
+Epoch 004/100 | Train Loss (MAE): 0.2041 | Val Loss (MAE): 0.1756
+Epoch 005/100 | Train Loss (MAE): 0.2058 | Val Loss (MAE): 0.1731
+Epoch 006/100 | Train Loss (MAE): 0.2064 | Val Loss (MAE): 0.1745
+Epoch 007/100 | Train Loss (MAE): 0.1944 | Val Loss (MAE): 0.1852
+Epoch 008/100 | Train Loss (MAE): 0.1827 | Val Loss (MAE): 0.1774
+Epoch 009/100 | Train Loss (MAE): 0.1751 | Val Loss (MAE): 0.1690
+Epoch 010/100 | Train Loss (MAE): 0.1770 | Val Loss (MAE): 0.1730
+Epoch 011/100 | Train Loss (MAE): 0.1736 | Val Loss (MAE): 0.1650
+Epoch 012/100 | Train Loss (MAE): 0.1617 | Val Loss (MAE): 0.1624
+Epoch 013/100 | Train Loss (MAE): 0.1587 | Val Loss (MAE): 0.1720
+Epoch 014/100 | Train Loss (MAE): 0.1655 | Val Loss (MAE): 0.1664
+Epoch 015/100 | Train Loss (MAE): 0.1516 | Val Loss (MAE): 0.1703
+Epoch 016/100 | Train Loss (MAE): 0.1484 | Val Loss (MAE): 0.1813
+Epoch 017/100 | Train Loss (MAE): 0.1568 | Val Loss (MAE): 0.2118
+Epoch 018/100 | Train Loss (MAE): 0.1675 | Val Loss (MAE): 0.1675
+Epoch 019/100 | Train Loss (MAE): 0.1487 | Val Loss (MAE): 0.1654
+Epoch 020/100 | Train Loss (MAE): 0.1362 | Val Loss (MAE): 0.1677
+Epoch 021/100 | Train Loss (MAE): 0.1359 | Val Loss (MAE): 0.1664
+Epoch 022/100 | Train Loss (MAE): 0.1321 | Val Loss (MAE): 0.1628
+
+Early stopping triggered! No improvement in validation loss for 10 epochs.
+
+Loading best model weights and evaluating on Test Set...
+
+--- 24-Hour-Ahead Seq2Seq Metrics (kW) ---
+RMSE: 4.25 | MAE: 2.27 | WAPE: 18.76%
+Graph saved successfully to seq2seq_24hr_ahead_forecast.png
+
+  [Trial 3 Success] -> RMSE: 4.25 | MAE: 2.27 | WAPE: 18.76%
+
+[Trial 4/5] Executing CommFac/24hr_seq2seq.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 24-Hour-Ahead Seq2Seq Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (MAE): 0.3276 | Val Loss (MAE): 0.2197
+Epoch 002/100 | Train Loss (MAE): 0.2464 | Val Loss (MAE): 0.1973
+Epoch 003/100 | Train Loss (MAE): 0.2343 | Val Loss (MAE): 0.1949
+Epoch 004/100 | Train Loss (MAE): 0.2138 | Val Loss (MAE): 0.1950
+Epoch 005/100 | Train Loss (MAE): 0.2100 | Val Loss (MAE): 0.1969
+Epoch 006/100 | Train Loss (MAE): 0.2047 | Val Loss (MAE): 0.1805
+Epoch 007/100 | Train Loss (MAE): 0.2083 | Val Loss (MAE): 0.1810
+Epoch 008/100 | Train Loss (MAE): 0.1880 | Val Loss (MAE): 0.1855
+Epoch 009/100 | Train Loss (MAE): 0.1914 | Val Loss (MAE): 0.1833
+Epoch 010/100 | Train Loss (MAE): 0.1810 | Val Loss (MAE): 0.1830
+Epoch 011/100 | Train Loss (MAE): 0.1840 | Val Loss (MAE): 0.1955
+Epoch 012/100 | Train Loss (MAE): 0.1782 | Val Loss (MAE): 0.2013
+Epoch 013/100 | Train Loss (MAE): 0.1706 | Val Loss (MAE): 0.1732
+Epoch 014/100 | Train Loss (MAE): 0.1652 | Val Loss (MAE): 0.1725
+Epoch 015/100 | Train Loss (MAE): 0.1629 | Val Loss (MAE): 0.2272
+Epoch 016/100 | Train Loss (MAE): 0.1912 | Val Loss (MAE): 0.1766
+Epoch 017/100 | Train Loss (MAE): 0.1819 | Val Loss (MAE): 0.1906
+Epoch 018/100 | Train Loss (MAE): 0.1747 | Val Loss (MAE): 0.1819
+Epoch 019/100 | Train Loss (MAE): 0.1622 | Val Loss (MAE): 0.1727
+Epoch 020/100 | Train Loss (MAE): 0.1541 | Val Loss (MAE): 0.1693
+Epoch 021/100 | Train Loss (MAE): 0.1515 | Val Loss (MAE): 0.1741
+Epoch 022/100 | Train Loss (MAE): 0.1442 | Val Loss (MAE): 0.1776
+Epoch 023/100 | Train Loss (MAE): 0.1399 | Val Loss (MAE): 0.1726
+Epoch 024/100 | Train Loss (MAE): 0.1353 | Val Loss (MAE): 0.1708
+Epoch 025/100 | Train Loss (MAE): 0.1295 | Val Loss (MAE): 0.1757
+Epoch 026/100 | Train Loss (MAE): 0.1436 | Val Loss (MAE): 0.1671
+Epoch 027/100 | Train Loss (MAE): 0.1416 | Val Loss (MAE): 0.1709
+Epoch 028/100 | Train Loss (MAE): 0.1335 | Val Loss (MAE): 0.1816
+Epoch 029/100 | Train Loss (MAE): 0.1434 | Val Loss (MAE): 0.1683
+Epoch 030/100 | Train Loss (MAE): 0.1267 | Val Loss (MAE): 0.1679
+Epoch 031/100 | Train Loss (MAE): 0.1444 | Val Loss (MAE): 0.1697
+Epoch 032/100 | Train Loss (MAE): 0.1415 | Val Loss (MAE): 0.1709
+Epoch 033/100 | Train Loss (MAE): 0.1191 | Val Loss (MAE): 0.1665
+Epoch 034/100 | Train Loss (MAE): 0.1163 | Val Loss (MAE): 0.1901
+Epoch 035/100 | Train Loss (MAE): 0.1325 | Val Loss (MAE): 0.1777
+Epoch 036/100 | Train Loss (MAE): 0.1223 | Val Loss (MAE): 0.1782
+Epoch 037/100 | Train Loss (MAE): 0.1573 | Val Loss (MAE): 0.1931
