@@ -8,42 +8,49 @@ def run_evaluation(script_path, num_runs=5):
     print(f"--- Starting {num_runs}-Run Evaluation for {script_path} ---")
     
     metrics = {'RMSE': [], 'MAE': [], 'WAPE': []}
-    
-    # Regex to capture the specific format your scripts print at the very end
     regex = r"RMSE:\s*([\d.]+)\s*\|\s*MAE:\s*([\d.]+)\s*\|\s*WAPE:\s*([\d.]+)%"
     
     for run in range(1, num_runs + 1):
-        print(f"\n[Trial {run}/{num_runs}] Executing {script_path}...")
+        print(f"\n[Trial {run}/{num_runs}] Executing {script_path}...\n")
         
-        # Execute the exterior script and capture everything it prints to the terminal
-        result = subprocess.run([sys.executable, script_path], capture_output=True, text=True)
+        # Use Popen to stream the training epochs in real time
+        process = subprocess.Popen(
+            [sys.executable, "-u", script_path], 
+            stdout=subprocess.PIPE, 
+            stderr=subprocess.STDOUT, 
+            text=True, 
+            bufsize=1
+        )
         
-        # Check if the script crashed
-        if result.returncode != 0:
-            print(f"  [!] Error executing script on trial {run}:")
-            print(result.stderr)
+        captured_output = []
+        
+        # Print output line-by-line as PyTorch trains
+        for line in process.stdout:
+            print(line, end='', flush=True)  
+            captured_output.append(line)
+            
+        process.wait()
+        
+        if process.returncode != 0:
+            print(f"\n  [!] Error executing script on trial {run}.")
             continue
             
-        # Search the captured terminal output for the metrics line
-        output = result.stdout
-        match = re.search(regex, output)
+        # Rejoin the captured lines to search for the final metrics
+        full_output = "".join(captured_output)
+        match = re.search(regex, full_output)
         
         if match:
-            rmse = float(match.group(1))
-            mae = float(match.group(2))
-            wape = float(match.group(3))
-            
-            print(f"  Captured -> RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
+            rmse, mae, wape = float(match.group(1)), float(match.group(2)), float(match.group(3))
+            print(f"\n  [Trial {run} Success] -> RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
             metrics['RMSE'].append(rmse)
             metrics['MAE'].append(mae)
             metrics['WAPE'].append(wape)
         else:
-            print(f"  [!] Warning: Could not find or parse metrics in the terminal output.")
+            print(f"\n  [!] Warning: Could not find or parse metrics in the terminal output.")
             print("  --- Last 500 characters of terminal output ---")
-            print(output[-500:])
+            print(full_output[-500:])
             print("  ----------------------------------------------")
 
-    # Calculate and display the final statistical summary
     if len(metrics['RMSE']) > 0:
         print("\n==================================================")
         print(f"FINAL STATISTICAL SUMMARY ({len(metrics['RMSE'])} SUCCESSFUL TRIALS)")
