@@ -88,9 +88,9 @@ def main():
     # 1. 15-Minute Substation Configuration
     HORIZON = 1              # Predict 1 step ahead (15 minutes)
     SEQ_LEN = 96             # 96 intervals = 24 hours of history
-    PATCH_LEN = 24           # 24 intervals per patch (6 hours each if patch_len=24, or adjust to fit 96)
-    TARGET_IDX = 1           # Load_MW is at index 1 before dropping Month
-    COVARIATE_START_IDX = 2  # Future covariates start at index 2
+    PATCH_LEN = 4            # 4 intervals per patch (1-hour patches -> 24 patches total)
+    TARGET_IDX = 1           # Ensure this matches your working 15min_direct_lstm.py
+    COVARIATE_START_IDX = 2  
     
     print("--- Starting 15-Minute-Ahead PatchTST Pipeline ---")
     
@@ -105,24 +105,24 @@ def main():
         test_df, seq_len=SEQ_LEN, horizon=HORIZON, target_idx=TARGET_IDX, covariate_start_idx=COVARIATE_START_IDX
     )
     
-    # 3. DataLoaders
-    train_loader = DataLoader(TensorDataset(X_train_hist, X_train_fut, Y_train), batch_size=64, shuffle=True, num_workers=4)
-    val_loader   = DataLoader(TensorDataset(X_val_hist, X_val_fut, Y_val), batch_size=64, shuffle=False, num_workers=4)
-    test_loader  = DataLoader(TensorDataset(X_test_hist, X_test_fut, Y_test), batch_size=64, shuffle=False, num_workers=4)
+    # 3. DataLoaders (set num_workers=0 if running inside batch_runner on Docker)
+    train_loader = DataLoader(TensorDataset(X_train_hist, X_train_fut, Y_train), batch_size=32, shuffle=True, num_workers=0)
+    val_loader   = DataLoader(TensorDataset(X_val_hist, X_val_fut, Y_val), batch_size=32, shuffle=False, num_workers=0)
+    test_loader  = DataLoader(TensorDataset(X_test_hist, X_test_fut, Y_test), batch_size=32, shuffle=False, num_workers=0)
     
     model_path = 'best_15min_patchtst.pth'
     
-    # 4. Instantiate Model (Ensure seq_len matches SEQ_LEN=96 and patch_len divides evenly into it)
+    # 4. Instantiate Model
     model = PatchTST(
         hist_input_dim=X_train_hist.shape[-1],
         future_input_dim=X_train_fut.shape[-1],
         seq_len=SEQ_LEN,
-        patch_len=16,       # 96 / 16 = 6 patches total
+        patch_len=PATCH_LEN, # Uses 4-step (1-hr) patches for sharper short-term boundary resolution
         horizon=HORIZON,
-        hidden_dim=128,
-        nheads=4,
-        num_layers=2,
-        dropout=0.2
+        hidden_dim=64,       # Reduced from 128 to prevent over-parameterizing 4-step patches
+        nheads=2,            # Aligned with tuned PatchTST config
+        num_layers=1,        # Aligned with tuned PatchTST config
+        dropout=0.1          # Lower dropout for 1-step precision
     )
     
     trained_model = train_patchtst(
@@ -130,7 +130,7 @@ def main():
         train_loader=train_loader,
         val_loader=val_loader,
         epochs=100,
-        lr=1e-3,
+        lr=3e-4,             # Lowered from 1e-3 to stabilize Transformer convergence
         patience=10,
         model_save_path=model_path
     )

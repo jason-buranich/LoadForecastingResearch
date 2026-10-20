@@ -69,18 +69,31 @@ def run_and_stream_evaluations(script_list, log_filename="model_benchmark_result
 if __name__ == "__main__":
     # Define scripts as a list of tuples: ("script_name.py", number_of_runs)
     scripts_to_evaluate = [
+        ("CommFac/15min_mlr.py", 1),
+        ("CommFac/15min_rf.py", 1),
+        ("CommFac/15min_xgboost.py", 1),
+        ("CommFac/15min_lgbm.py", 1),
         ("CommFac/15min_tft.py", 5),
         ("CommFac/15min_seq2seq.py", 5),
         ("CommFac/15min_patchtst.py", 5),
         ("CommFac/15min_lstm.py", 5),
+        ("CommFac/1hr_mlr.py", 1),
+        ("CommFac/1hr_rf.py", 1),
+        ("CommFac/1hr_xgboost.py", 1),
+        ("CommFac/1hr_lgbm.py", 1),
         ("CommFac/1hr_tft.py", 5),
         ("CommFac/1hr_seq2seq.py", 5),
         ("CommFac/1hr_patchtst.py", 5),
         ("CommFac/1hr_lstm.py", 5),
+        ("CommFac/24hr_mlr.py", 1),
+        ("CommFac/24hr_rf.py", 1),
+        ("CommFac/24hr_xgboost.py", 1),
+        ("CommFac/24hr_lgbm.py", 1),
         ("CommFac/24hr_tft.py", 5),
         ("CommFac/24hr_seq2seq.py", 5),
         ("CommFac/24hr_patchtst.py", 5),
         ("CommFac/24hr_lstm.py", 5)
+        
     ]
     
     run_and_stream_evaluations(scripts_to_evaluate, log_filename="model_benchmark_results.txt")

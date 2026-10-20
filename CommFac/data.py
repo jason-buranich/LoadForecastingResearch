@@ -26,6 +26,9 @@ def process_latrobe_data(filepath):
     df['DayOfWeek'] = df.index.dayofweek
     df['Month'] = df.index.month
     
+    # Convert 15-minute interval energy (kWh) to average power (kW)
+    df['Load_kW'] = df['Load_kW'] * 4
+    
     return df
 
 # --- Pipeline Execution ---
