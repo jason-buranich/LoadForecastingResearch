@@ -1,3 +1,4 @@
+from metrics import profile_model_efficiency, TrainingTimer
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -50,7 +51,15 @@ def main():
     )
     
     print(f"Training Random Forest on shape {X_train_combined.shape}...")
-    rf.fit(X_train_combined, y_train)
+    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+        rf.fit(X_train_combined, y_train)
+    hw_metrics = profile_model_efficiency(
+        model=rf,
+        test_input=X_test_combined[0:1],
+        training_time_seconds=timer.training_time,
+        model_type="tabular",
+        save_path="temp_substation_15min_rf"
+    )
     
     # 5. Predict and Inverse Scale
     preds_flat = rf.predict(X_test_combined)
@@ -73,6 +82,10 @@ def main():
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     
     # 7. Visualization
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
     plot_single_model_forecast(
         targets_mw, 
         preds_mw, 

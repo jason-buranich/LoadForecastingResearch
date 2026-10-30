@@ -1,3 +1,4 @@
+from metrics import profile_model_efficiency, TrainingTimer
 import os
 import numpy as np
 import pandas as pd
@@ -173,15 +174,23 @@ def main():
         dropout=0.1     
     )
     
-    trained_seq_model = train_seq2seq(
-        model=seq_model, train_loader=train_loader, val_loader=val_loader,
-        epochs=100, lr=1e-4, weight_decay=2.6e-6, patience=10, model_save_path=model_path
-    )
-    
+    with TrainingTimer(use_cuda=torch.cuda.is_available()) as seq_timer:
+        trained_seq_model = train_seq2seq(
+            model=seq_model, train_loader=train_loader, val_loader=val_loader,
+            epochs=100, lr=1e-4, weight_decay=2.6e-6, patience=10, model_save_path=model_path
+        )
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     trained_seq_model.load_state_dict(torch.load(model_path, map_location=device, weights_only=True))
     trained_seq_model.to(device)
     trained_seq_model.eval()
+    seq_hw_metrics = profile_model_efficiency(
+        model=trained_seq_model,
+        test_input=(X_test_hist[0:1].to(device), X_test_fut[0:1].to(device)),
+        training_time_seconds=seq_timer.training_time,
+        model_type="pytorch",
+        save_path="temp_microgrid_24hr_graph_seq2seq"
+    )
     
     seq_predictions, seq_targets = [], []
     with torch.no_grad():
@@ -216,7 +225,15 @@ def main():
     
     xg_base = xgb.XGBRegressor(n_estimators=100, max_depth=6, learning_rate=0.1, random_state=42, tree_method='hist', n_jobs=1)
     multi_xgb = MultiOutputRegressor(xg_base, n_jobs=4)
-    multi_xgb.fit(X_train_flat, Y_xgb_train.numpy())
+    with TrainingTimer(use_cuda=False) as xgb_timer:
+        multi_xgb.fit(X_train_flat, Y_xgb_train.numpy())
+    xgb_hw_metrics = profile_model_efficiency(
+        model=multi_xgb,
+        test_input=X_test_flat[0:1],
+        training_time_seconds=xgb_timer.training_time,
+        model_type="tabular",
+        save_path="temp_microgrid_24hr_graph_xgboost"
+    )
     
     preds_xgb_np = multi_xgb.predict(X_test_flat)
     
@@ -235,6 +252,16 @@ def main():
     t96_preds_seq = inverse_scale(preds_seq_np[:, 95])
     t96_preds_xgb = inverse_scale(preds_xgb_np[:, 95])
     
+    print("\n--- Seq2Seq Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {seq_hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {seq_hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {seq_hw_metrics['size_mb']:.4f} MB")
+
+    print("\n--- XGBoost Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {xgb_hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {xgb_hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {xgb_hw_metrics['size_mb']:.4f} MB")
+
     plot_combined_forecast(
         targets=t96_targets, 
         preds_seq2seq=t96_preds_seq, 

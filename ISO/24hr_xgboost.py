@@ -1,3 +1,4 @@
+from metrics import profile_model_efficiency, TrainingTimer
 import random
 import os
 import numpy as np
@@ -38,6 +39,8 @@ def main():
     # 3. Train 24 Separate XGBoost Models (Direct Multi-Model Strategy)
     print("Training 24 specialized XGBoost models (one per horizon step)...")
     preds_list = []
+    trained_models = []
+    timer = TrainingTimer(use_cuda=False)
     
     for h in range(HORIZON):
         print(f"  -> Training model for Hour {h+1}/{HORIZON}...")
@@ -54,11 +57,21 @@ def main():
             n_jobs=4,
             objective='reg:squarederror'
         )
+        timer.start()
         xgb_h.fit(X_train_combined, y_train_h)
+        timer.stop()
+        trained_models.append(xgb_h)
         
         # Predict for this specific hour on the test set
         pred_h = xgb_h.predict(X_test_combined)
         preds_list.append(pred_h)
+    hw_metrics = profile_model_efficiency(
+        model=trained_models,
+        test_input=X_test_combined[0:1],
+        training_time_seconds=timer.training_time,
+        model_type="tabular",
+        save_path="temp_iso_24hr_xgboost"
+    )
         
     # Stack the predictions back into an (N, 24) matrix
     preds = np.column_stack(preds_list)
@@ -81,6 +94,10 @@ def main():
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     
     # 6. Plot Forecast
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
     plot_single_model_forecast(
         targets_mw, 
         preds_mw, 

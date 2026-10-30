@@ -1,3 +1,4 @@
+from metrics import profile_model_efficiency, TrainingTimer
 import numpy as np
 import pandas as pd
 import xgboost as xgb
@@ -59,7 +60,15 @@ def main():
     multi_xgb = MultiOutputRegressor(xg_base, n_jobs=4)
     
     print(f"Training {HORIZON} distinct XGBoost Models (Throttled to 4 workers)...")
-    multi_xgb.fit(X_train_flat, Y_train_np)
+    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+        multi_xgb.fit(X_train_flat, Y_train_np)
+    hw_metrics = profile_model_efficiency(
+        model=multi_xgb,
+        test_input=X_test_flat[0:1],
+        training_time_seconds=timer.training_time,
+        model_type="tabular",
+        save_path="temp_microgrid_24hr_xgboost"
+    )
     
     # 5. Predict
     print("Evaluating on Test Set...")
@@ -86,6 +95,10 @@ def main():
     t96_preds = inverse_scale(preds[:, 95])
     t96_targets = inverse_scale(Y_test_np[:, 95])
     
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
     plot_single_model_forecast(
         t96_targets, 
         t96_preds, 

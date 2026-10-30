@@ -1,3 +1,4 @@
+from metrics import profile_model_efficiency, TrainingTimer
 import torch
 import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
@@ -119,16 +120,17 @@ def main():
     
     # 4. Execute Training Loop
     print("Launching Seq2Seq training loop...")
-    trained_model, _ = train_seq2seq_model(
-        model=model, 
-        train_loader=train_loader, 
-        val_loader=val_loader, 
-        epochs=100, 
-        lr=3e-4, 
-        patience=10,
-        model_save_path=model_path
-    )
-    
+    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+        trained_model, _ = train_seq2seq_model(
+            model=model,
+            train_loader=train_loader,
+            val_loader=val_loader,
+            epochs=100,
+            lr=3e-4,
+            patience=10,
+            model_save_path=model_path
+        )
+
     # 5. Load Best Weights and Evaluate
     print("\nEvaluating best model on test dataset...")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -136,6 +138,14 @@ def main():
     trained_model.to(device)
     
     # Call the 3-item evaluate function from evaluate.py
+    trained_model.eval()
+    hw_metrics = profile_model_efficiency(
+        model=trained_model,
+        test_input=(X_test_hist[0:1].to(device), X_test_fut[0:1].to(device)),
+        training_time_seconds=timer.training_time,
+        model_type="pytorch",
+        save_path="temp_iso_24hr_seq2seq"
+    )
     lstm_metrics, lstm_preds, lstm_targets = evaluate_predictions(
         trained_model, 
         test_loader, 
@@ -144,6 +154,10 @@ def main():
         device=device
     )
 
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
     plot_single_model_forecast(
         lstm_targets, 
         lstm_preds, 

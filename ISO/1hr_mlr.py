@@ -1,3 +1,4 @@
+from metrics import profile_model_efficiency, TrainingTimer
 import numpy as np
 from sklearn.linear_model import RidgeCV
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -38,7 +39,15 @@ def main():
     mlr = RidgeCV(alphas=alphas_to_test)
     
     print(f"Training MLR on shape: {X_train_combined.shape} to predict t+1...")
-    mlr.fit(X_train_combined, y_train)
+    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+        mlr.fit(X_train_combined, y_train)
+    hw_metrics = profile_model_efficiency(
+        model=mlr,
+        test_input=X_test_combined[0:1],
+        training_time_seconds=timer.training_time,
+        model_type="tabular",
+        save_path="temp_iso_1hr_mlr"
+    )
     
     print(f"Optimal Alpha Selected: {mlr.alpha_}")
     
@@ -61,5 +70,9 @@ def main():
     print("\n--- Hour-Ahead MLR Evaluation Metrics (MW) ---")
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
 
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
 if __name__ == "__main__":
     main()

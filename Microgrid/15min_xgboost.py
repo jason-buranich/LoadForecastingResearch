@@ -1,3 +1,4 @@
+from metrics import profile_model_efficiency, TrainingTimer
 import numpy as np
 import pandas as pd
 import xgboost as xgb
@@ -59,7 +60,15 @@ def main():
     
     # 5. Train
     print("Training XGBoost...")
-    xgb_model.fit(X_train_flat, Y_train_np)
+    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+        xgb_model.fit(X_train_flat, Y_train_np)
+    hw_metrics = profile_model_efficiency(
+        model=xgb_model,
+        test_input=X_test_flat[0:1],
+        training_time_seconds=timer.training_time,
+        model_type="tabular",
+        save_path="temp_microgrid_15min_xgboost"
+    )
     
     # 6. Predict
     print("Evaluating on Test Set...")
@@ -83,6 +92,10 @@ def main():
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     
     # 9. Visualization
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
     plot_single_model_forecast(
         targets_kw_flat, 
         preds_kw_flat, 

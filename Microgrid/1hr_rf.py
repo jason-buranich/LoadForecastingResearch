@@ -1,3 +1,4 @@
+from metrics import profile_model_efficiency, TrainingTimer
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -54,7 +55,15 @@ def main():
     
     # 5. Train
     print("Training Random Forest (MultiOutput)...")
-    rf.fit(X_train_flat, Y_train_np)
+    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+        rf.fit(X_train_flat, Y_train_np)
+    hw_metrics = profile_model_efficiency(
+        model=rf,
+        test_input=X_test_flat[0:1],
+        training_time_seconds=timer.training_time,
+        model_type="tabular",
+        save_path="temp_microgrid_1hr_rf"
+    )
     
     # 6. Predict
     print("Evaluating on Test Set...")
@@ -83,6 +92,10 @@ def main():
     t4_preds = inverse_scale(preds[:, 3])
     t4_targets = inverse_scale(Y_test_np[:, 3])
     
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
     plot_single_model_forecast(
         t4_targets, 
         t4_preds, 

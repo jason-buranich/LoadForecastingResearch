@@ -11,6 +11,7 @@ from data import train_df, val_df, test_df, scaler
 from slidingWindow import create_safe_sequences
 from models import GridTransformer
 from visualize import plot_single_model_forecast
+from metrics import profile_model_efficiency, TrainingTimer
 
 # ==============================================================================
 # MAIN PIPELINE
@@ -76,6 +77,9 @@ def main():
     epochs_no_improve = 0
     best_model_path = 'best_grid_transformer_24hr.pth'
     
+    timer = TrainingTimer(use_cuda=device.type == "cuda")
+    timer.start()
+
     for epoch in range(1, EPOCHS + 1):
         # --- Training Phase ---
         model.train()
@@ -123,10 +127,19 @@ def main():
                 print(f"\nEarly stopping triggered! No improvement in validation loss for {PATIENCE} epochs.")
                 break
                 
+    timer.stop()
+
     # 6. Evaluation Loop
     print("\nLoading best model weights and evaluating on Test Set...")
     model.load_state_dict(torch.load(best_model_path))
     model.eval()
+    hw_metrics = profile_model_efficiency(
+        model=model,
+        test_input=(X_test_hist[0:1].to(device), X_test_fut[0:1].to(device)),
+        training_time_seconds=timer.training_time,
+        model_type="pytorch",
+        save_path="temp_24hr_tft"
+    )
     test_preds = []
     
     with torch.no_grad():
@@ -163,6 +176,11 @@ def main():
     t96_preds = inverse_scale(preds_np[:, 95])
     t96_targets = inverse_scale(Y_test_np[:, 95])
     
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
+
     plot_single_model_forecast(
         t96_targets, 
         t96_preds, 

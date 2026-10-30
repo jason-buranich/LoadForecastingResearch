@@ -1,3 +1,4 @@
+from metrics import profile_model_efficiency, TrainingTimer
 import random
 import os
 import numpy as np
@@ -45,7 +46,15 @@ def main():
         max_features=0.3,
         n_jobs=4
     )
-    rf.fit(X_train_combined, y_train)
+    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+        rf.fit(X_train_combined, y_train)
+    hw_metrics = profile_model_efficiency(
+        model=rf,
+        test_input=X_test_combined[0:1],
+        training_time_seconds=timer.training_time,
+        model_type="tabular",
+        save_path="temp_iso_1hr_rf"
+    )
     
     # 5. Predict and Inverse Scale
     preds_flat = rf.predict(X_test_combined)
@@ -66,5 +75,9 @@ def main():
     print("\n--- Hour-Ahead Random Forest Evaluation Metrics (MW) ---")
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
 
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
 if __name__ == "__main__":
     main()

@@ -1,3 +1,4 @@
+from metrics import profile_model_efficiency, TrainingTimer
 import numpy as np
 from sklearn.linear_model import RidgeCV
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -52,7 +53,15 @@ def main():
     mlr = RidgeCV(alphas=alphas_to_test)
     
     print(f"Training MLR on shape: {X_train_combined.shape} to predict t+{HORIZON} steps...")
-    mlr.fit(X_train_combined, y_train)
+    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+        mlr.fit(X_train_combined, y_train)
+    hw_metrics = profile_model_efficiency(
+        model=mlr,
+        test_input=X_test_combined[0:1],
+        training_time_seconds=timer.training_time,
+        model_type="tabular",
+        save_path="temp_substation_24hr_mlr"
+    )
     print(f"MLR Training Complete.")
     
     # 5. Predict and Inverse Scale
@@ -82,6 +91,10 @@ def main():
     t96_preds = inverse_scale(preds[:, 95])
     t96_targets = inverse_scale(y_test[:, 95])
     
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
     plot_single_model_forecast(
         t96_targets, 
         t96_preds, 

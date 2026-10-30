@@ -1,3 +1,4 @@
+from metrics import profile_model_efficiency, TrainingTimer
 import os
 import numpy as np
 import pandas as pd
@@ -134,22 +135,30 @@ def main():
     )
     
     # Train
-    trained_model = train_seq2seq(
-        model=model,
-        train_loader=train_loader,
-        val_loader=val_loader,
-        epochs=100,
-        lr=1e-3,
-        weight_decay=1e-4,
-        patience=10, 
-        model_save_path=model_path
-    )
-    
+    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+        trained_model = train_seq2seq(
+            model=model,
+            train_loader=train_loader,
+            val_loader=val_loader,
+            epochs=100,
+            lr=1e-3,
+            weight_decay=1e-4,
+            patience=10,
+            model_save_path=model_path
+        )
+
     # Evaluate on Test Set
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     trained_model.load_state_dict(torch.load(model_path, map_location=device, weights_only=True))
     trained_model.to(device)
     trained_model.eval()
+    hw_metrics = profile_model_efficiency(
+        model=trained_model,
+        test_input=(X_test_hist[0:1].to(device), X_test_fut[0:1].to(device)),
+        training_time_seconds=timer.training_time,
+        model_type="pytorch",
+        save_path="temp_microgrid_15min_seq2seq"
+    )
     
     predictions, targets = [], []
     with torch.no_grad():
@@ -179,6 +188,10 @@ def main():
     print("\n--- 15-Minute-Ahead Seq2Seq Metrics (kW) ---")
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
     plot_single_model_forecast(
         targets_kw, 
         preds_kw, 

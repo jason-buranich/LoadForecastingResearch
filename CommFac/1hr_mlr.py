@@ -7,6 +7,7 @@ from data import train_df, val_df, test_df, scaler
 from slidingWindow import create_safe_sequences
 from models import get_tabular_models
 from visualize import plot_single_model_forecast
+from metrics import profile_model_efficiency, TrainingTimer
 
 # ==============================================================================
 # 1. DATA PREPARATION: TENSOR FLATTENING
@@ -66,8 +67,22 @@ def main():
     mlr, _, _ = get_tabular_models(horizon=HORIZON)
     
     print("Fitting Multiple Linear Regression (Ridge) 1-Hour Baseline...")
-    mlr.fit(X_train_flat, Y_train_full)
+    with TrainingTimer(use_cuda=False) as timer:
+        mlr.fit(X_train_flat, Y_train_full)
     
+    print("Profiling hardware efficiency...")
+    # Slice a single sample to simulate one live RTM dispatch interval
+    single_test_sample = X_test_flat[0:1] 
+    
+    hw_metrics = profile_model_efficiency(
+        model=mlr, 
+        test_input=single_test_sample,
+        training_time_seconds=timer.training_time,
+        model_type="tabular", 
+        save_path="temp_mlr_1hr"
+    )
+
+
     # Predict on the test set; returns shape (N_samples, 4)
     preds_np = mlr.predict(X_test_flat)
     
@@ -88,6 +103,11 @@ def main():
     
     print("\n--- 1-Hour-Ahead MLR Metrics (kW) ---")
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
+
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
     
     # Visualization: Isolate the t+4 interval (index 3) 
     t4_preds = inverse_scale(preds_np[:, 3])

@@ -1,3 +1,4 @@
+from metrics import profile_model_efficiency, TrainingTimer
 import numpy as np
 import lightgbm as lgb
 from sklearn.multioutput import MultiOutputRegressor
@@ -54,7 +55,15 @@ def main():
     multi_lgb = MultiOutputRegressor(lgb_base, n_jobs=4)
     
     print(f"Training {HORIZON} distinct LightGBM Models on shape {X_train_combined.shape} to predict t+1 through t+{HORIZON}...")
-    multi_lgb.fit(X_train_combined, y_train)
+    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+        multi_lgb.fit(X_train_combined, y_train)
+    hw_metrics = profile_model_efficiency(
+        model=multi_lgb,
+        test_input=X_test_combined[0:1],
+        training_time_seconds=timer.training_time,
+        model_type="tabular",
+        save_path="temp_substation_24hr_lightgbm"
+    )
     print("Multi-Model LightGBM Training Complete.")
     
     # 5. Predict and Inverse Scale
@@ -85,6 +94,10 @@ def main():
     t96_preds = inverse_scale(preds[:, 95])
     t96_targets = inverse_scale(y_test[:, 95])
     
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
     plot_single_model_forecast(
         t96_targets, 
         t96_preds, 

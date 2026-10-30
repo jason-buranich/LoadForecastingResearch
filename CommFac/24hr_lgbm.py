@@ -9,6 +9,7 @@ from data import train_df, val_df, test_df, scaler
 from slidingWindow import create_safe_sequences
 from models import get_tabular_models
 from visualize import plot_single_model_forecast
+from metrics import profile_model_efficiency, TrainingTimer
 
 # ==============================================================================
 # 1. DATA PREPARATION: TENSOR FLATTENING
@@ -63,11 +64,21 @@ def main():
     print("\nFitting LightGBM 24-Hour Predictor...")
     trained_models = []
     
+    timer = TrainingTimer(use_cuda=False)
+    timer.start()
     for i in tqdm(range(HORIZON), desc="Training 96 Horizon Models", unit="model"):
         # Clone ensures a fresh model is instantiated for each time step
         step_model = clone(base_lgbm)
         step_model.fit(X_train_flat, Y_train_full[:, i])
         trained_models.append(step_model)
+    timer.stop()
+    hw_metrics = profile_model_efficiency(
+        model=trained_models,
+        test_input=X_test_flat[0:1],
+        training_time_seconds=timer.training_time,
+        model_type="tabular",
+        save_path="temp_24hr_lgbm"
+    )
     
     # --- MANUAL PREDICTION LOOP ---
     preds_np = np.zeros((X_test_flat.shape[0], HORIZON))
@@ -96,6 +107,11 @@ def main():
     t96_preds = inverse_scale(preds_np[:, 95])
     t96_targets = inverse_scale(Y_test_np[:, 95])
     
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
+
     plot_single_model_forecast(
         t96_targets, 
         t96_preds, 

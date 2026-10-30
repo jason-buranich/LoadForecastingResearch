@@ -7,6 +7,7 @@ from data import train_df, val_df, test_df, scaler
 from slidingWindow import create_safe_sequences
 from models import get_tabular_models
 from visualize import plot_single_model_forecast
+from metrics import profile_model_efficiency, TrainingTimer
 
 # ==============================================================================
 # 1. DATA PREPARATION: TENSOR FLATTENING
@@ -64,7 +65,15 @@ def main():
     _, rf, _ = get_tabular_models(horizon=HORIZON)
     
     print("Fitting Random Forest Regressor...")
-    rf.fit(X_train_flat, Y_train_full)
+    with TrainingTimer(use_cuda=False) as timer:
+        rf.fit(X_train_flat, Y_train_full)
+    hw_metrics = profile_model_efficiency(
+        model=rf,
+        test_input=X_test_flat[0:1],
+        training_time_seconds=timer.training_time,
+        model_type="tabular",
+        save_path="temp_15min_rf"
+    )
     
     # Predict on the test set
     preds_flat = rf.predict(X_test_flat)
@@ -87,6 +96,11 @@ def main():
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     
     # Visualization
+    print("\n--- Hardware Efficiency Metrics ---")
+    print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
+    print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
+    print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
+
     plot_single_model_forecast(
         targets_kw, 
         preds_kw, 
