@@ -92,7 +92,7 @@ if __name__ == "__main__":
         ("CommFac/24hr_tft.py", 5),
         ("CommFac/24hr_seq2seq.py", 5),
         ("CommFac/24hr_patchtst.py", 5),
-        ("CommFac/24hr_lstm.py", 5)
+        ("CommFac/24hr_lstm.py", 5),
         
         ("Microgrid/15min_mlr.py", 1),
         ("Microgrid/15min_rf.py", 1),
@@ -159,7 +159,7 @@ if __name__ == "__main__":
         ("ISO/24hr_tft.py", 5),
         ("ISO/24hr_seq2seq.py", 5),
         ("ISO/24hr_patchtst.py", 5),
-        ("ISO/24hr_lstm.py", 5),
+        ("ISO/24hr_lstm.py", 5)
 
     ]
     
