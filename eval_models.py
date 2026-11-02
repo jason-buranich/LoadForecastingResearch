@@ -8,6 +8,11 @@ def run_evaluation(script_path, num_runs=5):
     print(f"--- Starting {num_runs}-Run Evaluation for {script_path} ---")
     
     metrics = {'RMSE': [], 'MAE': [], 'WAPE': []}
+    efficiency_metrics = {
+        'Inference Latency': ([], r"Inference Latency\s*:\s*([\d.eE+-]+)\s*seconds", "seconds"),
+        'Training Latency': ([], r"Training Latency\s*:\s*([\d.eE+-]+)\s*seconds", "seconds"),
+        'Model Disk Size': ([], r"Model Disk Size\s*:\s*([\d.eE+-]+)\s*MB", "MB"),
+    }
     regex = r"RMSE:\s*([\d.]+)\s*\|\s*MAE:\s*([\d.]+)\s*\|\s*WAPE:\s*([\d.]+)%"
     
     for run in range(1, num_runs + 1):
@@ -45,6 +50,12 @@ def run_evaluation(script_path, num_runs=5):
             metrics['RMSE'].append(rmse)
             metrics['MAE'].append(mae)
             metrics['WAPE'].append(wape)
+            for name, (values, metric_regex, _) in efficiency_metrics.items():
+                efficiency_match = re.search(metric_regex, full_output)
+                if efficiency_match:
+                    values.append(float(efficiency_match.group(1)))
+                else:
+                    print(f"  [!] Warning: Could not find {name} in the terminal output.")
         else:
             print(f"\n  [!] Warning: Could not find or parse metrics in the terminal output.")
             print("  --- Last 500 characters of terminal output ---")
@@ -59,6 +70,12 @@ def run_evaluation(script_path, num_runs=5):
         print(f"RMSE: {np.mean(metrics['RMSE']):.2f} ± {np.std(metrics['RMSE']):.2f}")
         print(f"MAE:  {np.mean(metrics['MAE']):.2f} ± {np.std(metrics['MAE']):.2f}")
         print(f"WAPE: {np.mean(metrics['WAPE']):.2f}% ± {np.std(metrics['WAPE']):.2f}%")
+        for name, (values, _, unit) in efficiency_metrics.items():
+            if values:
+                print(
+                    f"{name}: {np.mean(values):.6f} ± "
+                    f"{np.std(values):.6f} {unit}"
+                )
         print("==================================================")
     else:
         print("\nNo successful trials to summarize.")

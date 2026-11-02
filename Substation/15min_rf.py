@@ -51,7 +51,7 @@ def main():
     )
     
     print(f"Training Random Forest on shape {X_train_combined.shape}...")
-    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+    with TrainingTimer(use_cuda=False) as timer:
         rf.fit(X_train_combined, y_train)
     hw_metrics = profile_model_efficiency(
         model=rf,

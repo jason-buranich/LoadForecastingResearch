@@ -36,7 +36,7 @@ def main():
     mlr = RidgeCV(alphas=alphas_to_test)
     
     print("Finding optimal alpha and fitting MLR...")
-    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+    with TrainingTimer(use_cuda=False) as timer:
         mlr.fit(X_train_combined, Y_train_flat)
     hw_metrics = profile_model_efficiency(
         model=mlr,

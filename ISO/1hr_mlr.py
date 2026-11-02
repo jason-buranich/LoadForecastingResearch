@@ -39,7 +39,7 @@ def main():
     mlr = RidgeCV(alphas=alphas_to_test)
     
     print(f"Training MLR on shape: {X_train_combined.shape} to predict t+1...")
-    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+    with TrainingTimer(use_cuda=False) as timer:
         mlr.fit(X_train_combined, y_train)
     hw_metrics = profile_model_efficiency(
         model=mlr,

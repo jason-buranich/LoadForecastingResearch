@@ -48,7 +48,7 @@ def main():
         n_jobs=4,
         verbosity=-1
     )
-    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+    with TrainingTimer(use_cuda=False) as timer:
         lgbm_model.fit(X_train_combined, y_train)
     hw_metrics = profile_model_efficiency(
         model=lgbm_model,

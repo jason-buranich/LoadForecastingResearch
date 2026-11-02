@@ -54,7 +54,7 @@ def main():
     multi_rf = MultiOutputRegressor(rf_base)
     
     print(f"Training 4 distinct RF Models on shape {X_train_combined.shape} to predict t+1 through t+{HORIZON}...")
-    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+    with TrainingTimer(use_cuda=False) as timer:
         multi_rf.fit(X_train_combined, y_train)
     hw_metrics = profile_model_efficiency(
         model=multi_rf,

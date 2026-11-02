@@ -55,7 +55,7 @@ def main():
     
     # 5. Train
     print("Training MLR (Ridge Regression MultiOutput)...")
-    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+    with TrainingTimer(use_cuda=False) as timer:
         mlr.fit(X_train_flat, Y_train_np)
     hw_metrics = profile_model_efficiency(
         model=mlr,

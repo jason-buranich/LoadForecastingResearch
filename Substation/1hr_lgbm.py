@@ -10,13 +10,13 @@ from slidingWindow import create_safe_sequences
 from visualize import plot_single_model_forecast
 
 def main():
-    # 1. 24-Hour Substation Configuration
-    HORIZON = 96             # Predict 96 steps ahead (24 hours)
+    # 1. 1-Hour Substation Configuration
+    HORIZON = 4              # Predict 4 steps ahead (1 hour)
     SEQ_LEN = 96             # 96 intervals = 24 hours of history
     TARGET_IDX = 1           # Load_MW is at index 1 before dropping Month
     COVARIATE_START_IDX = 2  # Future covariates start at index 2
     
-    print("--- Starting 24-Hour-Ahead LightGBM (Multi-Model) Pipeline ---")
+    print("--- Starting 1-Hour-Ahead LightGBM (Multi-Model) Pipeline ---")
     
     # 2. Slice Sequences
     X_train_hist, X_train_fut, Y_train = create_safe_sequences(
@@ -36,40 +36,40 @@ def main():
         X_test_fut.numpy().reshape(X_test_fut.shape[0], -1)
     ))
     
-    # Keep targets as 2D arrays (N, 96) for multi-output regression
+    # Keep targets as 2D arrays (N, 4) for multi-output regression
     y_train = Y_train.numpy()
     y_test = Y_test.numpy()
     
-    # 4. Initialize and Train the 96 Independent LightGBM Models
+    # 4. Initialize and Train the 4 Independent LightGBM Models
+    # Wrapping the base estimator trains a distinct model for each horizon step
     lgb_base = lgb.LGBMRegressor(
         n_estimators=100,
         max_depth=6,
         learning_rate=0.1,
         random_state=42,
-        n_jobs=1,             # Force single-thread per model to avoid deadlocks
-        force_col_wise=True,  # Silence threading overhead info
-        verbose=-1            # Silence negative gain split warnings
+        n_jobs=4,
+        force_col_wise=True,
+        verbose=-1
     )
     
-    # Push parallelization to the wrapper to train the 96 models concurrently
-    multi_lgb = MultiOutputRegressor(lgb_base, n_jobs=4)
+    multi_lgb = MultiOutputRegressor(lgb_base)
     
-    print(f"Training {HORIZON} distinct LightGBM Models on shape {X_train_combined.shape} to predict t+1 through t+{HORIZON}...")
-    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+    print(f"Training 4 distinct LightGBM Models on shape {X_train_combined.shape} to predict t+1 through t+{HORIZON}...")
+    with TrainingTimer(use_cuda=False) as timer:
         multi_lgb.fit(X_train_combined, y_train)
     hw_metrics = profile_model_efficiency(
         model=multi_lgb,
         test_input=X_test_combined[0:1],
         training_time_seconds=timer.training_time,
         model_type="tabular",
-        save_path="temp_substation_24hr_lightgbm"
+        save_path="temp_substation_1hr_lightgbm"
     )
     print("Multi-Model LightGBM Training Complete.")
     
     # 5. Predict and Inverse Scale
     preds = multi_lgb.predict(X_test_combined)
     
-    # Flatten the (N, 96) arrays to 1D for unified inverse scaling and metric calculation
+    # Flatten the (N, 4) arrays to 1D for unified inverse scaling and metric calculation
     preds_flat = preds.ravel()
     y_test_flat = y_test.ravel()
     
@@ -86,25 +86,25 @@ def main():
     mae = mean_absolute_error(targets_mw, preds_mw)
     wape = np.sum(np.abs(targets_mw - preds_mw)) / np.sum(np.abs(targets_mw)) * 100
     
-    print("\n--- 24-Hour-Ahead LightGBM Metrics (MW) ---")
+    print("\n--- 1-Hour-Ahead LightGBM Metrics (MW) ---")
     print(f"RMSE: {rmse:.2f} | MAE: {mae:.2f} | WAPE: {wape:.2f}%")
     
     # 7. Visualization
-    # Isolate the t+96 interval (index 95) to prevent overlapping visualizations
-    t96_preds = inverse_scale(preds[:, 95])
-    t96_targets = inverse_scale(y_test[:, 95])
+    # Isolate the t+4 interval (index 3) to prevent overlapping visualizations
+    t4_preds = inverse_scale(preds[:, 3])
+    t4_targets = inverse_scale(y_test[:, 3])
     
     print("\n--- Hardware Efficiency Metrics ---")
     print(f"Inference Latency : {hw_metrics['inference_latency_seconds']:.6f} seconds")
     print(f"Training Latency  : {hw_metrics['training_latency_seconds']:.4f} seconds")
     print(f"Model Disk Size   : {hw_metrics['size_mb']:.4f} MB")
     plot_single_model_forecast(
-        t96_targets, 
-        t96_preds, 
+        t4_targets, 
+        t4_preds, 
         start_idx=0, 
         horizon=96,
-        model_name="24-Hour LightGBM (t+96 step)", 
-        save_path='lightgbm_24hr_ahead_forecast.png'
+        model_name="1-Hour LightGBM (t+4 step)", 
+        save_path='lightgbm_1hr_ahead_forecast.png'
     )
 
 if __name__ == "__main__":

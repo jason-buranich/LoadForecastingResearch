@@ -12299,3 +12299,294 @@ Timestamp: 2026-10-31 11:19:20
 BATCH EVALUATION COMPLETED: 2026-10-31 11:19:20
 ======================================================================
 
+======================================================================
+BATCH EVALUATION STARTED: 2026-11-02 16:56:14
+======================================================================
+
+--- STARTING EVALUATION: Substation/15min_lgbm.py ---
+Timestamp: 2026-11-02 16:56:14
+
+--- Starting 1-Run Evaluation for Substation/15min_lgbm.py ---
+
+[Trial 1/1] Executing Substation/15min_lgbm.py...
+
+Data Pipeline Initialized. Target Substation: Substation/Punchbowl 33_11kV FY25.csv
+Train shape: (23231, 7) | Val shape: (5761, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead LightGBM Pipeline ---
+Training LightGBM on shape (22463, 581)...
+Traceback (most recent call last):
+  File "/mnt/jburanich/LoadForecastingResearch/Substation/15min_lgbm.py", line 98, in <module>
+    main()
+  File "/mnt/jburanich/LoadForecastingResearch/Substation/15min_lgbm.py", line 53, in main
+    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+                                ^^^^^
+NameError: name 'torch' is not defined
+
+  [!] Error executing script on trial 1.
+
+No successful trials to summarize.
+
+--- SUCCESS: Substation/15min_lgbm.py ---
+
+--- STARTING EVALUATION: Substation/15min_lstm.py ---
+Timestamp: 2026-11-02 16:56:23
+
+--- Starting 5-Run Evaluation for Substation/15min_lstm.py ---
+
+[Trial 1/5] Executing Substation/15min_lstm.py...
+
+======================================================================
+BATCH EVALUATION STARTED: 2026-11-02 17:02:53
+======================================================================
+
+--- STARTING EVALUATION: Substation/15min_lgbm.py ---
+Timestamp: 2026-11-02 17:02:53
+
+--- Starting 1-Run Evaluation for Substation/15min_lgbm.py ---
+
+[Trial 1/1] Executing Substation/15min_lgbm.py...
+
+Data Pipeline Initialized. Target Substation: Substation/Punchbowl 33_11kV FY25.csv
+Train shape: (23231, 7) | Val shape: (5761, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead LightGBM Pipeline ---
+Training LightGBM on shape (22463, 581)...
+Traceback (most recent call last):
+  File "/mnt/jburanich/LoadForecastingResearch/Substation/15min_lgbm.py", line 98, in <module>
+    main()
+  File "/mnt/jburanich/LoadForecastingResearch/Substation/15min_lgbm.py", line 53, in main
+    with TrainingTimer(use_cuda=torch.cuda.is_available()) as timer:
+                                ^^^^^
+NameError: name 'torch' is not defined
+
+  [!] Error executing script on trial 1.
+
+No successful trials to summarize.
+
+--- SUCCESS: Substation/15min_lgbm.py ---
+
+--- STARTING EVALUATION: Substation/15min_lstm.py ---
+Timestamp: 2026-11-02 17:03:18
+
+--- Starting 5-Run Evaluation for Substation/15min_lstm.py ---
+
+[Trial 1/5] Executing Substation/15min_lstm.py...
+
+Data Pipeline Initialized. Target Substation: Substation/Punchbowl 33_11kV FY25.csv
+Train shape: (23231, 7) | Val shape: (5761, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead Direct LSTM Pipeline ---
+======================================================================
+BATCH EVALUATION STARTED: 2026-11-02 17:35:17
+======================================================================
+
+--- STARTING EVALUATION: CommFac/15min_mlr.py ---
+Timestamp: 2026-11-02 17:35:17
+
+--- Starting 1-Run Evaluation for CommFac/15min_mlr.py ---
+
+[Trial 1/1] Executing CommFac/15min_mlr.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute MLR Baseline Pipeline ---
+Fitting Multiple Linear Regression (Ridge) Baseline...
+
+--- 15-Minute-Ahead MLR Metrics (kW) ---
+RMSE: 9.57 | MAE: 4.49 | WAPE: 9.09%
+
+--- Hardware Efficiency Metrics ---
+Inference Latency : 0.000757 seconds
+Training Latency  : 3.6586 seconds
+Model Disk Size   : 0.0032 MB
+Graph saved successfully to mlr_15min_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 9.57 | MAE: 4.49 | WAPE: 9.09%
+
+==================================================
+FINAL STATISTICAL SUMMARY (1 SUCCESSFUL TRIALS)
+Target Script: CommFac/15min_mlr.py
+==================================================
+RMSE: 9.57 ± 0.00
+MAE:  4.49 ± 0.00
+WAPE: 9.09% ± 0.00%
+Inference Latency: avg 0.000757 seconds | std_dev 0.000000 seconds
+Training Latency: avg 3.658600 seconds | std_dev 0.000000 seconds
+Model Disk Size: avg 0.003200 MB | std_dev 0.000000 MB
+==================================================
+
+--- SUCCESS: CommFac/15min_mlr.py ---
+
+--- STARTING EVALUATION: CommFac/15min_rf.py ---
+Timestamp: 2026-11-02 17:35:30
+
+--- Starting 1-Run Evaluation for CommFac/15min_rf.py ---
+
+[Trial 1/1] Executing CommFac/15min_rf.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute Random Forest Pipeline ---
+Fitting Random Forest Regressor...
+======================================================================
+BATCH EVALUATION STARTED: 2026-11-02 17:36:53
+======================================================================
+
+--- STARTING EVALUATION: CommFac/15min_mlr.py ---
+Timestamp: 2026-11-02 17:36:53
+
+--- Starting 1-Run Evaluation for CommFac/15min_mlr.py ---
+
+[Trial 1/1] Executing CommFac/15min_mlr.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute MLR Baseline Pipeline ---
+Fitting Multiple Linear Regression (Ridge) Baseline...
+
+--- 15-Minute-Ahead MLR Metrics (kW) ---
+RMSE: 9.57 | MAE: 4.49 | WAPE: 9.09%
+
+--- Hardware Efficiency Metrics ---
+Inference Latency : 0.001127 seconds
+Training Latency  : 3.3670 seconds
+Model Disk Size   : 0.0032 MB
+Graph saved successfully to mlr_15min_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 9.57 | MAE: 4.49 | WAPE: 9.09%
+
+==================================================
+FINAL STATISTICAL SUMMARY (1 SUCCESSFUL TRIALS)
+Target Script: CommFac/15min_mlr.py
+==================================================
+RMSE: 9.57 ± 0.00
+MAE:  4.49 ± 0.00
+WAPE: 9.09% ± 0.00%
+Inference Latency: 0.001127 ± 0.000000 seconds
+Training Latency: 3.367000 ± 0.000000 seconds
+Model Disk Size: 0.003200 ± 0.000000 MB
+==================================================
+
+--- SUCCESS: CommFac/15min_mlr.py ---
+
+--- STARTING EVALUATION: CommFac/15min_rf.py ---
+Timestamp: 2026-11-02 17:37:07
+
+--- Starting 1-Run Evaluation for CommFac/15min_rf.py ---
+
+[Trial 1/1] Executing CommFac/15min_rf.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute Random Forest Pipeline ---
+Fitting Random Forest Regressor...
+
+--- 15-Minute-Ahead Random Forest Metrics (kW) ---
+RMSE: 9.27 | MAE: 3.89 | WAPE: 7.88%
+
+--- Hardware Efficiency Metrics ---
+Inference Latency : 0.026502 seconds
+Training Latency  : 24.1797 seconds
+Model Disk Size   : 7.2787 MB
+Graph saved successfully to rf_15min_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 9.27 | MAE: 3.89 | WAPE: 7.88%
+
+==================================================
+FINAL STATISTICAL SUMMARY (1 SUCCESSFUL TRIALS)
+Target Script: CommFac/15min_rf.py
+==================================================
+RMSE: 9.27 ± 0.00
+MAE:  3.89 ± 0.00
+WAPE: 7.88% ± 0.00%
+Inference Latency: 0.026502 ± 0.000000 seconds
+Training Latency: 24.179700 ± 0.000000 seconds
+Model Disk Size: 7.278700 ± 0.000000 MB
+==================================================
+
+--- SUCCESS: CommFac/15min_rf.py ---
+
+--- STARTING EVALUATION: CommFac/15min_xgboost.py ---
+Timestamp: 2026-11-02 17:37:37
+
+--- Starting 1-Run Evaluation for CommFac/15min_xgboost.py ---
+
+[Trial 1/1] Executing CommFac/15min_xgboost.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead XGBoost Pipeline ---
+Fitting XGBoost 15-Minute Predictor...
+
+--- 15-Minute-Ahead XGBoost Metrics (kW) ---
+RMSE: 9.24 | MAE: 3.85 | WAPE: 7.79%
+
+--- Hardware Efficiency Metrics ---
+Inference Latency : 0.085467 seconds
+Training Latency  : 11.0997 seconds
+Model Disk Size   : 0.2238 MB
+Graph saved successfully to xgboost_15min_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 9.24 | MAE: 3.85 | WAPE: 7.79%
+
+==================================================
+FINAL STATISTICAL SUMMARY (1 SUCCESSFUL TRIALS)
+Target Script: CommFac/15min_xgboost.py
+==================================================
+RMSE: 9.24 ± 0.00
+MAE:  3.85 ± 0.00
+WAPE: 7.79% ± 0.00%
+Inference Latency: 0.085467 ± 0.000000 seconds
+Training Latency: 11.099700 ± 0.000000 seconds
+Model Disk Size: 0.223800 ± 0.000000 MB
+==================================================
+
+--- SUCCESS: CommFac/15min_xgboost.py ---
+
+--- STARTING EVALUATION: CommFac/15min_lgbm.py ---
+Timestamp: 2026-11-02 17:37:54
+
+--- Starting 1-Run Evaluation for CommFac/15min_lgbm.py ---
+
+[Trial 1/1] Executing CommFac/15min_lgbm.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead LightGBM Pipeline ---
+Fitting LightGBM 15-Minute Predictor...
+
+--- 15-Minute-Ahead LightGBM Metrics (kW) ---
+RMSE: 8.95 | MAE: 3.76 | WAPE: 7.60%
+
+--- Hardware Efficiency Metrics ---
+Inference Latency : 0.001359 seconds
+Training Latency  : 2.8490 seconds
+Model Disk Size   : 0.1799 MB
+Graph saved successfully to lgbm_15min_ahead_forecast.png
+
+  [Trial 1 Success] -> RMSE: 8.95 | MAE: 3.76 | WAPE: 7.60%
+
+==================================================
+FINAL STATISTICAL SUMMARY (1 SUCCESSFUL TRIALS)
+Target Script: CommFac/15min_lgbm.py
+==================================================
+RMSE: 8.95 ± 0.00
+MAE:  3.76 ± 0.00
+WAPE: 7.60% ± 0.00%
+Inference Latency: 0.001359 ± 0.000000 seconds
+Training Latency: 2.849000 ± 0.000000 seconds
+Model Disk Size: 0.179900 ± 0.000000 MB
+==================================================
+
+--- SUCCESS: CommFac/15min_lgbm.py ---
+
+--- STARTING EVALUATION: CommFac/15min_tft.py ---
+Timestamp: 2026-11-02 17:38:07
+
+--- Starting 5-Run Evaluation for CommFac/15min_tft.py ---
+
+[Trial 1/5] Executing CommFac/15min_tft.py...
+
+Data Pipeline Initialized. Target Building: CommFac/bldg_59.csv
+Train shape: (23232, 7) | Val shape: (5856, 7) | Test shape: (5952, 7)
+--- Starting 15-Minute-Ahead Grid Transformer Pipeline on cuda ---
+Training Model for up to 100 Epochs (Patience: 10)...
+Epoch 001/100 | Train Loss (L1): 0.1956 | Val Loss (L1): 0.1179
