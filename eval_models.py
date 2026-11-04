@@ -73,8 +73,8 @@ def run_evaluation(script_path, num_runs=5):
         for name, (values, _, unit) in efficiency_metrics.items():
             if values:
                 print(
-                    f"{name}: {np.mean(values):.6f} ± "
-                    f"{np.std(values):.6f} {unit}"
+                    f"{name}: {np.mean(values):.3f} ± "
+                    f"{np.std(values):.3f} {unit}"
                 )
         print("==================================================")
     else:

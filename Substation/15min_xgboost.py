@@ -1,5 +1,6 @@
 from metrics import profile_model_efficiency, TrainingTimer
 import numpy as np
+import torch
 import xgboost as xgb
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
